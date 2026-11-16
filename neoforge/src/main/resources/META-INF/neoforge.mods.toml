@@ -1,0 +1,31 @@
+modLoader = "javafml"
+loaderVersion = "${neoforge_loader_version_range}"
+license = "${license}"
+issueTrackerURL = "https://github.com/CosmicLogic0/stash-radar/issues"
+[[mods]]
+modId = "${mod_id}"
+version = "${version}"
+displayName = "${mod_name}"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/stash-radar"
+logoFile = "${mod_id}.png"
+credits = "${credits}"
+authors = "${mod_author}"
+description = '''${description}'''
+[[dependencies.${mod_id}]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge_version},)"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
+[[dependencies.${mod_id}]]
+modId = "logiclib"
+type = "required"
+versionRange = "[${logiclib_version},)"
+ordering = "AFTER"
+side = "BOTH"
