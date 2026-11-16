@@ -26,9 +26,12 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * /find <item> [range]   - everyone (config permissionLevel), vanilla clients included
- * /stashradar reload     - operators
- * /stashradar selftest   - server console only (used by CI)
+ * Commands:
+ * <ul>
+ *   <li>{@code /find <item> [range]}: everyone (config permissionLevel), vanilla clients included</li>
+ *   <li>{@code /stashradar reload}: operators</li>
+ *   <li>{@code /stashradar selftest}: server console only (used by CI)</li>
+ * </ul>
  */
 public final class StashRadarCommands {
 

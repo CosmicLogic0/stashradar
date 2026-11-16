@@ -9,7 +9,7 @@
 - Looks one level into shulker box and bundle items. Configurable range, max range, cooldown, permission level, container list (modded containers too), highlight time/color and outline limit: `config/stashradar.json`.
 - Needs **LogicLib**.
 
-The Paper plugin is in [stash-radar-paper](https://github.com/CosmicLogic0/stash-radar-paper).
+The Paper plugin is in [stashradar-plugin](https://github.com/CosmicLogic0/stashradar-plugin).
 
 ## Commands
 | Command | Who |
