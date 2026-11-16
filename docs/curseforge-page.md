@@ -2,6 +2,8 @@
 
 **Stop opening every chest. Just ask the radar.**
 
+> ⚠️ **Requires [LogicLib](https://www.curseforge.com/minecraft/mc-mods/logiclib).** Install it too. The CurseForge app adds it for you automatically.
+
 You know the diamonds are *somewhere*. Twenty chests, three barrels and a wall of shulker boxes later, you still haven't found them. **Stash Radar finds them for you.** Type the item, and every nearby container that has it lights up.
 
 ---
@@ -45,7 +47,7 @@ Change the key in Options → Controls → Key Binds.
 - **NeoForge:** Minecraft 1.21.1
 - More versions are added as soon as they pass testing.
 - **Running a Paper server?** Get **Stash Radar Plugin** here: https://www.curseforge.com/minecraft/bukkit-plugins/stash-radar
-- **Requires LogicLib** (shared code for my mods)
+- **Requires [LogicLib](https://www.curseforge.com/minecraft/mc-mods/logiclib)** (shared code for my mods). The mod won't start without it.
 - Install on the **server** for searching. Install on the **client** too for the search screen (K). Singleplayer: just install it.
 - Pick the file for your Minecraft version and loader on the Files tab.
 
