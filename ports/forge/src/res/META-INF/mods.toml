@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "All Rights Reserved"
+issueTrackerURL = "https://github.com/CosmicLogic0/stashradar/issues"
+
+[[mods]]
+modId = "stashradar"
+version = "${version}"
+displayName = "Stash Radar"
+authors = "CosmicLogic"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/stash-radar"
+logoFile = "stashradar.png"
+# Works with vanilla clients on the server (/find), and the search screen only needs it on the client.
+displayTest = "IGNORE_ALL_VERSION"
+description = """
+Find which nearby chest, barrel or shulker box has your item. The server checks what's inside and highlights it.
+"""
+
+[[dependencies.stashradar]]
+modId = "${loaderId}"
+${mandatory}
+versionRange = "[${loaderMajor},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.stashradar]]
+modId = "minecraft"
+${mandatory}
+versionRange = "${mcRange}"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.stashradar]]
+modId = "logiclib"
+${mandatory}
+versionRange = "[${logiclibVersion},)"
+ordering = "AFTER"
+side = "BOTH"

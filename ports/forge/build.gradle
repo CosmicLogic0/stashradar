@@ -1,0 +1,73 @@
+// Stash Radar for Forge (Minecraft 1.16.5 - 1.21.11) and NeoForge (1.20.5 - 1.21.11), built with Architectury Loom.
+// One code base for every version: ../src/common + ../src/forge (or ../src/neoforge) with //#if blocks (see ../shared.gradle).
+// Build setup copied from CosmicLogic0/logiclib ports/forge (originally villager-reroller).
+plugins {
+    id 'dev.architectury.loom' version "${arch_loom_version}"
+}
+
+apply from: '../shared.gradle'
+def neo = project.findProperty('loom.platform') == 'neoforge'
+def loaderName = neo ? 'neoforge' : 'forge'
+def mcv = project.minecraft_version as String
+def javaVer = (project.findProperty('java_version') ?: vrJavaFor(mcv)) as int
+def java8 = javaVer < 16
+
+version = "${project.mod_version}"
+group = 'com.cosmiclogic.stashradar'
+base { archivesName = "stashradar-${loaderName}-${mcv}" }
+
+// LogicLib (read-only). CI puts the released jar for this loader + version in ../../libs/.
+def logicLibJar = rootProject.file("../../libs/logiclib-${loaderName}-${mcv}-${project.logiclib_version}.jar")
+
+loom { silentMojangMappingsLicense() }
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.neoforged.net/releases/' }
+}
+dependencies {
+    minecraft "com.mojang:minecraft:${mcv}"
+    mappings loom.officialMojangMappings()
+    if (neo) neoForge "net.neoforged:neoforge:${project.forge_version}"
+    else forge "net.minecraftforge:forge:${mcv}-${project.forge_version}"
+    modCompileOnly files(logicLibJar)
+    if (java8) { annotationProcessor 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1'; compileOnly 'com.pkware.jabel:jabel-javac-plugin:1.0.1-1' }
+}
+
+def gen = layout.buildDirectory.dir('gen-src').get().asFile
+def ctx = [mc: mcv, FABRIC: false, FORGE: !neo, NEOFORGE: neo, JAVA8: java8, RELOCATE: false]
+tasks.register('srSources') {
+    inputs.dir('../src'); inputs.property('ctx', ctx.toString())
+    outputs.dir(gen)
+    doLast { vrGenerate(["../src/${loaderName}", '../src/common'], gen, ctx) }
+}
+def assets = layout.buildDirectory.dir('assets-res')
+tasks.register('srAssets', Sync) {
+    from('../../common/src/main/resources') { include 'stashradar.png'; include 'assets/**' }
+    into assets
+}
+sourceSets.main.java.srcDirs = [gen]
+sourceSets.main.resources.srcDirs = ['src/res', assets]
+compileJava.dependsOn 'srSources'
+processResources.dependsOn 'srAssets'
+tasks.matching { it.name == 'sourcesJar' }.configureEach { dependsOn 'srSources', 'srAssets' }
+
+def mcRange = project.findProperty('mc_range') ?: "[${mcv}]"
+def loaderMajor = (project.forge_version.split('\\.')[0]) as int
+def neoNewToml = neo && vrCmp(mcv, '1.20.5') >= 0
+def packFormats = ['1.16.5': 6, '1.17.1': 7, '1.18.2': 8, '1.19.2': 9, '1.19.4': 13, '1.20.1': 15, '1.20.4': 22, '1.20.6': 32,
+                   '1.21.1': 34, '1.21.4': 46, '1.21.5': 55, '1.21.8': 64, '1.21.10': 69, '1.21.11': 75]
+def pack = packFormats[mcv] ?: 15
+processResources {
+    def props = ['version': project.mod_version, 'mcRange': mcRange, 'loaderMajor': loaderMajor, 'pack': pack,
+                 'loaderId': loaderName, 'mandatory': neoNewToml ? 'type = "required"' : 'mandatory = true',
+                 'logiclibVersion': project.logiclib_version]
+    inputs.properties props
+    inputs.property 'neoNewToml', neoNewToml
+    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) { expand props }
+    if (neoNewToml) rename 'mods.toml', 'neoforge.mods.toml'
+}
+tasks.withType(JavaCompile).configureEach {
+    options.release = javaVer; options.encoding = 'UTF-8'
+    if (java8) { sourceCompatibility = '17'; options.compilerArgs += ['-Xlint:-options'] }   // Jabel: modern syntax, Java 8 classes
+}
+tasks.named('test') { enabled = false }

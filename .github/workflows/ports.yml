@@ -1,0 +1,209 @@
+# Builds Stash Radar for every loader + Minecraft version in .github/ports.txt, then tests each one for real:
+# a dedicated server running the in-game self-test, and the real client (mc-runtime-test) with LogicLib, including
+# "LogicLib adds Logic Survival once, requested by stashradar".
+# If .github/ports-only.txt lists "<loader> <mc>" lines, only those run.
+# Results (one text file per build + the jars) go to the "port-results" branch.
+# Setup copied from CosmicLogic0/logiclib .github/workflows/ports.yml (originally villager-reroller).
+name: Ports (all versions)
+
+on:
+  push:
+    branches: [main]
+    paths: ['ports/**', 'common/src/main/resources/**', 'ci/**', '.github/ports*.txt', '.github/workflows/ports.yml']
+  workflow_dispatch:
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: m
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          def rows(p):
+              out = []
+              if not os.path.exists(p): return out
+              for l in open(p):
+                  l = l.split('#')[0].split()
+                  if len(l) >= 2: out.append(l)
+              return out
+          only = {(r[0], r[1]) for r in rows('.github/ports-only.txt')}
+          inc = []
+          for loader, mc in [(r[0], r[1]) for r in rows('.github/ports.txt')]:
+              if only and (loader, mc) not in only: continue
+              d = {'forge': 'ports/forge', 'neoforge': 'ports/forge', 'neoforge120': 'ports/forge', 'forge26': 'ports/forge-26', 'neoforge26': 'ports/neoforge-26'}[loader]
+              def v(s): return [int(x) for x in s.split('.')] + [0] * (3 - len(s.split('.')))
+              j = 25 if loader.endswith('26') else (21 if v(mc) >= [1, 20, 5] else 17 if v(mc) >= [1, 18] else 8)
+              inc.append({'loader': loader, 'mc': mc, 'dir': d, 'java': j, 'id': f"{loader.replace('26', '')}-{mc}"})
+          print('matrix=' + json.dumps({'include': inc}))
+          PY
+
+  port:
+    needs: plan
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    name: ${{ matrix.id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: |
+            8
+            17
+            21
+            25
+      - name: Find the loader version
+        id: v
+        run: |
+          mc="${{ matrix.mc }}"
+          LOOM=$(curl -s https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/maven-metadata.xml | grep -o "<latest>[^<]*</latest>" | sed 's/<[^>]*>//g')
+          FORGE=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>$mc-[^<]*</version>" | sed "s/<[^>]*>//g; s/^$mc-//" | sort -V | tail -1)
+          case "${{ matrix.loader }}" in
+            forge) echo "args=-Pforge_version=$FORGE -Parch_loom_version=$LOOM" >> "$GITHUB_OUTPUT"; echo "lv=$mc-$FORGE" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE, Loom $LOOM" ;;
+            forge26) echo "args=-Pforge_version=$FORGE" >> "$GITHUB_OUTPUT"; echo "lv=$mc-$FORGE" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE" ;;
+            neoforge120) NF=$(curl -s https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml | grep -oE "<version>$mc-[0-9.]+</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+                echo "args=-Pforge_version=$FORGE -Parch_loom_version=$LOOM" >> "$GITHUB_OUTPUT"; echo "lv=$NF" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE jar on NeoForge $NF" ;;
+            neoforge) P=$(echo "$mc" | sed 's/^1\.//'); case "$P" in *.*) ;; *) P="$P.0" ;; esac
+                F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+                echo "args=-Ploom.platform=neoforge -Pforge_version=$F -Parch_loom_version=$LOOM" >> "$GITHUB_OUTPUT"; echo "lv=$F" >> "$GITHUB_OUTPUT"; echo "NeoForge $F" ;;
+            neoforge26) P="$mc"; case "$P" in *.*.*) ;; *) P="$P.0" ;; esac
+                F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+                echo "args=-Pneo_version=$F" >> "$GITHUB_OUTPUT"; echo "lv=$F" >> "$GITHUB_OUTPUT"; echo "NeoForge $F" ;;
+          esac
+      - name: Get LogicLib for this version (read-only dependency)
+        id: ll
+        run: |
+          mkdir -p libs
+          case "${{ matrix.loader }}" in neoforge120|forge*) L=forge ;; *) L=neoforge ;; esac
+          J="logiclib-$L-${{ matrix.mc }}-0.1.0.jar"
+          if curl -fsSL -o "libs/$J" "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/$J"; then SRC=dist
+          elif curl -fsSL -o "libs/$J" "https://raw.githubusercontent.com/CosmicLogic0/logiclib/port-results/jars/$J"; then SRC=port-results
+          else echo "::error::LogicLib has no jar for $L ${{ matrix.mc }} yet"; exit 1; fi
+          echo "LogicLib $J from $SRC"; echo "src=$SRC" >> "$GITHUB_OUTPUT"; echo "jar=libs/$J" >> "$GITHUB_OUTPUT"
+      - name: Build
+        id: build
+        working-directory: ${{ matrix.dir }}
+        run: |
+          set -o pipefail
+          case "${{ matrix.loader }}" in *26) export JAVA_HOME="$JAVA_HOME_25_X64" ;; *) export JAVA_HOME="$JAVA_HOME_21_X64" ;; esac
+          chmod +x gradlew
+          ./gradlew build -x test --no-daemon -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} 2>&1 | tee build.log
+      - name: Pick the jar
+        id: jar
+        run: |
+          mkdir -p result/jars
+          for f in ${{ matrix.dir }}/build/libs/*.jar; do case "$f" in *-sources.jar|*-dev.jar|*-dev-shadow.jar|*-slim.jar) ;; *) cp "$f" result/jars/ ;; esac; done
+          ls -la result/jars
+          echo "file=$(ls result/jars/*.jar | head -1)" >> "$GITHUB_OUTPUT"
+      - name: Server test
+        id: server
+        run: |
+          J=${{ matrix.java }}; JH=$(eval echo \$JAVA_HOME_${J}_X64); export PATH="$JH/bin:$PATH"; java -version 2>&1 | head -1
+          mkdir -p server/mods && cd server
+          LV="${{ steps.v.outputs.lv }}"
+          case "${{ matrix.loader }}" in
+            neoforge120) curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/forge/$LV/forge-$LV-installer.jar"
+                    java -jar installer.jar --installServer . > install.log 2>&1 || (tail -40 install.log; exit 1); NAME=Forge ;;
+            forge*) curl -fsSL -o installer.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/$LV/forge-$LV-installer.jar"
+                    java -jar installer.jar --installServer . > install.log 2>&1 || (tail -40 install.log; exit 1); NAME=Forge ;;
+            neoforge*) curl -fsSL -o installer.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$LV/neoforge-$LV-installer.jar"
+                    java -jar installer.jar --install-server . > install.log 2>&1 || (tail -40 install.log; exit 1); NAME=NeoForge ;;
+          esac
+          cp "../${{ steps.jar.outputs.file }}" "../${{ steps.ll.outputs.jar }}" mods/
+          if [ -f run.sh ]; then CMD="bash run.sh nogui"; else CMD="java -jar $(ls forge-*.jar | grep -v installer | head -1) nogui"; fi
+          echo "start: $CMD"
+          cd ..
+          TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server "LogicLib loaded on $NAME" "Stash Radar loaded on $NAME" "Stash Radar self-test PASSED" -- $CMD 2>&1 | tee server-test.log
+      - name: Client test files
+        if: always() && steps.jar.outputs.file != ''
+        run: |
+          mkdir -p run/mods run/config && cp "${{ steps.jar.outputs.file }}" "${{ steps.ll.outputs.jar }}" run/mods/
+          # mc-runtime-test gives the game the current JAVA_HOME, so point it at the Java this version needs
+          # (otherwise 1.16.5 gets Java 25 and HeadlessMC can't install Forge).
+          echo "JAVA_HOME=$(eval echo \$JAVA_HOME_${{ matrix.java }}_X64)" >> "$GITHUB_ENV"
+      - name: Client test (real game)
+        id: client
+        if: always() && steps.jar.outputs.file != ''
+        uses: headlesshq/mc-runtime-test@5.0.0
+        with:
+          mc: ${{ matrix.mc }}
+          modloader: ${{ startsWith(matrix.loader, 'neo') && 'neoforge' || 'forge' }}
+          mc-runtime-test: ${{ startsWith(matrix.loader, 'neo') && 'neoforge' || 'forge' }}
+          java: ${{ matrix.java }}
+      - name: Creator server check (added once, marker written)
+        id: cs
+        if: always() && steps.client.outcome == 'success'
+        run: |
+          ls -la run run/config run/config/cosmiclogic 2>/dev/null || true
+          grep -a -q "play.logicsurvival.fyi" run/servers.dat && echo "servers.dat has Logic Survival"
+          test -f run/config/cosmiclogic/creator_server.json && cat run/config/cosmiclogic/creator_server.json
+          grep -h "Logic Survival" run/logs/latest.log | head -3
+          grep -q "requested by stashradar" run/logs/latest.log && echo "LogicLib added it for stashradar"
+          grep -q "Stash Radar loaded on" run/logs/latest.log && echo "Stash Radar loaded in the client"
+      - name: Write the result
+        if: always()
+        run: |
+          mkdir -p result
+          R="result/${{ matrix.id }}.txt"
+          B="${{ steps.build.outcome }}"; S="${{ steps.server.outcome }}"; C="${{ steps.client.outcome }}"; K="${{ steps.cs.outcome }}"
+          if [ "$B" = success ] && [ "$S" = success ] && [ "$C" = success ] && [ "$K" = success ]; then echo "PASS build+server(self-test)+client+creator-server (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R";
+          else echo "FAIL build=$B server=$S client=$C creator-server=$K (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R"; fi
+          if [ "$B" != success ] && [ -f ${{ matrix.dir }}/build.log ]; then python3 - ${{ matrix.dir }}/build.log >> "$R" <<'PY'
+          import re, sys
+          L = open(sys.argv[1], errors='replace').read().split('\n'); out = []; seen = set()
+          for i, l in enumerate(L):
+              m = re.search(r'/(\S+?\.java):(\d+): error: (.*)', l)
+              if not m: continue
+              sym = ''
+              for k in range(i + 1, min(i + 6, len(L))):
+                  if 'symbol:' in L[k]: sym = L[k].strip(); break
+              code = L[i + 1].strip() if i + 1 < len(L) else ''
+              key = (m.group(1), m.group(3), sym)
+              if key in seen: continue
+              seen.add(key); out.append(f"{m.group(1).split('/')[-1]}:{m.group(2)} {m.group(3)} | {sym} | {code[:150]}")
+          if not out:
+              for i, l in enumerate(L):
+                  if 'What went wrong' in l: out += [x for x in L[i:i + 16] if x.strip()]
+          print('\n'.join(out[:120]))
+          PY
+          fi
+          if [ "$C" = failure ]; then echo "--- client ---" >> "$R"; ls run 2>/dev/null | head -20 >> "$R"; for L in run/logs/latest.log run/logs/debug.log; do [ -f "$L" ] && { echo "[$L]"; grep -E "ERROR|Exception|Caused by|FATAL|mc-runtime-test|McRuntimeTest" "$L" | head -25; tail -15 "$L"; } >> "$R"; done; fi
+          if [ "$S" = failure ] && [ -f server-test.log ]; then echo "--- server ---" >> "$R"; grep -E "::error|self-test|selftest|Exception|ERROR|Caused by" server-test.log | head -40 >> "$R"; fi
+          cat "$R" | head -60
+          E=$(head -40 "$R" | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          if grep -q '^PASS' "$R"; then echo "::notice title=${{ matrix.id }}::$E"; else echo "::error title=${{ matrix.id }}::$E"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: result-${{ matrix.id }}
+          path: result/
+
+  collect:
+    needs: port
+    if: always()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: result-*
+          merge-multiple: true
+          path: out
+      - name: Push results
+        run: |
+          cd out
+          git init -q -b port-results
+          git config user.name ci; git config user.email ci@example.com
+          echo "${GITHUB_SHA}" > COMMIT
+          echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" > RUN
+          { for f in *.txt; do echo "$(basename "$f" .txt): $(head -1 "$f" | cut -c1-140)"; done; } > SUMMARY
+          git add -A; git commit -qm "results for ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" port-results
