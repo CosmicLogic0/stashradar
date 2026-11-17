@@ -49,7 +49,7 @@ public final class StashRadarCommands {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
     //#endif
         dispatcher.register(Commands.literal("find")
-                .requires(src -> src.hasPermission(StashRadar.config().permissionLevel))
+                .requires(src -> Text.op(src, StashRadar.config().permissionLevel))
                 //#if MC >= 1.19
                 .then(Commands.argument("item", ItemArgument.item(context))
                 //#else
@@ -61,14 +61,14 @@ public final class StashRadarCommands {
 
         dispatcher.register(Commands.literal("stashradar")
                 .then(Commands.literal("reload")
-                        .requires(src -> src.hasPermission(2))
+                        .requires(src -> Text.op(src, 2))
                         .executes(ctx -> {
                             StashRadar.reloadConfig();
                             Text.ok(ctx.getSource(), Text.prefix().append(Text.of("Config reloaded.", ChatFormatting.GREEN)), true);
                             return 1;
                         }))
                 .then(Commands.literal("selftest")
-                        .requires(src -> src.hasPermission(4) && src.getEntity() == null)
+                        .requires(src -> Text.op(src, 4) && src.getEntity() == null)
                         .executes(ctx -> SelfTest.run(ctx.getSource().getServer()))));
     }
 
@@ -81,7 +81,7 @@ public final class StashRadarCommands {
         int maxRange = Math.max(1, config.maxRange);
         int range = Math.max(1, Math.min(requestedRange > 0 ? requestedRange : config.range, maxRange));
 
-        if (!player.hasPermissions(2)) {
+        if (!Text.op(source, 2)) {
             long cooldown = Math.max(0, config.cooldownSeconds) * 1000L;
             long now = System.currentTimeMillis();
             Long last = LAST_SEARCH.get(player.getUUID());

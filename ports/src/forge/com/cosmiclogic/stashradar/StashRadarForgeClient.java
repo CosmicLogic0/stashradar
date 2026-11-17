@@ -2,8 +2,10 @@ package com.cosmiclogic.stashradar;
 
 import com.cosmiclogic.stashradar.client.StashRadarClient;
 import net.minecraftforge.client.event.InputEvent;
+//#if MC < 1.21.6
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+//#endif
 //#if MC >= 1.19
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 //#elif MC >= 1.17
@@ -20,13 +22,24 @@ final class StashRadarForgeClient {
     private StashRadarForgeClient() {
     }
 
-    static void init(IEventBus modBus) {
-        //#if MC >= 1.19
-        modBus.addListener((RegisterKeyMappingsEvent event) -> event.register(StashRadarClient.KEY));
-        MinecraftForge.EVENT_BUS.addListener((InputEvent.Key event) -> StashRadarClient.onKeyInput());
+    //#if MC >= 26.1
+    static void init(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
+        RegisterKeyMappingsEvent.BUS.addListener(e -> e.register(StashRadarClient.KEY));
+        InputEvent.Key.BUS.addListener(e -> StashRadarClient.onKeyInput());
+    }
+    //#else
+    static void init() {
+        //#if MC >= 1.21.6
+        RegisterKeyMappingsEvent.getBus(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModBusGroup())
+                .addListener(e -> e.register(StashRadarClient.KEY));
+        InputEvent.Key.BUS.addListener(e -> StashRadarClient.onKeyInput());
+        //#elif MC >= 1.19
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((RegisterKeyMappingsEvent e) -> e.register(StashRadarClient.KEY));
+        MinecraftForge.EVENT_BUS.addListener((InputEvent.Key e) -> StashRadarClient.onKeyInput());
         //#else
-        modBus.addListener((FMLClientSetupEvent event) -> ClientRegistry.registerKeyBinding(StashRadarClient.KEY));
-        MinecraftForge.EVENT_BUS.addListener((InputEvent.KeyInputEvent event) -> StashRadarClient.onKeyInput());
+        FMLJavaModLoadingContext.get().getModEventBus().addListener((FMLClientSetupEvent e) -> ClientRegistry.registerKeyBinding(StashRadarClient.KEY));
+        MinecraftForge.EVENT_BUS.addListener((InputEvent.KeyInputEvent e) -> StashRadarClient.onKeyInput());
         //#endif
     }
+    //#endif
 }

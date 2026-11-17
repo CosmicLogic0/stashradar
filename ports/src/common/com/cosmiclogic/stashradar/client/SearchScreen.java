@@ -20,6 +20,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.lwjgl.glfw.GLFW;
+//#if MC >= 1.21.9
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;
@@ -202,8 +206,9 @@ public class SearchScreen extends Screen {
 
     // ---- drawing helpers: one render() body for every version ----
     //#if MC >= 1.20
-    private void centered(GuiGraphics g, Component c, int x, int y, int color) { g.drawCenteredString(font, c, x, y, color); }
-    private void text(GuiGraphics g, String s, int x, int y, int color) { g.drawString(font, s, x, y, color); }
+    // Text colours get a full alpha byte: 1.21.6+ treats a missing alpha as invisible.
+    private void centered(GuiGraphics g, Component c, int x, int y, int color) { g.drawCenteredString(font, c, x, y, 0xFF000000 | color); }
+    private void text(GuiGraphics g, String s, int x, int y, int color) { g.drawString(font, s, x, y, 0xFF000000 | color); }
     private void rect(GuiGraphics g, int x0, int y0, int x1, int y1, int color) { g.fill(x0, y0, x1, y1, color); }
     private void item(GuiGraphics g, ItemStack stack, int x, int y) { g.renderItem(stack, x, y); }
     //#else
@@ -213,8 +218,8 @@ public class SearchScreen extends Screen {
     private void item(PoseStack g, ItemStack stack, int x, int y) { itemRenderer.renderAndDecorateItem(stack, x, y); }
     //#endif
 
-    @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    /** @return true if the click picked an item */
+    private boolean clickList(double mouseX, double mouseY, int button) {
         int left = (width - LIST_WIDTH) / 2;
         if (button == 0 && mouseX >= left && mouseX < left + LIST_WIDTH && mouseY >= listTop()) {
             int row = (int) ((mouseY - listTop()) / ROW_HEIGHT);
@@ -223,8 +228,20 @@ public class SearchScreen extends Screen {
                 return true;
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return false;
     }
+
+    //#if MC >= 1.21.9
+    @Override
+    public boolean mouseClicked(MouseButtonEvent e, boolean doubleClick) {
+        return clickList(e.x(), e.y(), e.button()) || super.mouseClicked(e, doubleClick);
+    }
+    //#else
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        return clickList(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
+    }
+    //#endif
 
     @Override
     //#if MC >= 1.20.2
@@ -237,14 +254,26 @@ public class SearchScreen extends Screen {
         return true;
     }
 
-    @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    /** Enter picks the first match. */
+    private boolean enter(int keyCode) {
         if ((keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) && !results.isEmpty()) {
             pick(results.get(0));
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        return false;
     }
+
+    //#if MC >= 1.21.9
+    @Override
+    public boolean keyPressed(KeyEvent e) {
+        return enter(e.key()) || super.keyPressed(e);
+    }
+    //#else
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        return enter(keyCode) || super.keyPressed(keyCode, scanCode, modifiers);
+    }
+    //#endif
 
     private void pick(Entry entry) {
         if (minecraft != null && minecraft.player != null) {

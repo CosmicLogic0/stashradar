@@ -21,10 +21,6 @@ public final class Players {
     }
 
     public static MinecraftServer server(ServerPlayer player) {
-        //#if MC >= 1.21.9
-        return player.level().getServer();
-        //#else
-        return player.server;
-        //#endif
+        return level(player).getServer();
     }
 }

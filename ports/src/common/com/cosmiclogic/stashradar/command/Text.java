@@ -28,6 +28,16 @@ final class Text {
                 .append(of("] ", ChatFormatting.DARK_GRAY));
     }
 
+    /** Permission level check (0 everyone ... 4 console). 1.21.11 replaced levels with permission sets. */
+    static boolean op(CommandSourceStack s, int level) {
+        //#if MC >= 1.21.11
+        return s.permissions().hasPermission(new net.minecraft.server.permissions.Permission.HasCommandLevel(
+                net.minecraft.server.permissions.PermissionLevel.byId(level)));
+        //#else
+        return s.hasPermission(level);
+        //#endif
+    }
+
     static void ok(CommandSourceStack source, Component message, boolean toOps) {
         //#if MC >= 1.20
         source.sendSuccess(() -> message, toOps);

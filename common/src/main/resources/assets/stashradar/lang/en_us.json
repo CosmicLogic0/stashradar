@@ -6,5 +6,6 @@
   "screen.stashradar.hint": "Type an item name, e.g. diamond",
   "screen.stashradar.range": "Range: %s",
   "screen.stashradar.empty": "Start typing to see items. Enter picks the first one.",
-  "screen.stashradar.none": "No item with that name."
+  "screen.stashradar.none": "No item with that name.",
+  "key.category.stashradar.main": "Stash Radar"
 }

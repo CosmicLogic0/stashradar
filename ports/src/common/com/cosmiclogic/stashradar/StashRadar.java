@@ -3,15 +3,24 @@ package com.cosmiclogic.stashradar;
 import com.cosmiclogic.logiclib.config.LogicConfig;
 import com.cosmiclogic.logiclib.platform.Services;
 import com.cosmiclogic.logiclib.server.CreatorServer;
+//#if MC >= 1.18
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//#else
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+//#endif
 
 /** Stash Radar: "Where did I put my diamonds?" Server-checked search of nearby containers. */
 public final class StashRadar {
 
     public static final String MOD_ID = "stashradar";
     public static final String MOD_NAME = "Stash Radar";
+    //#if MC >= 1.18
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
+    //#else
+    public static final Logger LOG = LogManager.getLogger(MOD_NAME);
+    //#endif
 
     private static LogicConfig<StashRadarConfig> config;
 

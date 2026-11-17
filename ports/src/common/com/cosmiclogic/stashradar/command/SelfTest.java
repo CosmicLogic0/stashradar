@@ -43,7 +43,11 @@ final class SelfTest {
         ServerLevel level = server.overworld();
         int checks = 0;
         try {
+            //#if MC >= 1.21.9
+            BlockPos spawn = BlockPos.ZERO;   // the spawn API changed in 1.21.9; any spot works, it's only a test area
+            //#else
             BlockPos spawn = level.getSharedSpawnPos();
+            //#endif
             // Middle of the spawn chunk: every test block stays inside this one chunk (nothing to load or generate).
             int x = (spawn.getX() >> 4) * 16 + 8;
             int z = (spawn.getZ() >> 4) * 16 + 8;
