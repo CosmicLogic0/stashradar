@@ -1,0 +1,151 @@
+# Uploads the TESTED Stash Radar jars to CurseForge (project id in .github/curseforge-id.txt).
+# Only jars from a commit where every test passed are used:
+#   - 1.21.1 Forge + NeoForge: the "stashradar-jars" artifact of a successful "Build and test" run on this commit
+#   - every other version: the port-results branch, whose SUMMARY must say PASS and whose tested COMMIT must have
+#     the same port code as this commit
+# Run it by hand (Actions → Publish to CurseForge → Run workflow). dry_run (default) checks everything,
+# including that CurseForge knows every game version, and uploads nothing. Needs the CURSEFORGE_TOKEN secret.
+name: Publish to CurseForge
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only check, don't upload"
+        type: boolean
+        default: true
+      only:
+        description: "Optional: upload just these ids (space separated, e.g. forge-1.12.2)"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.m.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Find the passing "Build and test" run for this commit
+        id: main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          RID=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/actions/workflows/build.yml/runs?head_sha=${{ github.sha }}&status=success&per_page=1" | python3 -c "import sys,json;r=json.load(sys.stdin)['workflow_runs'];print(r[0]['id'] if r else '')")
+          if [ -z "$RID" ]; then echo "::error::No passing Build and test run for ${{ github.sha }}"; exit 1; fi
+          echo "Build and test run $RID"; echo "rid=$RID" >> "$GITHUB_OUTPUT"
+      - uses: actions/download-artifact@v4
+        with:
+          name: stashradar-jars
+          run-id: ${{ steps.main.outputs.rid }}
+          github-token: ${{ github.token }}
+          path: main-jars
+      - name: Get the ported jars (port-results)
+        run: |
+          git clone -q --depth 1 -b port-results "https://github.com/${{ github.repository }}" pr
+          echo "port-results tested commit: $(cat pr/COMMIT)  run: $(cat pr/RUN)"
+          # The tested commit may be older than this one, but nothing that goes into a port jar may have changed since.
+          CHANGED=$(git diff --name-only "$(cat pr/COMMIT)" "${{ github.sha }}" -- ports common/src/main/resources ci .github/ports.txt .github/workflows/ports.yml)
+          if [ -n "$CHANGED" ]; then echo "::error::Port code changed since the tested commit $(cat pr/COMMIT):"; echo "$CHANGED"; exit 1; fi
+          cat pr/SUMMARY
+      - id: m
+        name: Plan the uploads
+        run: |
+          mkdir -p upload
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os, shutil, glob, sys
+          ver = [l.split('=', 1)[1].strip() for l in open('ports/forge/gradle.properties') if l.startswith('mod_version=')][0]
+          only = set("${{ inputs.only }}".split())
+          summary = {}
+          for l in open('pr/SUMMARY'):
+              k, v = l.split(':', 1); summary[k.strip()] = v.strip()
+          def java(mc):
+              v = [int(x) for x in mc.split('.')] + [0, 0]
+              return 25 if v[0] >= 26 else 21 if (v[1], v[2]) >= (20, 5) else 17 if v[1] >= 18 else 8
+          ups = []
+          def add(uid, src, loaders, mc):
+              if not os.path.exists(src): sys.exit(f"missing jar {src}")
+              dst = f"upload/{uid}/{os.path.basename(src)}"; os.makedirs(os.path.dirname(dst), exist_ok=True); shutil.copy(src, dst)
+              names = {'forge': 'Forge', 'neoforge': 'NeoForge'}
+              ups.append({'id': uid, 'jar': dst, 'loaders': ' '.join(loaders), 'mc': mc, 'java': java(mc),
+                          'name': f"Stash Radar {ver} for {'/'.join(names[l] for l in loaders)} {mc}", 'version': f"{ver}+{uid}"})
+          # 1.21.1 from the main MultiLoader build
+          for l in ('forge', 'neoforge'):
+              add(f"{l}-1.21.1", f"main-jars/stashradar-{l}-1.21.1-{ver}.jar", [l], '1.21.1')
+          # every port that passed
+          for line in open('.github/ports.txt'):
+              p = line.split('#')[0].split()
+              if len(p) < 2: continue
+              loader, mc = p[0], p[1]
+              rid = {'forge112': 'forge', 'forge26': 'forge', 'neoforge26': 'neoforge'}.get(loader, loader) + '-' + mc
+              if not summary.get(rid, '').startswith('PASS'): sys.exit(f"{rid} did not pass: {summary.get(rid)}")
+              if loader == 'neoforge120': continue   # same jar as Forge 1.20.1, tagged below
+              base = 'neoforge' if loader.startswith('neoforge') else 'forge'
+              loaders = [base]
+              if base == 'forge' and mc == '1.20.1' and summary.get('neoforge120-1.20.1', '').startswith('PASS'): loaders.append('neoforge')
+              add(f"{base}-{mc}", f"pr/jars/stashradar-{base}-{mc}-{ver}.jar", loaders, mc)
+          if only: ups = [u for u in ups if u['id'] in only]
+          for u in ups: print(f"{u['id']:20} {u['loaders']:16} MC {u['mc']:8} Java {u['java']:2}  {u['jar']}", file=sys.stderr)
+          print('matrix=' + json.dumps({'include': ups}))
+          PY
+          ls -R upload | head -60; sha256sum upload/*/*.jar
+      - name: Check CurseForge knows every game version (dry run part)
+        env:
+          CF: ${{ secrets.CURSEFORGE_TOKEN }}
+        run: |
+          curl -fsS -H "X-Api-Token: $CF" https://minecraft.curseforge.com/api/game/versions -o versions.json
+          python3 - '${{ steps.m.outputs.matrix }}' <<'PY'
+          import json, sys
+          names = {v['name'] for v in json.load(open('versions.json'))}
+          bad = []
+          for u in json.loads(sys.argv[1])['include']:
+              need = [u['mc'], f"Java {u['java']}"] + [{'forge': 'Forge', 'neoforge': 'NeoForge'}[l] for l in u['loaders'].split()]
+              miss = [n for n in need if n not in names]
+              print(u['id'], 'OK' if not miss else f'MISSING {miss}')
+              if miss: bad.append(u['id'])
+          if bad: sys.exit('CurseForge is missing game versions for ' + ', '.join(bad))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: upload-jars
+          path: upload/
+
+  upload:
+    needs: plan
+    if: ${{ !inputs.dry_run }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    name: upload ${{ matrix.id }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: upload-jars
+          path: upload
+      - name: Game versions
+        id: gv
+        run: |
+          { echo "list<<EOF"; echo "${{ matrix.mc }}"; echo "EOF"; } >> "$GITHUB_OUTPUT"
+          echo "id=$(grep -v '^#' .github/curseforge-id.txt | tr -d ' \r\n')" >> "$GITHUB_OUTPUT"
+      - uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          curseforge-id: ${{ steps.gv.outputs.id }}
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+          files: ${{ matrix.jar }}
+          name: ${{ matrix.name }}
+          version: ${{ matrix.version }}
+          version-type: release
+          loaders: ${{ matrix.loaders }}
+          game-versions: ${{ steps.gv.outputs.list }}
+          java: ${{ matrix.java }}
+          dependencies: logiclib(required)
+          changelog-file: CHANGELOG.md
