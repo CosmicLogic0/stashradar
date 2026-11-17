@@ -135,7 +135,8 @@ jobs:
         with:
           mc: ${{ matrix.mc }}
           modloader: ${{ startsWith(matrix.loader, 'neo') && 'neoforge' || 'forge' }}
-          mc-runtime-test: ${{ startsWith(matrix.loader, 'neo') && 'neoforge' || 'forge' }}
+          # NeoForge 1.20.1 still runs Forge mods, and the test tool only has a Forge test mod for 1.20.1 (same fix as LogicLib).
+          mc-runtime-test: ${{ (startsWith(matrix.loader, 'neo') && matrix.loader != 'neoforge120') && 'neoforge' || 'forge' }}
           java: ${{ matrix.java }}
       - name: Creator server check (added once, marker written)
         id: cs

@@ -93,7 +93,11 @@ public final class StashRadarCommands {
             LAST_SEARCH.put(player.getUUID(), now);
         }
 
+        //#if MC >= 1.17
         Vec3 eye = player.getEyePosition();
+        //#else
+        Vec3 eye = player.getEyePosition(1.0f);
+        //#endif
         List<ContainerSearch.Hit> hits = ContainerSearch.search(Players.level(player), eye, item, range,
                 new ContainerSearch.Options(config.containers, config.searchInsideItems));
 

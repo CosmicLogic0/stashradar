@@ -3,7 +3,15 @@ package com.cosmiclogic.stashradar.client;
 import com.cosmiclogic.stashradar.StashRadar;
 import com.cosmiclogic.stashradar.search.Ids;
 import net.minecraft.ChatFormatting;
+//#if MC >= 1.20
 import net.minecraft.client.gui.GuiGraphics;
+//#else
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiComponent;
+//#endif
+//#if MC < 1.19
+import net.minecraft.network.chat.TranslatableComponent;
+//#endif
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
@@ -54,7 +62,7 @@ public class SearchScreen extends Screen {
     private int range;
 
     public SearchScreen() {
-        super(Component.translatable("screen.stashradar.title"));
+        super(tr("screen.stashradar.title"));
     }
 
     @Override
@@ -75,20 +83,39 @@ public class SearchScreen extends Screen {
         range = lastRange;
 
         int left = (width - LIST_WIDTH) / 2;
-        searchBox = new EditBox(font, left, 32, LIST_WIDTH - 84, 20, Component.translatable("screen.stashradar.search"));
-        searchBox.setHint(Component.translatable("screen.stashradar.hint").withStyle(ChatFormatting.DARK_GRAY));
+        searchBox = new EditBox(font, left, 32, LIST_WIDTH - 84, 20, tr("screen.stashradar.search"));
+        //#if MC >= 1.19.4
+        searchBox.setHint(tr("screen.stashradar.hint").withStyle(ChatFormatting.DARK_GRAY));
+        //#endif
         searchBox.setMaxLength(64);
         searchBox.setValue(lastQuery);
         searchBox.setResponder(text -> refresh());
+        //#if MC >= 1.19.3
+        rangeButton = Button.builder(rangeLabel(), b -> cycleRange()).bounds(left + LIST_WIDTH - 80, 32, 80, 20).build();
+        //#else
+        rangeButton = new Button(left + LIST_WIDTH - 80, 32, 80, 20, rangeLabel(), b -> cycleRange());
+        //#endif
+        //#if MC >= 1.17
         addRenderableWidget(searchBox);
-        rangeButton = addRenderableWidget(Button.builder(rangeLabel(), b -> cycleRange())
-                .bounds(left + LIST_WIDTH - 80, 32, 80, 20).build());
+        addRenderableWidget(rangeButton);
+        //#else
+        addButton(searchBox);
+        addButton(rangeButton);
+        //#endif
         setInitialFocus(searchBox);
         refresh();
     }
 
     private Component rangeLabel() {
-        return Component.translatable("screen.stashradar.range", range);
+        return tr("screen.stashradar.range", range);
+    }
+
+    private static net.minecraft.network.chat.MutableComponent tr(String key, Object... args) {
+        //#if MC >= 1.19
+        return Component.translatable(key, args);
+        //#else
+        return new TranslatableComponent(key, args);
+        //#endif
     }
 
     private void cycleRange() {
@@ -132,19 +159,28 @@ public class SearchScreen extends Screen {
     }
 
     @Override
+    //#if MC >= 1.20
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
+    //#else
+    public void render(PoseStack g, int mouseX, int mouseY, float partialTick) {
+    //#endif
         //#if MC < 1.20.2
         renderBackground(g);
         //#endif
         super.render(g, mouseX, mouseY, partialTick);
         int left = (width - LIST_WIDTH) / 2;
-        g.drawCenteredString(font, title, width / 2, 14, 0xFFFFFF);
+        centered(g, title, width / 2, 14, 0xFFFFFF);
+        //#if MC < 1.19.4
+        if (searchBox.getValue().isEmpty() && !searchBox.isFocused()) {
+            text(g, tr("screen.stashradar.hint").getString(), searchBox.x + 4, searchBox.y + 6, 0x555555);
+        }
+        //#endif
 
         if (results.isEmpty()) {
             Component msg = searchBox.getValue().trim().isEmpty()
-                    ? Component.translatable("screen.stashradar.empty")
-                    : Component.translatable("screen.stashradar.none");
-            g.drawCenteredString(font, msg, width / 2, listTop() + 8, 0x808080);
+                    ? tr("screen.stashradar.empty")
+                    : tr("screen.stashradar.none");
+            centered(g, msg, width / 2, listTop() + 8, 0x808080);
             return;
         }
         int rows = visibleRows();
@@ -152,17 +188,30 @@ public class SearchScreen extends Screen {
             Entry e = results.get(scroll + i);
             int y = listTop() + i * ROW_HEIGHT;
             boolean hover = mouseX >= left && mouseX < left + LIST_WIDTH && mouseY >= y && mouseY < y + ROW_HEIGHT;
-            g.fill(left, y, left + LIST_WIDTH, y + ROW_HEIGHT - 1, hover ? 0x8040A060 : (i % 2 == 0 ? 0x40000000 : 0x20000000));
-            g.renderItem(e.stack, left + 2, y + 1);
-            g.drawString(font, e.name, left + 22, y + 6, 0xFFFFFF);
+            rect(g, left, y, left + LIST_WIDTH, y + ROW_HEIGHT - 1, hover ? 0x8040A060 : (i % 2 == 0 ? 0x40000000 : 0x20000000));
+            item(g, e.stack, left + 2, y + 1);
+            text(g, e.name, left + 22, y + 6, 0xFFFFFF);
             String id = e.id.startsWith("minecraft:") ? e.id.substring(10) : e.id;
-            g.drawString(font, id, left + LIST_WIDTH - 4 - font.width(id), y + 6, 0x707070);
+            text(g, id, left + LIST_WIDTH - 4 - font.width(id), y + 6, 0x707070);
         }
         if (results.size() > rows) {
             String more = (scroll + 1) + "-" + Math.min(results.size(), scroll + rows) + " / " + results.size();
-            g.drawCenteredString(font, more, width / 2, listTop() + rows * ROW_HEIGHT + 4, 0x808080);
+            centered(g, Component.nullToEmpty(more), width / 2, listTop() + rows * ROW_HEIGHT + 4, 0x808080);
         }
     }
+
+    // ---- drawing helpers: one render() body for every version ----
+    //#if MC >= 1.20
+    private void centered(GuiGraphics g, Component c, int x, int y, int color) { g.drawCenteredString(font, c, x, y, color); }
+    private void text(GuiGraphics g, String s, int x, int y, int color) { g.drawString(font, s, x, y, color); }
+    private void rect(GuiGraphics g, int x0, int y0, int x1, int y1, int color) { g.fill(x0, y0, x1, y1, color); }
+    private void item(GuiGraphics g, ItemStack stack, int x, int y) { g.renderItem(stack, x, y); }
+    //#else
+    private void centered(PoseStack g, Component c, int x, int y, int color) { GuiComponent.drawCenteredString(g, font, c, x, y, color); }
+    private void text(PoseStack g, String s, int x, int y, int color) { GuiComponent.drawString(g, font, s, x, y, color); }
+    private void rect(PoseStack g, int x0, int y0, int x1, int y1, int color) { GuiComponent.fill(g, x0, y0, x1, y1, color); }
+    private void item(PoseStack g, ItemStack stack, int x, int y) { itemRenderer.renderAndDecorateItem(stack, x, y); }
+    //#endif
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -199,7 +248,13 @@ public class SearchScreen extends Screen {
 
     private void pick(Entry entry) {
         if (minecraft != null && minecraft.player != null) {
+            //#if MC >= 1.19.3
             minecraft.player.connection.sendCommand("find " + entry.id + " " + range);
+            //#elif MC >= 1.19
+            minecraft.player.commandUnsigned("find " + entry.id + " " + range);
+            //#else
+            minecraft.player.chat("/find " + entry.id + " " + range);
+            //#endif
         }
         onClose();
     }

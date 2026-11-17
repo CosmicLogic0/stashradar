@@ -4,3 +4,6 @@
 # A version is only added here once LogicLib has a passing jar for it (dist, or its port-results branch).
 forge 1.20.1
 neoforge120 1.20.1   # the Forge 1.20.1 jar, tested on NeoForge 1.20.1
+forge 1.19.2
+forge 1.18.2
+forge 1.16.5

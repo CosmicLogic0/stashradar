@@ -6,8 +6,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 //#if MC >= 1.19
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-//#else
+//#elif MC >= 1.17
 import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+//#else
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 //#endif
 
