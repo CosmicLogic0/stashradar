@@ -47,3 +47,15 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 dependencies {
     compileOnly files(rootProject.file("libs/logiclib-neoforge-${minecraft_version}-${logiclib_version}.jar"))
 }
+
+// ---- CI only: the gallery screenshot helper (src/pageshots). Its own jar, never part of the Stash Radar release.
+sourceSets {
+    pageshots {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+    }
+}
+tasks.register('pageshotsJar', Jar) {
+    from sourceSets.pageshots.output
+    archiveFileName = 'stashradar-pageshots.jar'
+    destinationDirectory = layout.buildDirectory.dir('pageshots')
+}

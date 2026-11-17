@@ -1,0 +1,78 @@
+# Takes the CurseForge gallery screenshots in the real game (see ci/gallery.sh): a Superflat world, noon, clear
+# weather, 1920x1080, Fancy graphics. Mod shots on a NeoForge 1.21.1 server, plugin shots on a Paper 1.21.1 server.
+# Run by hand (or push to branch "gallery"). The pictures go to branch "gallery-results".
+name: Gallery screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [gallery]
+
+permissions:
+  contents: write
+
+env:
+  MC: "1.21.1"
+  LOGICLIB: "0.1.0"
+
+jobs:
+  shots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [mod, plugin]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: LogicLib + Stash Radar plugin jars (read-only, tested releases)
+        run: |
+          mkdir -p libs plugin-jars
+          for l in forge neoforge; do
+            curl -fsSL -o "libs/logiclib-$l-${MC}-${LOGICLIB}.jar" "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/logiclib-$l-${MC}-${LOGICLIB}.jar"
+          done
+          curl -fsSL -o plugin-jars/logiclib-paper-${LOGICLIB}.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib-paper/dist/logiclib-paper-${LOGICLIB}.jar"
+          curl -fsSL -o plugin-jars/stashradar-paper-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/stashradar-plugin/dist/stashradar-paper-0.1.0.jar"
+          ls -la libs plugin-jars
+      - name: Build Stash Radar (NeoForge 1.21.1) + the screenshot helper
+        run: |
+          chmod +x gradlew
+          ./gradlew :neoforge:build :neoforge:pageshotsJar -x test --no-daemon -q
+          ls -la neoforge/build/libs neoforge/build/pageshots
+      - name: Virtual screen, software OpenGL, launcher
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri libglx-mesa0 libopenal1 imagemagick > /dev/null
+          pip install -q portablemc
+      - name: Take the shots (${{ matrix.mode }})
+        run: bash ci/gallery.sh ${{ matrix.mode }} out
+      - name: Sizes
+        if: always()
+        run: for f in out/*.png; do echo "$f $(identify -format '%wx%h' "$f")"; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gallery-${{ matrix.mode }}
+          path: out/
+
+  save:
+    needs: shots
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: gallery-*
+          merge-multiple: true
+          path: out
+      - name: Push to gallery-results
+        run: |
+          cd out
+          echo "${GITHUB_SHA}" > COMMIT
+          echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" > RUN
+          git init -q -b gallery-results && git config user.name ci && git config user.email ci@example.com
+          git add -A && git commit -qm "gallery ${GITHUB_SHA}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gallery-results

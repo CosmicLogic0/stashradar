@@ -1,0 +1,15 @@
+# CI-only helper for the CurseForge gallery: never released, never in the Stash Radar jar.
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "All Rights Reserved"
+[[mods]]
+modId = "stashradar_pageshots"
+version = "1.0.0"
+displayName = "Stash Radar gallery shots (CI only)"
+description = '''Takes the gallery screenshots in CI. Does nothing unless -Dstashradar.pageshots is set.'''
+[[dependencies.stashradar_pageshots]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "CLIENT"
