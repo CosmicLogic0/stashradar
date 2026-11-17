@@ -52,6 +52,20 @@ tasks.register('srResources', Sync) {
 sourceSets.main.java.srcDirs = [gen]
 sourceSets.main.resources.srcDirs = [res]
 compileJava.dependsOn 'srSources'
+compileJava.enabled = !project.hasProperty('probe')
 processResources.dependsOn 'srResources'
 tasks.matching { it.name == 'sourcesJar' }.configureEach { dependsOn 'srSources', 'srResources' }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 25 }
+
+// Prints the signatures of a few Minecraft classes (javap) so ports can be written against the real 26.x API.
+tasks.register('apiProbe') {
+    dependsOn 'compileJava'
+    doLast {
+        def cp = sourceSets.main.compileClasspath.files.collect { it.absolutePath }.join(File.pathSeparator)
+        def javap = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }.get().executablePath.asFile.parentFile.toPath().resolve('javap').toString()
+        (project.findProperty('probe') ?: '').toString().split(',').findAll { it }.each { cls ->
+            def p = new ProcessBuilder(javap, '-cp', cp, cls).redirectErrorStream(true).start()
+            println "===== ${cls}"; println p.inputStream.text; p.waitFor()
+        }
+    }
+}

@@ -1,0 +1,21 @@
+name: API probe
+on:
+  push:
+    paths: ['.github/probe.txt']
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 25 }
+      - name: javap
+        working-directory: ports/forge-26
+        run: |
+          mkdir -p ../../libs
+          chmod +x gradlew
+          MC=$(head -1 ../../.github/probe.txt); CLS=$(sed -n 2p ../../.github/probe.txt)
+          FORGE=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>$MC-[^<]*</version>" | sed "s/<[^>]*>//g; s/^$MC-//" | sort -V | tail -1)
+          echo "Forge $FORGE"
+          ./gradlew apiProbe --no-daemon -Pminecraft_version=$MC -Pforge_version=$FORGE -Pprobe="$CLS" 2>&1 | grep -v "^\s*$" 
