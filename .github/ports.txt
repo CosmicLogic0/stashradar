@@ -1,6 +1,6 @@
 # Every extra build of Stash Radar (the main 1.21.1 MultiLoader build is build.yml): <loader> <minecraft>
 # loader: forge / neoforge (ports/forge, Architectury Loom), neoforge120 (the Forge 1.20.1 jar on NeoForge 1.20.1),
-#         forge26 / neoforge26 (ports/forge-26, ports/neoforge-26)
+#         forge26 / neoforge26 (ports/forge-26, ports/neoforge-26), forge112 (ports/forge-1.12.2, RetroFuturaGradle)
 # A version is only added here once LogicLib has a released jar for it (LogicLib's dist branch).
 forge 1.21.11
 forge 1.20.1
@@ -15,3 +15,4 @@ forge26 26.1.2
 neoforge26 26.3
 neoforge26 26.2
 neoforge26 26.1.2
+forge112 1.12.2   # ports/forge-1.12.2 (RetroFuturaGradle, own 1.12.2 source)

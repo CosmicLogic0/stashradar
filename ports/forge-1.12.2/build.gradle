@@ -1,0 +1,57 @@
+// Stash Radar for Forge 1.12.2. Build setup copied from LogicLib's ports/forge-1.12.2 (CleanroomMC's TemplateDevEnv,
+// RetroFuturaGradle). 1.12.2 uses completely different (MCP) names, so the Minecraft-facing code lives in its own
+// small source (src/main/java/.../legacy). StashRadar.java and StashRadarConfig.java (plain Java) are shared with
+// every other version through the //#if preprocessor in ../shared.gradle.
+plugins {
+    id 'java'
+    id 'com.gtnewhorizons.retrofuturagradle' version '2.0.3'
+}
+
+apply from: '../shared.gradle'
+
+version = "${project.mod_version}"
+group = 'com.cosmiclogic.stashradar'
+base { archivesName = 'stashradar-forge-1.12.2' }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+        vendor.set(JvmVendorSpec.AZUL)
+    }
+}
+
+minecraft {
+    mcVersion.set('1.12.2')
+    mcpMappingChannel.set('stable')
+    mcpMappingVersion.set('39')
+    username.set('Developer')
+}
+
+// LogicLib (read-only dependency): CI downloads the tested jar from LogicLib's dist branch into ../../libs.
+dependencies {
+    compileOnly files(rootProject.file("../../libs/logiclib-forge-1.12.2-${project.logiclib_version}.jar"))
+}
+
+def sharedOut = layout.buildDirectory.dir('shared-src').get().asFile
+tasks.register('srSources') {
+    inputs.dir('../src/common')
+    outputs.dir(sharedOut)
+    doLast {
+        vrGenerate([['../src/common', 'com/cosmiclogic/stashradar/StashRadar']], sharedOut,
+                [mc: '1.12.2', FORGE: true, NEOFORGE: false, FABRIC: false, JAVA8: true])
+    }
+}
+sourceSets.main.java.srcDir sharedOut
+compileJava.dependsOn 'srSources'
+
+sourceSets.main.resources.srcDir layout.buildDirectory.dir('icon-res')
+tasks.register('srIcon', Sync) {
+    from('../../common/src/main/resources') { include 'stashradar.png' }
+    into layout.buildDirectory.dir('icon-res')
+}
+processResources {
+    dependsOn 'srIcon'
+    inputs.property 'version', project.mod_version
+    filesMatching('mcmod.info') { expand 'version': project.mod_version }
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }

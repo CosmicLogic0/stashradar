@@ -1,0 +1,12 @@
+[{
+  "modid": "stashradar",
+  "name": "Stash Radar",
+  "description": "Where did I put my diamonds? Search nearby chests and shulker boxes for an item; the server checks what's really inside and highlights the containers that have it.",
+  "version": "${version}",
+  "mcversion": "1.12.2",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/stash-radar",
+  "authorList": ["CosmicLogic"],
+  "dependencies": ["logiclib"],
+  "requiredMods": ["logiclib"],
+  "logoFile": "stashradar.png"
+}]

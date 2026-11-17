@@ -34,10 +34,11 @@ jobs:
           inc = []
           for loader, mc in [(r[0], r[1]) for r in rows('.github/ports.txt')]:
               if only and (loader, mc) not in only: continue
-              d = {'forge': 'ports/forge', 'neoforge': 'ports/forge', 'neoforge120': 'ports/forge', 'forge26': 'ports/forge-26', 'neoforge26': 'ports/neoforge-26'}[loader]
+              d = {'forge': 'ports/forge', 'neoforge': 'ports/forge', 'neoforge120': 'ports/forge', 'forge26': 'ports/forge-26', 'neoforge26': 'ports/neoforge-26', 'forge112': 'ports/forge-1.12.2'}[loader]
               def v(s): return [int(x) for x in s.split('.')] + [0] * (3 - len(s.split('.')))
               j = 25 if loader.endswith('26') else (21 if v(mc) >= [1, 20, 5] else 17 if v(mc) >= [1, 18] else 8)
-              inc.append({'loader': loader, 'mc': mc, 'dir': d, 'java': j, 'id': f"{loader.replace('26', '')}-{mc}"})
+              lid = 'forge' if loader == 'forge112' else loader.replace('26', '')
+              inc.append({'loader': loader, 'mc': mc, 'dir': d, 'java': j, 'id': f"{lid}-{mc}"})
           print('matrix=' + json.dumps({'include': inc}))
           PY
 
@@ -68,6 +69,7 @@ jobs:
           case "${{ matrix.loader }}" in
             forge) echo "args=-Pforge_version=$FORGE -Parch_loom_version=$LOOM" >> "$GITHUB_OUTPUT"; echo "lv=$mc-$FORGE" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE, Loom $LOOM" ;;
             forge26) echo "args=-Pforge_version=$FORGE" >> "$GITHUB_OUTPUT"; echo "lv=$mc-$FORGE" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE" ;;
+            forge112) echo "lv=$mc-$FORGE" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE (RetroFuturaGradle build)" ;;
             neoforge120) NF=$(curl -s https://maven.neoforged.net/releases/net/neoforged/forge/maven-metadata.xml | grep -oE "<version>$mc-[0-9.]+</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
                 echo "args=-Pforge_version=$FORGE -Parch_loom_version=$LOOM" >> "$GITHUB_OUTPUT"; echo "lv=$NF" >> "$GITHUB_OUTPUT"; echo "Forge $FORGE jar on NeoForge $NF" ;;
             neoforge) P=$(echo "$mc" | sed 's/^1\.//'); case "$P" in *.*) ;; *) P="$P.0" ;; esac
@@ -92,7 +94,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
         run: |
           set -o pipefail
-          case "${{ matrix.loader }}" in *26) export JAVA_HOME="$JAVA_HOME_25_X64" ;; *) export JAVA_HOME="$JAVA_HOME_21_X64" ;; esac
+          case "${{ matrix.loader }}" in *26|forge112) export JAVA_HOME="$JAVA_HOME_25_X64" ;; *) export JAVA_HOME="$JAVA_HOME_21_X64" ;; esac
           chmod +x gradlew
           ./gradlew build -x test --no-daemon -Pminecraft_version=${{ matrix.mc }} ${{ steps.v.outputs.args }} 2>&1 | tee build.log
       - name: Pick the jar
