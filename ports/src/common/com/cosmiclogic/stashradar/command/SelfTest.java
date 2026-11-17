@@ -55,12 +55,12 @@ final class SelfTest {
             level.getChunk(x >> 4, z >> 4);
             level.getChunk((x + 20) >> 4, z >> 4);
 
-            // Chest: 7 diamonds + a purple shulker box ITEM holding 3 emeralds.
+            // Chest: 7 diamonds + a shulker box ITEM holding 3 emeralds.
             Container chest = place(level, new BlockPos(x, y, z), Blocks.CHEST.defaultBlockState(), placed);
             chest.setItem(0, new ItemStack(Items.DIAMOND, 7));
             chest.setItem(1, shulkerItemWith(new ItemStack(Items.EMERALD, 3)));
-            // Purple shulker box block: 4 diamonds.
-            place(level, new BlockPos(x - 2, y, z), Blocks.PURPLE_SHULKER_BOX.defaultBlockState(), placed).setItem(0, new ItemStack(Items.DIAMOND, 4));
+            // Shulker box block: 4 diamonds.
+            place(level, new BlockPos(x - 2, y, z), Blocks.SHULKER_BOX.defaultBlockState(), placed).setItem(0, new ItemStack(Items.DIAMOND, 4));
             // Barrel: 2 diamonds.
             place(level, new BlockPos(x + 2, y, z), Blocks.BARREL.defaultBlockState(), placed).setItem(0, new ItemStack(Items.DIAMOND, 2));
             // A dropper with diamonds: not searched by default.
@@ -131,7 +131,7 @@ final class SelfTest {
     }
 
     private static ItemStack shulkerItemWith(ItemStack content) {
-        ItemStack shulker = new ItemStack(Items.PURPLE_SHULKER_BOX);
+        ItemStack shulker = new ItemStack(Items.SHULKER_BOX);
         //#if MC >= 1.20.5
         shulker.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(Collections.singletonList(content)));
         //#else

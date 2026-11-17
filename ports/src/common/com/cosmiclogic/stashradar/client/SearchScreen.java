@@ -3,7 +3,9 @@ package com.cosmiclogic.stashradar.client;
 import com.cosmiclogic.stashradar.StashRadar;
 import com.cosmiclogic.stashradar.search.Ids;
 import net.minecraft.ChatFormatting;
-//#if MC >= 1.20
+//#if MC >= 26.1
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+//#elif MC >= 1.20
 import net.minecraft.client.gui.GuiGraphics;
 //#else
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -19,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import org.lwjgl.glfw.GLFW;
 //#if MC >= 1.21.9
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -163,15 +164,20 @@ public class SearchScreen extends Screen {
     }
 
     @Override
-    //#if MC >= 1.20
+    //#if MC >= 26.1
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(g, mouseX, mouseY, partialTick);
+    //#elif MC >= 1.20
     public void render(GuiGraphics g, int mouseX, int mouseY, float partialTick) {
-    //#else
-    public void render(PoseStack g, int mouseX, int mouseY, float partialTick) {
-    //#endif
         //#if MC < 1.20.2
         renderBackground(g);
         //#endif
         super.render(g, mouseX, mouseY, partialTick);
+    //#else
+    public void render(PoseStack g, int mouseX, int mouseY, float partialTick) {
+        renderBackground(g);
+        super.render(g, mouseX, mouseY, partialTick);
+    //#endif
         int left = (width - LIST_WIDTH) / 2;
         centered(g, title, width / 2, 14, 0xFFFFFF);
         //#if MC < 1.19.4
@@ -205,7 +211,12 @@ public class SearchScreen extends Screen {
     }
 
     // ---- drawing helpers: one render() body for every version ----
-    //#if MC >= 1.20
+    //#if MC >= 26.1
+    private void centered(GuiGraphicsExtractor g, Component c, int x, int y, int color) { g.centeredText(font, c, x, y, 0xFF000000 | color); }
+    private void text(GuiGraphicsExtractor g, String s, int x, int y, int color) { g.text(font, s, x, y, 0xFF000000 | color, true); }
+    private void rect(GuiGraphicsExtractor g, int x0, int y0, int x1, int y1, int color) { g.fill(x0, y0, x1, y1, color); }
+    private void item(GuiGraphicsExtractor g, ItemStack stack, int x, int y) { g.item(stack, x, y); }
+    //#elif MC >= 1.20
     // Text colours get a full alpha byte: 1.21.6+ treats a missing alpha as invisible.
     private void centered(GuiGraphics g, Component c, int x, int y, int color) { g.drawCenteredString(font, c, x, y, 0xFF000000 | color); }
     private void text(GuiGraphics g, String s, int x, int y, int color) { g.drawString(font, s, x, y, 0xFF000000 | color); }
@@ -256,7 +267,7 @@ public class SearchScreen extends Screen {
 
     /** Enter picks the first match. */
     private boolean enter(int keyCode) {
-        if ((keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) && !results.isEmpty()) {
+        if ((keyCode == 257 || keyCode == 335) && !results.isEmpty()) {   // GLFW Enter, keypad Enter
             pick(results.get(0));
             return true;
         }

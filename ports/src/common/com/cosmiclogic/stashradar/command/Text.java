@@ -22,6 +22,15 @@ final class Text {
         //#endif
     }
 
+    /** An item's display name. Item.getDescription() is gone from 1.21.11. */
+    static MutableComponent itemName(net.minecraft.world.item.Item item) {
+        //#if MC >= 1.21.11
+        return new net.minecraft.world.item.ItemStack(item).getHoverName().copy();
+        //#else
+        return item.getDescription().copy();
+        //#endif
+    }
+
     static MutableComponent prefix() {
         return of("[", ChatFormatting.DARK_GRAY)
                 .append(of("Stash Radar", ChatFormatting.GREEN))

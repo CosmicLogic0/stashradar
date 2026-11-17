@@ -75,7 +75,11 @@ public final class StashRadarCommands {
     private static int find(CommandContext<CommandSourceStack> ctx, int requestedRange) throws CommandSyntaxException {
         CommandSourceStack source = ctx.getSource();
         ServerPlayer player = source.getPlayerOrException();
+        //#if MC >= 26.1
+        Item item = ItemArgument.getItem(ctx, "item").item().value();
+        //#else
         Item item = ItemArgument.getItem(ctx, "item").getItem();
+        //#endif
         StashRadarConfig config = StashRadar.config();
 
         int maxRange = Math.max(1, config.maxRange);
@@ -105,7 +109,7 @@ public final class StashRadarCommands {
             Highlighter.stop(player.getUUID());
             Text.ok(source, Text.prefix()
                     .append(Text.of("No ", ChatFormatting.GRAY))
-                    .append(item.getDescription().copy().withStyle(ChatFormatting.WHITE))
+                    .append(Text.itemName(item).withStyle(ChatFormatting.WHITE))
                     .append(Text.of(" in containers within " + range + " blocks.", ChatFormatting.GRAY)), false);
             return 0;
         }
@@ -119,7 +123,7 @@ public final class StashRadarCommands {
         MutableComponent msg = Text.prefix()
                 .append(Text.of("Found ", ChatFormatting.GREEN))
                 .append(Text.of(total + " ", ChatFormatting.WHITE))
-                .append(item.getDescription().copy().withStyle(ChatFormatting.WHITE))
+                .append(Text.itemName(item).withStyle(ChatFormatting.WHITE))
                 .append(Text.of(" in ", ChatFormatting.GREEN))
                 .append(Text.of(String.valueOf(hits.size()), ChatFormatting.WHITE))
                 .append(Text.of(hits.size() == 1 ? " container. " : " containers. ", ChatFormatting.GREEN))

@@ -146,7 +146,21 @@ public final class ContainerSearch {
     /** Items stored inside a shulker box item (or bundle). Empty for other items. */
     static List<ItemStack> contentsOf(ItemStack stack) {
         List<ItemStack> out = new ArrayList<>();
-        //#if MC >= 1.20.5
+        //#if MC >= 26.1
+        // 26.x stores ItemStackTemplates; ask for ready-made ItemStack copies instead.
+        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
+        if (contents != null) {
+            contents.nonEmptyItemCopyStream().forEach(out::add);
+        }
+        BundleContents bundle = stack.get(DataComponents.BUNDLE_CONTENTS);
+        if (bundle != null) {
+            //#if MC >= 26.3
+            bundle.itemCopies().forEach(out::add);
+            //#else
+            bundle.itemCopyStream().forEach(out::add);
+            //#endif
+        }
+        //#elif MC >= 1.20.5
         ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
         if (contents != null) {
             for (ItemStack inner : contents.nonEmptyItems()) {
