@@ -36,7 +36,7 @@ public final class PageShots {
     private static final String SERVER = System.getProperty("stashradar.pageshots.server", "127.0.0.1:25565");
 
     /** A step: wait this many ticks, then run. */
-    private record Step(int wait, Runnable run) {
+    private record Step(int delay, Runnable run) {
     }
 
     private final Deque<Step> steps = new ArrayDeque<>();
@@ -81,7 +81,7 @@ public final class PageShots {
             }
             s.run().run();
             Step next = steps.peek();
-            waiting = next == null ? 0 : next.wait();
+            waiting = next == null ? 0 : next.delay();
         } catch (Throwable t) {
             LOG.error("SRSHOT failed", t);
             steps.clear();
