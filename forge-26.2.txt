@@ -1,0 +1,1 @@
+PASS build+server(self-test)+client+creator-server (26.2-65.1.6, LogicLib from dist)
