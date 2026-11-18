@@ -111,8 +111,13 @@ public final class PageShots {
         }
     }
 
+    /** HUD on (only for shots about the chat or the HUD) or off (F1). The hand is never drawn. */
     private void hud(boolean on) {
-        then(1, () -> Minecraft.getInstance().options.hideGui = !on);
+        then(1, () -> {
+            Minecraft mc = Minecraft.getInstance();
+            mc.options.hideGui = !on;
+            mc.gameRenderer.setRenderHand(false);
+        });
     }
 
     private void gui(int scale) {
@@ -123,9 +128,12 @@ public final class PageShots {
         });
     }
 
-    /** Feet at (x, y, z), looking yaw/pitch (yaw 0 = south). */
-    private void camera(double x, double y, double z, float yaw, float pitch) {
-        cmd(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", x, y, z, yaw, pitch));
+    /** Eye at (ex, ey, ez), looking at the point (tx, ty, tz). */
+    private void look(double ex, double ey, double ez, double tx, double ty, double tz) {
+        double dx = tx - ex, dy = ty - ey, dz = tz - ez;
+        float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));
+        float pitch = (float) -Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)));
+        cmd(String.format(java.util.Locale.ROOT, "tp @s %.2f %.2f %.2f %.1f %.1f", ex, ey - 1.62, ez, yaw, pitch));
     }
 
     private void shot(int wait, String name) {
@@ -142,15 +150,21 @@ public final class PageShots {
         then(1, () -> Minecraft.getInstance().setScreen(null));
     }
 
+    private void clearChat() {
+        then(2, () -> Minecraft.getInstance().gui.getChat().clearMessages(false));
+    }
+
     // ------------------------------------------------------------------ the tour
 
     private void plan() {
         Minecraft mc = Minecraft.getInstance();
         GLFW.glfwSetWindowSize(mc.getWindow().getWindow(), 1920, 1080);
         boolean plugin = MODE.equals("plugin");
+        String p = plugin ? "plugin-" : "mod-";
         String diamond = plugin ? "diamond" : "minecraft:diamond";
         String emerald = plugin ? "emerald" : "minecraft:emerald";
         String iron = plugin ? "iron_ingot" : "minecraft:iron_ingot";
+        double yx = Scene.YX + 0.5, yz = Scene.YZ + 0.5;
 
         // world: noon, clear, nothing moving
         then(100, () -> LOG.info("SRSHOT setting up"));
@@ -163,68 +177,85 @@ public final class PageShots {
             Minecraft m = Minecraft.getInstance();
             m.player.getAbilities().flying = true;
             m.player.onUpdateAbilities();
+            m.player.getInventory().selected = 8;   // empty slot: nothing in the hand
         });
-        gui(3);
-
-        // 1. The storage wall: diamonds found, outlines on the containers that have them
+        gui(4);
         hud(false);
-        camera(7.5, -60, 2.6, 0, 9);
-        cmd("find " + diamond);
-        shot(45, plugin ? "plugin-01-storage-diamonds" : "mod-01-storage-diamonds");
 
-        // 2. Closer: the outlined chest, barrel and shulker box fill the frame
-        camera(6.2, -60, 6.4, -12, 18);
+        // 1. The storage wall fills the frame: /find diamond outlines the 4 containers that hold diamonds
+        look(7.5, -58.2, 3.6, 7.5, -58.6, 10.5);
+        then(40, () -> LOG.info("SRSHOT chunks settled"));
         cmd("find " + diamond);
-        shot(45, plugin ? "plugin-02-closeup" : "mod-02-closeup");
+        shot(45, p + "01-storage-wall");
 
-        // 3. Emeralds: only the chest holding a shulker box ITEM full of emeralds lights up
-        camera(4.2, -60, 5.6, 22, 20);
+        // 2. Close-up: the outlined chest and purple shulker box, with plain neighbours
+        look(5.9, -58.4, 7.4, 5.7, -59.3, 10.5);
+        cmd("find " + diamond);
+        shot(45, p + "02-closeup");
+
+        // 3. Emeralds: only the chest that holds a shulker box ITEM full of emeralds lights up
+        look(3.0, -58.4, 7.0, 2.5, -59.5, 10.5);
         cmd("find " + emerald);
-        shot(45, plugin ? "plugin-03-inside-shulker" : "mod-03-inside-shulker");
+        shot(45, p + "03-inside-shulker-item");
 
-        // 4. The yard: iron in containers spread around, found with a 24 block range
-        camera(Scene.YX, -48, Scene.YZ - 13, 0, 38);
-        cmd("find " + iron + " 24");
-        shot(55, plugin ? "plugin-04-yard-range" : "mod-04-yard-range");
+        // 4./5. The yard: the same search with range 8 and range 24, searched from the middle of the field
+        for (int r : new int[]{8, 24}) {
+            look(yx, -58.3, yz - 1, yx, -58.3, yz + 5);
+            cmd("find " + iron + " " + r);
+            look(yx - 1, -49.0, yz - 15, yx, -60, yz + 1);
+            shot(35, p + (r == 8 ? "04-yard-range-8" : "05-yard-range-24"));
+        }
 
         if (!plugin) {
-            // 5./6. The search screen (key K): suggestions with icons, range button
-            gui(4);
+            // 6./7. The search screen (key K): suggestions with icons, range button, mouse over a row
             then(5, () -> ModOnly.openSearch("diamond", 16));
-            shot(40, "mod-05-search-screen");
+            then(10, () -> ModOnly.hover("Diamond"));
+            shot(30, "mod-06-search-screen");
             closeScreen();
-            then(5, () -> ModOnly.openSearch("shulker", 24));
-            shot(40, "mod-06-search-shulker");
+            then(5, () -> ModOnly.openSearch("shulker box", 24));
+            then(10, () -> ModOnly.hover("Lime Shulker Box"));
+            shot(30, "mod-07-search-shulker");
             closeScreen();
         }
 
-        // 7. Chat summary + outlines, HUD on (this shot is about the chat)
-        gui(3);
+        // 8. Chat close-up (HUD on, big GUI): the summary line, outlines behind it
         hud(true);
-        camera(7.5, -60, 2.6, 0, 9);
-        then(5, () -> Minecraft.getInstance().gui.getChat().clearMessages(false));
+        look(7.5, -58.2, 3.6, 7.5, -58.6, 10.5);
+        clearChat();
         if (!plugin) {
-            // picked from the search screen with Enter, exactly like a player does
+            // picked in the search screen with a click on the "Diamond" row, exactly like a player does
             then(5, () -> ModOnly.openSearch("diamond", 16));
-            then(30, ModOnly::pressEnter);
+            then(10, () -> ModOnly.hover("Diamond"));
+            then(10, ModOnly::click);
         } else {
             cmd("find " + diamond);
         }
-        shot(40, plugin ? "plugin-05-chat-result" : "mod-07-chat-result");
+        shot(40, p + "08-chat-result");
 
-        // 8. /find tab-complete
-        then(5, () -> Minecraft.getInstance().gui.getChat().clearMessages(false));
-        then(5, () -> Minecraft.getInstance().setScreen(new ChatScreen(plugin ? "/find dia" : "/find minecraft:dia")));
-        shot(40, plugin ? "plugin-06-tab-complete" : "mod-08-tab-complete");
+        // 9. /find tab-complete (Tab shows the matching items)
+        clearChat();
+        then(5, () -> Minecraft.getInstance().setScreen(new ChatScreen("/find diamond")));
+        then(15, () -> {
+            Minecraft m = Minecraft.getInstance();
+            if (m.screen != null) {
+                m.screen.keyPressed(GLFW.GLFW_KEY_TAB, 0, 0);
+            }
+        });
+        shot(30, p + "09-tab-complete");
         closeScreen();
 
+        // 10. Nothing found: the plain answer, no outlines
+        clearChat();
+        cmd("find " + (plugin ? "netherite_ingot" : "minecraft:netherite_ingot"));
+        shot(30, p + "10-chat-nothing");
+
         if (plugin) {
-            // 9. Cooldown for normal players (operators skip it): deop, then search twice
+            // 11. Cooldown for normal players (operators skip it): deop, then search twice
             cmd("deop @s");
-            then(5, () -> Minecraft.getInstance().gui.getChat().clearMessages(false));
+            clearChat();
             then(10, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
             then(10, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
-            shot(20, "plugin-07-cooldown");
+            shot(20, "plugin-11-cooldown");
         }
 
         then(10, () -> {

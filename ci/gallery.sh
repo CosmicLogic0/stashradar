@@ -30,8 +30,10 @@ if [ "$mode" = mod ]; then
   mkdir -p "$S/mods"; cp "$G"/mods/stashradar-neoforge-*.jar "$G"/mods/logiclib-neoforge-*.jar "$S/mods/"
   START="bash run.sh nogui"
 else
-  B=$(curl -s "https://api.papermc.io/v2/projects/paper/versions/$MC/builds" | python3 -c "import json,sys; b=[x for x in json.load(sys.stdin)['builds'] if x['channel']=='default']; print(b[-1]['build'])")
-  curl -fsSL -o "$S/paper.jar" "https://api.papermc.io/v2/projects/paper/versions/$MC/builds/$B/downloads/paper-$MC-$B.jar"
+  UA="CosmicLogic-CI/1.0 (https://github.com/CosmicLogic0)"
+  URL=$(curl -fsSL -H "User-Agent: $UA" "https://fill.papermc.io/v3/projects/paper/versions/$MC/builds" | jq -r 'sort_by(.id) | last | .downloads["server:default"].url')
+  echo "Paper: $URL"
+  curl -fsSL -H "User-Agent: $UA" -o "$S/paper.jar" "$URL" || { echo "::error::Paper download failed"; exit 1; }
   mkdir -p "$S/plugins"; cp plugin-jars/*.jar "$S/plugins/"; ls -la "$S/plugins"
   START="$J21 -Xmx2G -jar paper.jar nogui"
 fi
@@ -73,14 +75,14 @@ OPT
 
 for i in $(seq 1 480); do
   sleep 5
-  grep -q "SRSHOT done" game.log && break
+  grep -qh "SRSHOT done" game.log "$G/logs/latest.log" 2>/dev/null && break
   grep -qE "Crash report saved|---- Minecraft Crash Report ----" game.log && break
   pgrep -f "portablemc" > /dev/null || break
 done
 sleep 5
 pkill -f portablemc || true; pkill -f java || true; sleep 3
-cp game.log "$out/$mode-game.log"; cp "$S/server.log" "$out/$mode-server.log" 2>/dev/null || true
+cp game.log "$out/$mode-game.log"; cp "$G/logs/latest.log" "$out/$mode-latest.log" 2>/dev/null || true; cp "$S/server.log" "$out/$mode-server.log" 2>/dev/null || true
 cp "$G"/screenshots/*.png "$out/" 2>/dev/null || true
-grep -E "SRSHOT|Stash Radar|\[CHAT\]" game.log | head -120
+grep -hE "SRSHOT|Stash Radar|\[CHAT\]" game.log "$G/logs/latest.log" 2>/dev/null | head -150
 ls -la "$out"
-grep -q "SRSHOT done" game.log && ! grep -q "SRSHOT done (with an error)" game.log
+grep -qh "SRSHOT done" game.log "$G/logs/latest.log" 2>/dev/null && ! grep -qh "SRSHOT done (with an error)" game.log "$G/logs/latest.log" 2>/dev/null
