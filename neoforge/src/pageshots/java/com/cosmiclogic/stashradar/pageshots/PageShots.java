@@ -146,6 +146,23 @@ public final class PageShots {
         });
     }
 
+    /** World shots are taken in spectator mode: no gravity, no hand, the camera stays exactly where it is put. */
+    private void spectator(boolean on) {
+        cmd(on ? "gamemode spectator" : "gamemode creative");
+        if (!on) {
+            then(2, () -> {
+                Minecraft m = Minecraft.getInstance();
+                m.player.getAbilities().flying = true;
+                m.player.onUpdateAbilities();
+                m.player.getInventory().selected = 8;
+            });
+        }
+    }
+
+    private void noToasts() {
+        then(1, () -> Minecraft.getInstance().getToasts().clear());
+    }
+
     private void closeScreen() {
         then(1, () -> Minecraft.getInstance().setScreen(null));
     }
@@ -181,29 +198,30 @@ public final class PageShots {
         });
         gui(4);
         hud(false);
+        spectator(true);
 
-        // 1. The storage wall fills the frame: /find diamond outlines the 4 containers that hold diamonds
-        look(7.5, -58.2, 3.6, 7.5, -58.6, 10.5);
+        // 1. The storage wall: /find diamond outlines the 4 containers that hold diamonds
+        look(7.5, -58.9, 5.0, 7.5, -59.0, 10.5);
         then(40, () -> LOG.info("SRSHOT chunks settled"));
         cmd("find " + diamond);
         shot(45, p + "01-storage-wall");
 
-        // 2. Close-up: the outlined chest and purple shulker box, with plain neighbours
-        look(5.9, -58.4, 7.4, 5.7, -59.3, 10.5);
+        // 2. Close-up at chest height: the outlined chest and purple shulker box, plain neighbours around them
+        look(5.9, -59.0, 7.9, 5.9, -59.0, 10.5);
         cmd("find " + diamond);
         shot(45, p + "02-closeup");
 
-        // 3. Emeralds: only the chest that holds a shulker box ITEM full of emeralds lights up
-        look(3.0, -58.4, 7.0, 2.5, -59.5, 10.5);
+        // 3. Emeralds: only the chest holding a shulker box ITEM full of emeralds lights up
+        look(2.5, -59.0, 7.6, 2.5, -59.4, 10.5);
         cmd("find " + emerald);
         shot(45, p + "03-inside-shulker-item");
 
-        // 4./5. The yard: the same search with range 8 and range 24, searched from the middle of the field
+        // 4./5. The yard: same search with range 8 and range 24, searched from the middle of the field
         for (int r : new int[]{8, 24}) {
-            look(yx, -58.3, yz - 1, yx, -58.3, yz + 5);
+            look(yx, -58.4, yz, yx, -58.4, yz + 5);
             cmd("find " + iron + " " + r);
-            look(yx - 1, -49.0, yz - 15, yx, -60, yz + 1);
-            shot(35, p + (r == 8 ? "04-yard-range-8" : "05-yard-range-24"));
+            look(yx, -49.5, yz - 13, yx, -60, yz + 1);
+            shot(40, p + (r == 8 ? "04-yard-range-8" : "05-yard-range-24"));
         }
 
         if (!plugin) {
@@ -219,8 +237,10 @@ public final class PageShots {
         }
 
         // 8. Chat close-up (HUD on, big GUI): the summary line, outlines behind it
+        spectator(false);
         hud(true);
-        look(7.5, -58.2, 3.6, 7.5, -58.6, 10.5);
+        look(7.5, -58.38, 4.5, 7.5, -59.0, 10.5);
+        noToasts();
         clearChat();
         if (!plugin) {
             // picked in the search screen with a click on the "Diamond" row, exactly like a player does
@@ -230,12 +250,13 @@ public final class PageShots {
         } else {
             cmd("find " + diamond);
         }
+        noToasts();
         shot(40, p + "08-chat-result");
 
         // 9. /find tab-complete (Tab shows the matching items)
         clearChat();
-        then(5, () -> Minecraft.getInstance().setScreen(new ChatScreen("/find diamond")));
-        then(15, () -> {
+        then(5, () -> Minecraft.getInstance().setScreen(new ChatScreen(plugin ? "/find dia" : "/find minecraft:dia")));
+        then(20, () -> {
             Minecraft m = Minecraft.getInstance();
             if (m.screen != null) {
                 m.screen.keyPressed(GLFW.GLFW_KEY_TAB, 0, 0);
@@ -251,7 +272,7 @@ public final class PageShots {
 
         if (plugin) {
             // 11. Cooldown for normal players (operators skip it): deop, then search twice
-            cmd("deop @s");
+            cmd("deop Radar");
             clearChat();
             then(10, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
             then(10, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));

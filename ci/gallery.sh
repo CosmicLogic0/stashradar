@@ -58,6 +58,10 @@ maxFps:60
 enableVsync:false
 fullscreen:false
 bobView:false
+fov:0.0
+fovEffectScale:0.0
+tutorialStep:none
+joinedFirstServer:true
 autoSuggestions:true
 chatVisibility:0
 onboardAccessibility:false
