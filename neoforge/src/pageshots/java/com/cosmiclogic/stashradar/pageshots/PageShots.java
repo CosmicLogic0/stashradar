@@ -163,6 +163,17 @@ public final class PageShots {
         then(1, () -> Minecraft.getInstance().getToasts().clear());
     }
 
+    /**
+     * Six real frames, 3 ticks apart. The outline is made of short-lived dust particles redrawn twice a second, so
+     * single frames catch it half-drawn; the gallery uses the frame where most of it is on screen (picked offline by
+     * counting outline-green pixels; every frame is a real, unedited screenshot).
+     */
+    private void burst(int wait, String name) {
+        for (int i = 1; i <= 6; i++) {
+            shot(i == 1 ? wait : 3, name + "-f" + i);
+        }
+    }
+
     private void closeScreen() {
         then(1, () -> Minecraft.getInstance().setScreen(null));
     }
@@ -204,24 +215,24 @@ public final class PageShots {
         look(7.5, -58.9, 5.0, 7.5, -59.0, 10.5);
         then(40, () -> LOG.info("SRSHOT chunks settled"));
         cmd("find " + diamond);
-        shot(45, p + "01-storage-wall");
+        burst(45, p + "01-storage-wall");
 
         // 2. Close-up at chest height: the outlined chest and purple shulker box, plain neighbours around them
         look(5.9, -59.0, 7.9, 5.9, -59.0, 10.5);
         cmd("find " + diamond);
-        shot(45, p + "02-closeup");
+        burst(45, p + "02-closeup");
 
         // 3. Emeralds: only the chest holding a shulker box ITEM full of emeralds lights up
         look(2.5, -59.0, 7.6, 2.5, -59.4, 10.5);
         cmd("find " + emerald);
-        shot(45, p + "03-inside-shulker-item");
+        burst(45, p + "03-inside-shulker-item");
 
         // 4./5. The yard: same search with range 8 and range 24, searched from the middle of the field
         for (int r : new int[]{8, 24}) {
             look(yx, -58.4, yz, yx, -58.4, yz + 5);
             cmd("find " + iron + " " + r);
-            look(yx, -49.5, yz - 13, yx, -60, yz + 1);
-            shot(40, p + (r == 8 ? "04-yard-range-8" : "05-yard-range-24"));
+            look(yx, -55.0, yz - 11, yx, -60, yz + 4);
+            burst(40, p + (r == 8 ? "04-yard-range-8" : "05-yard-range-24"));
         }
 
         if (!plugin) {
@@ -272,10 +283,11 @@ public final class PageShots {
 
         if (plugin) {
             // 11. Cooldown for normal players (operators skip it): deop, then search twice
+            // (non-operators count toward Paper's command spam limit: let it cool down first)
             cmd("deop Radar");
             clearChat();
-            then(10, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
-            then(10, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
+            then(240, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
+            then(30, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
             shot(20, "plugin-11-cooldown");
         }
 
