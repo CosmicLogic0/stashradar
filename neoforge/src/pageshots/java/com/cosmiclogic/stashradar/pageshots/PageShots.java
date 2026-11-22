@@ -284,9 +284,10 @@ public final class PageShots {
         if (plugin) {
             // 11. Cooldown for normal players (operators skip it): deop, then search twice
             // (non-operators count toward Paper's command spam limit: let it cool down first)
+            then(500, () -> LOG.info("SRSHOT waited for Paper's spam counter to drain"));
             cmd("deop Radar");
             clearChat();
-            then(240, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
+            then(100, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
             then(30, () -> Minecraft.getInstance().player.connection.sendCommand("find " + emerald));
             shot(20, "plugin-11-cooldown");
         }
