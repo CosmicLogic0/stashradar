@@ -66,9 +66,7 @@ autoSuggestions:true
 chatVisibility:0
 onboardAccessibility:false
 skipMultiplayerWarning:true
-joinedFirstServer:true
 pauseOnLostFocus:false
-tutorialStep:none
 narrator:0
 soundCategory_master:0.0
 OPT
