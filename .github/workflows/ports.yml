@@ -126,6 +126,7 @@ jobs:
       - name: Restart test (world reload, broken config, 1.0 config upgrade)
         id: restart
         run: |
+          set -o pipefail
           J=${{ matrix.java }}; JH=$(eval echo \$JAVA_HOME_${J}_X64); export PATH="$JH/bin:$PATH"
           cd server
           if [ -f run.sh ]; then CMD="bash run.sh nogui"; else CMD="java -jar $(ls forge-*.jar | grep -v installer | head -1) nogui"; fi
@@ -135,13 +136,17 @@ jobs:
           echo '{ "range": 16, oops this is not json' > server/config/stashradar.json
           mv server/server.log server/server-first.log
           ALLOW_PATTERN="Config stashradar.json is broken" TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server \
-            "Stash Radar loaded on $NAME" "Config stashradar.json is broken" "Stash Radar self-test PASSED" -- $CMD 2>&1 | tail -5
+            "Stash Radar loaded on $NAME" "Config stashradar.json is broken" "Stash Radar self-test PASSED" -- $CMD > restart1.log 2>&1 \
+            || { grep -Ei "stash ?radar|logiclib|error|exception" restart1.log | tail -40; exit 1; }
+          tail -3 restart1.log
           test -f server/config/stashradar.json.broken || { echo "::error::broken config was not kept as stashradar.json.broken"; exit 1; }
           python3 -c "import json; json.load(open('server/config/stashradar.json'))" || { echo "::error::config was not rewritten as valid JSON"; exit 1; }
           # 2) A 1.0 config (no configVersion, own choices): upgraded, choices kept.
           echo '{ "range": 20, "maxRange": 40, "containers": ["minecraft:chest", "minecraft:barrel"] }' > server/config/stashradar.json
           mv server/server.log server/server-broken.log
-          TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server "Stash Radar loaded on $NAME" "config updated to version 2" "Stash Radar self-test PASSED" -- $CMD 2>&1 | tail -5
+          TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server "Stash Radar loaded on $NAME" "config updated to version 2" "Stash Radar self-test PASSED" -- $CMD > restart2.log 2>&1 \
+            || { grep -Ei "stash ?radar|logiclib|error|exception" restart2.log | tail -40; exit 1; }
+          tail -3 restart2.log
           python3 - <<'PY'
           import json, sys
           c = json.load(open('server/config/stashradar.json'))
