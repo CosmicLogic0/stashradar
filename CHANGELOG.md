@@ -21,6 +21,7 @@
 - Tab-complete for `/find` now also suggests tags.
 
 ### Fixed
+- Forge 1.16.5 servers: `/find <item>` failed with an error instead of answering (it used a client-only name lookup).
 - Minecraft 1.21.11 and 26.x: the mod's resource pack info gave an error at startup (`pack.mcmeta`), so its texts could be missing.
 - Forge 1.21.11: used an old, deprecated way to register the key.
 - The cooldown list kept every player who ever searched until the server restarted (a small memory leak).

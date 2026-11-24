@@ -23,12 +23,12 @@ final class Text {
     }
 
     /** An item's display name. Item.getDescription() is gone from 1.21.11. */
+    /**
+     * The item's name. Through an ItemStack on every version: Item.getDescription() is client-only on 1.16.5, so a
+     * dedicated 1.16.5 server failed on it (found by the 1.1.0 self-test).
+     */
     static MutableComponent itemName(net.minecraft.world.item.Item item) {
-        //#if MC >= 1.21.11
         return new net.minecraft.world.item.ItemStack(item).getHoverName().copy();
-        //#else
-        return item.getDescription().copy();
-        //#endif
     }
 
     static MutableComponent prefix() {

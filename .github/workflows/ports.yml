@@ -160,11 +160,21 @@ jobs:
           # mc-runtime-test gives the game the current JAVA_HOME, so point it at the Java this version needs
           # (otherwise 1.16.5 gets Java 25 and HeadlessMC can't install Forge).
           echo "JAVA_HOME=$(eval echo \$JAVA_HOME_${{ matrix.java }}_X64)" >> "$GITHUB_ENV"
+      - name: Own virtual screen for 26.3 (its new renderer wants a GLX visual the test tool's screen doesn't offer)
+        if: always() && steps.jar.outputs.file != '' && matrix.mc == '26.3'
+        run: |
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq xvfb mesa-utils libgl1-mesa-dri >/dev/null
+          Xvfb :99 -screen 0 1920x1080x24 +extension GLX +extension Composite +extension RENDER -noreset > xvfb.log 2>&1 &
+          sleep 3
+          echo "DISPLAY=:99" >> "$GITHUB_ENV"
+          DISPLAY=:99 glxinfo -B | head -20 || true
+          DISPLAY=:99 glxinfo | grep -A3 "GLX Visuals\|GLXFBConfigs" | head -12 || true
       - name: Client test (real game)
         id: client
         if: always() && steps.jar.outputs.file != ''
         uses: headlesshq/mc-runtime-test@5.0.0
         with:
+          xvfb: ${{ matrix.mc != '26.3' }}
           mc: ${{ matrix.mc }}
           modloader: ${{ startsWith(matrix.loader, 'neo') && 'neoforge' || 'forge' }}
           # NeoForge 1.20.1 still runs Forge mods, and the test tool only has a Forge test mod for 1.20.1 (same fix as LogicLib).
