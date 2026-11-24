@@ -1,23 +1,31 @@
 package com.cosmiclogic.stashradar.search;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.BundleContents;
-import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.BundleContents;
+import net.minecraft.world.item.component.ItemContainerContents;
+
+
+
+
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * The search itself. Runs on the server thread and reads the real container contents in chunks
@@ -26,18 +34,59 @@ import java.util.Map;
 public final class ContainerSearch {
 
     /** One container that holds the item. */
-    public record Hit(BlockPos pos, String blockId, int count, double distance) {
+    public static final class Hit {
+        private final BlockPos pos;
+        private final String blockId;
+        private final int count;
+        private final double distance;
+
+        public Hit(BlockPos pos, String blockId, int count, double distance) {
+            this.pos = pos;
+            this.blockId = blockId;
+            this.count = count;
+            this.distance = distance;
+        }
+
+        public BlockPos pos() { return pos; }
+        public String blockId() { return blockId; }
+        public int count() { return count; }
+        public double distance() { return distance; }
     }
 
-    /** Which containers to search and whether to look inside shulker box / bundle items. */
-    public record Options(List<String> containers, boolean insideItems) {
+    /** Which containers to search, whether to look inside shulker box / bundle items, and item frames. */
+    public static final class Options {
+        private final List<String> containers;
+        private final boolean insideItems;
+        private final boolean itemFrames;
+
+        public Options(List<String> containers, boolean insideItems, boolean itemFrames) {
+            this.containers = containers;
+            this.insideItems = insideItems;
+            this.itemFrames = itemFrames;
+        }
+
+        public List<String> containers() { return containers; }
+        public boolean insideItems() { return insideItems; }
+        public boolean itemFrames() { return itemFrames; }
+    }
+
+    /** What we look for: one item, a tag ("#logs") or a name ("sword"). */
+    public static Predicate<ItemStack> of(Item item) {
+        return stack -> stack.getItem() == item;
+    }
+
+    /** Items whose name (custom name included) or id contains the text, ignoring case. */
+    public static Predicate<ItemStack> named(String text) {
+        String q = text.trim().toLowerCase(java.util.Locale.ROOT);
+        return stack -> !q.isEmpty() && (stack.getHoverName().getString().toLowerCase(java.util.Locale.ROOT).contains(q)
+                || Ids.item(stack.getItem()).contains(q.replace(' ', '_')));
     }
 
     private ContainerSearch() {
     }
 
-    /** Containers within {@code range} blocks of {@code center} that hold {@code item}, nearest first. */
-    public static List<Hit> search(ServerLevel level, Vec3 center, Item item, int range, Options options) {
+    /** Containers (and item frames) within {@code range} blocks of {@code center} that hold matching items, nearest first. */
+    public static List<Hit> search(ServerLevel level, Vec3 center, Predicate<ItemStack> match, int range, Options options) {
         List<Hit> hits = new ArrayList<>();
         if (range < 1) {
             return hits;
@@ -57,22 +106,41 @@ public final class ContainerSearch {
                     BlockPos pos = entry.getKey();
                     BlockEntity be = entry.getValue();
                     double distSq = center.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-                    if (distSq > rangeSq || !(be instanceof Container container) || be.isRemoved()) {
+                    if (distSq > rangeSq || !(be instanceof Container) || be.isRemoved()) {
                         continue;
                     }
-                    String blockId = BuiltInRegistries.BLOCK.getKey(be.getBlockState().getBlock()).toString();
+                    String blockId = Ids.block(be.getBlockState().getBlock());
                     if (!isSearched(blockId, be.getBlockState().getBlock() instanceof ShulkerBoxBlock, options.containers())) {
                         continue;
                     }
-                    int count = count(container, item, options.insideItems());
+                    int count = count((Container) be, match, options.insideItems());
                     if (count > 0) {
                         hits.add(new Hit(pos.immutable(), blockId, count, Math.sqrt(distSq)));
                     }
                 }
             }
         }
-        hits.sort(Comparator.comparingDouble(Hit::distance));
+        if (options.itemFrames()) {
+            AABB box = new AABB(center.x - range, center.y - range, center.z - range, center.x + range, center.y + range, center.z + range);
+            for (ItemFrame frame : level.getEntitiesOfClass(ItemFrame.class, box)) {
+                double distSq = center.distanceToSqr(frame.position());
+                int count = count(frame.getItem(), match, options.insideItems(), 0);
+                if (count > 0 && distSq <= rangeSq && frame.isAlive()) {
+                    hits.add(new Hit(frame.blockPosition().immutable(), "item_frame", count, Math.sqrt(distSq)));
+                }
+            }
+        }
+        Collections.sort(hits, Comparator.comparingDouble(Hit::distance));
         return hits;
+    }
+
+    /** How many matching items are in a container that isn't a block (the player's ender chest). */
+    public static int count(Container container, Predicate<ItemStack> match, boolean insideItems) {
+        int total = 0;
+        for (int slot = 0; slot < container.getContainerSize(); slot++) {
+            total += count(container.getItem(slot), match, insideItems, 0);
+        }
+        return total;
     }
 
     static boolean isSearched(String blockId, boolean isShulkerBox, List<String> containers) {
@@ -84,42 +152,81 @@ public final class ContainerSearch {
             if (isShulkerBox && (entry.equals("shulker_boxes") || entry.equals("#shulker_boxes"))) {
                 return true;
             }
+            if (entry.equals("copper_chests") && blockId.startsWith("minecraft:") && blockId.endsWith("copper_chest")) {
+                return true;   // copper_chest, exposed_copper_chest, waxed_oxidized_copper_chest, ...
+            }
         }
         return false;
     }
 
-    static int count(Container container, Item item, boolean insideItems) {
-        int total = 0;
-        for (int slot = 0; slot < container.getContainerSize(); slot++) {
-            total += count(container.getItem(slot), item, insideItems, 0);
-        }
-        return total;
-    }
-
     /** This stack, plus (one level deep) what's inside it if it's a shulker box or bundle item. */
-    static int count(ItemStack stack, Item item, boolean insideItems, int depth) {
+    static int count(ItemStack stack, Predicate<ItemStack> match, boolean insideItems, int depth) {
         if (stack.isEmpty()) {
             return 0;
         }
-        int total = stack.is(item) ? stack.getCount() : 0;
+        int total = match.test(stack) ? stack.getCount() : 0;
         if (insideItems && depth == 0) {
             int inside = 0;
-            ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
-            if (contents != null) {
-                for (ItemStack inner : contents.nonEmptyItems()) {
-                    inside += count(inner, item, true, depth + 1);
-                }
-            }
-            BundleContents bundle = stack.get(DataComponents.BUNDLE_CONTENTS);
-            if (bundle != null) {
-                for (ItemStack inner : bundle.items()) {
-                    inside += count(inner, item, true, depth + 1);
-                }
+            for (ItemStack inner : contentsOf(stack)) {
+                inside += count(inner, match, true, depth + 1);
             }
             total += inside * stack.getCount();
         }
         return total;
     }
+
+    /** Items stored inside a shulker box item (or bundle). Empty for other items. */
+    static List<ItemStack> contentsOf(ItemStack stack) {
+        List<ItemStack> out = new ArrayList<>();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        ItemContainerContents contents = stack.get(DataComponents.CONTAINER);
+        if (contents != null) {
+            for (ItemStack inner : contents.nonEmptyItems()) {
+                out.add(inner);
+            }
+        }
+        BundleContents bundle = stack.get(DataComponents.BUNDLE_CONTENTS);
+        if (bundle != null) {
+            for (ItemStack inner : bundle.items()) {
+                out.add(inner);
+            }
+        }
+
+
+
+
+
+        return out;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /** "north-east", "below you", ... from a point to a container. */
     public static String direction(Vec3 from, BlockPos to) {

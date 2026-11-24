@@ -4,7 +4,9 @@
 #   mode "plugin": Paper 1.21.1 server with the Stash Radar plugin + LogicLib Plugin, client without Stash Radar
 # Both: a Superflat world (Classic Flat, no structures), noon, clear weather, 1920x1080, Fancy graphics.
 # The client also has stashradar-pageshots.jar (neoforge/src/pageshots), which joins the server and takes the shots.
-# usage: ci/gallery.sh <mod|plugin> <out dir>
+#   mode "e2e-vanilla":  end-to-end test, server WITH Stash Radar, client WITHOUT it (only LogicLib + the helper)
+#   mode "e2e-noserver": end-to-end test, server WITHOUT Stash Radar (only LogicLib), client WITH it
+# usage: ci/gallery.sh <mod|plugin|e2e-vanilla|e2e-noserver> <out dir>
 set -u
 mode="$1"; out="$2"; MC=1.21.1
 NF=$(grep '^neoforge_version=' gradle.properties | cut -d= -f2)
@@ -12,11 +14,13 @@ G="$PWD/game-$mode"; S="$PWD/server-$mode"; mkdir -p "$G/mods" "$S" "$out"
 J21="$JAVA_HOME_21_X64/bin/java"
 export LIBGL_ALWAYS_SOFTWARE=1
 
+SR=$(ls neoforge/build/libs/stashradar-neoforge-$MC-*.jar | grep -v -- '-sources\|-javadoc' | head -1)
+LL=$(ls libs/logiclib-neoforge-$MC-*.jar | head -1)
 cp neoforge/build/pageshots/stashradar-pageshots.jar "$G/mods/"
-if [ "$mode" = mod ]; then
-  cp neoforge/build/libs/stashradar-neoforge-$MC-*.jar "$G/mods/"; rm -f "$G"/mods/*-sources.jar "$G"/mods/*-javadoc.jar
-  cp libs/logiclib-neoforge-$MC-*.jar "$G/mods/"
-fi
+case "$mode" in
+  mod|e2e-noserver) cp "$SR" "$LL" "$G/mods/" ;;
+  e2e-vanilla) cp "$LL" "$G/mods/" ;;
+esac
 ls -la "$G/mods"
 
 # ---- client install (real Mojang game + NeoForge, like a player's launcher)
@@ -24,10 +28,12 @@ ok=0; for i in 1 2 3; do portablemc --main-dir "$G" start --dry --jvm-policy moj
 [ "$ok" = 1 ] || { echo "::error::client install failed"; tail -30 "$out/$mode-install.log"; exit 1; }
 
 # ---- server: Superflat (Classic Flat), no structures, peaceful, creative, flying allowed
-if [ "$mode" = mod ]; then
+if [ "$mode" != plugin ]; then
   curl -fsSL -o "$S/installer.jar" "https://maven.neoforged.net/releases/net/neoforged/neoforge/$NF/neoforge-$NF-installer.jar"
   (cd "$S" && "$J21" -jar installer.jar --install-server . > install.log 2>&1) || { tail -30 "$S/install.log"; exit 1; }
-  mkdir -p "$S/mods"; cp "$G"/mods/stashradar-neoforge-*.jar "$G"/mods/logiclib-neoforge-*.jar "$S/mods/"
+  mkdir -p "$S/mods"; cp "$LL" "$S/mods/"
+  if [ "$mode" != e2e-noserver ]; then cp "$SR" "$S/mods/"; fi
+  ls -la "$S/mods"
   START="bash run.sh nogui"
 else
   UA="CosmicLogic-CI/1.0 (https://github.com/CosmicLogic0)"
@@ -85,6 +91,6 @@ sleep 5
 pkill -f portablemc || true; pkill -f java || true; sleep 3
 cp game.log "$out/$mode-game.log"; cp "$G/logs/latest.log" "$out/$mode-latest.log" 2>/dev/null || true; cp "$S/server.log" "$out/$mode-server.log" 2>/dev/null || true
 cp "$G"/screenshots/*.png "$out/" 2>/dev/null || true
-grep -hE "SRSHOT|Stash Radar|\[CHAT\]" game.log "$G/logs/latest.log" 2>/dev/null | head -150
+grep -hE "SRSHOT|SRTEST|SRCHAT|Stash Radar|\[CHAT\]" game.log "$G/logs/latest.log" 2>/dev/null | head -200
 ls -la "$out"
 grep -qh "SRSHOT done" game.log "$G/logs/latest.log" 2>/dev/null && ! grep -qh "SRSHOT done (with an error)" game.log "$G/logs/latest.log" 2>/dev/null

@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Root project = ports code for 1.21.1
+        run: python3 ci/sync-root.py
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -50,6 +52,8 @@ jobs:
         loader: [forge, neoforge]
     steps:
       - uses: actions/checkout@v4
+      - name: Root project = ports code for 1.21.1
+        run: python3 ci/sync-root.py
       - uses: actions/setup-java@v4
         with:
           distribution: temurin

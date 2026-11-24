@@ -40,6 +40,9 @@ public final class PageShots {
     }
 
     private final Deque<Step> steps = new ArrayDeque<>();
+    /** Every chat/system line the client received (e2e modes check them). */
+    private final List<String> chat = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private int failures;
     private int waiting;
     private boolean connected;
     private int inWorldTicks;
@@ -50,6 +53,11 @@ public final class PageShots {
         }
         LOG.info("SRSHOT mode {} server {}", MODE, SERVER);
         NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, e -> tick());
+        NeoForge.EVENT_BUS.addListener(net.neoforged.neoforge.client.event.ClientChatReceivedEvent.class, e -> {
+            String line = e.getMessage().getString();
+            chat.add(line);
+            LOG.info("SRCHAT {}", line);
+        });
     }
 
     private void tick() {
@@ -187,6 +195,14 @@ public final class PageShots {
     private void plan() {
         Minecraft mc = Minecraft.getInstance();
         GLFW.glfwSetWindowSize(mc.getWindow().getWindow(), 1920, 1080);
+        if (MODE.equals("e2e-vanilla")) {
+            e2eVanillaClient();
+            return;
+        }
+        if (MODE.equals("e2e-noserver")) {
+            e2eServerWithoutMod();
+            return;
+        }
         boolean plugin = MODE.equals("plugin");
         String p = plugin ? "plugin-" : "mod-";
         String diamond = plugin ? "diamond" : "minecraft:diamond";
@@ -296,6 +312,85 @@ public final class PageShots {
             Minecraft.getInstance().options.hideGui = false;
             LOG.info("SRSHOT done");
         });
+    }
+
+    // ------------------------------------------------------------------ end-to-end tests (not screenshots)
+
+    private void check(String name, boolean ok) {
+        if (!ok) {
+            failures++;
+        }
+        LOG.info("SRTEST {} {}", ok ? "pass" : "FAIL", name);
+    }
+
+    private boolean chatHas(String text) {
+        for (String line : chat) {
+            if (line.contains(text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Glowing, invisible shulkers the server sent to this client: Stash Radar's glow through walls. */
+    private static int glows(double within) {
+        Minecraft mc = Minecraft.getInstance();
+        int n = 0;
+        for (net.minecraft.world.entity.Entity e : mc.level.entitiesForRendering()) {
+            if (e instanceof net.minecraft.world.entity.monster.Shulker && e.isInvisible() && e.isCurrentlyGlowing()
+                    && e.distanceTo(mc.player) <= within) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    private void finish() {
+        then(10, () -> {
+            LOG.info("SRTEST {} failure(s)", failures);
+            LOG.info(failures == 0 ? "SRSHOT done" : "SRSHOT done (with an error)");
+        });
+    }
+
+    /** A player WITHOUT the mod on a server WITH it: /find, chat answers, glow through walls, help, names, tags. */
+    private void e2eVanillaClient() {
+        then(100, () -> LOG.info("SRSHOT setting up"));
+        cmds(List.of("gamemode creative", "gamerule doDaylightCycle false", "time set 6000", "weather clear 1000000",
+                "gamerule doMobSpawning false", "kill @e[type=!player]"));
+        cmds(Scene.build());
+        look(7.5, -58.9, -8.0, 7.5, -59.0, 10.5);
+        then(60, () -> chat.clear());
+        cmd("find minecraft:diamond 32");
+        then(40, () -> {
+            check("the answer arrives in chat", chatHas("Found"));
+            check("nearest containers are listed with coordinates", chatHas(" at ") && chatHas("blocks"));
+            check("far results glow through walls (fake shulkers sent to this player)", glows(64) > 0);
+        });
+        look(5.5, -58.4, 8.5, 5.5, -59.5, 10.5);
+        then(40, () -> check("no glow right next to the player (chests can be opened)", glows(5.4) == 0));
+        cmd("find help");
+        then(20, () -> check("/find help", chatHas("/find name")));
+        cmd("find name \"shulker\" 32");
+        then(20, () -> check("/find name", chatHas("items named \"shulker\"")));
+        cmd("find #minecraft:logs 32");
+        then(20, () -> check("/find #tag", chatHas("#logs")));
+        cmd("find minecraft:diamond 999");
+        then(20, () -> check("range above the server's limit is explained", chatHas("searches at most")));
+        finish();
+    }
+
+    /** A player WITH the mod on a server WITHOUT it: the screen says so, settings still open. */
+    private void e2eServerWithoutMod() {
+        then(100, () -> LOG.info("SRSHOT setting up"));
+        then(20, () -> check("this server has no /find", Minecraft.getInstance().getConnection().getCommands().getRoot().getChild("find") == null));
+        then(5, () -> ModOnly.openSearch("diamond", 16));
+        then(20, () -> check("the search screen says the server doesn't have Stash Radar", !ModOnly.searchAvailable()));
+        shot(5, "e2e-noserver-search");
+        then(5, ModOnly::openSettings);
+        then(20, () -> check("the settings screen opens", ModOnly.settingsOpen()));
+        shot(5, "e2e-noserver-settings");
+        closeScreen();
+        finish();
     }
 
     static List<String> list(String... s) {

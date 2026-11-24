@@ -46,9 +46,9 @@ final class ModOnly {
             int row = -1;
             for (int i = 0; i < results.size(); i++) {
                 Object e = results.get(i);
-                Method n = e.getClass().getDeclaredMethod("name");
+                Field n = e.getClass().getDeclaredField("name");
                 n.setAccessible(true);
-                if (name.equals(n.invoke(e))) {
+                if (name.equals(n.get(e))) {
                     row = i;
                     break;
                 }
@@ -72,6 +72,25 @@ final class ModOnly {
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    /** False when the open search screen says the server has no Stash Radar. */
+    static boolean searchAvailable() {
+        try {
+            Field f = SearchScreen.class.getDeclaredField("available");
+            f.setAccessible(true);
+            return f.getBoolean(Minecraft.getInstance().screen);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    static void openSettings() {
+        Minecraft.getInstance().setScreen(new com.cosmiclogic.stashradar.client.ConfigScreen(null));
+    }
+
+    static boolean settingsOpen() {
+        return Minecraft.getInstance().screen instanceof com.cosmiclogic.stashradar.client.ConfigScreen;
     }
 
     /** Left click where the mouse is (after hover): the search screen picks that row and sends /find. */

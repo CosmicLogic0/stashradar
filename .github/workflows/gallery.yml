@@ -38,6 +38,8 @@ jobs:
           curl -fsSL -o plugin-jars/logiclib-paper-${LOGICLIB}.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib-paper/dist/logiclib-paper-${LOGICLIB}.jar"
           curl -fsSL -o plugin-jars/stashradar-paper-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/stashradar-plugin/dist/stashradar-paper-0.1.0.jar"
           ls -la libs plugin-jars
+      - name: Root project = ports code for 1.21.1
+        run: python3 ci/sync-root.py
       - name: Build Stash Radar (NeoForge 1.21.1) + the screenshot helper
         run: |
           chmod +x gradlew
