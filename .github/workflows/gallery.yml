@@ -14,6 +14,8 @@ permissions:
 env:
   MC: "1.21.1"
   LOGICLIB: "0.1.0"
+  LOGICLIB_PLUGIN: "0.2.0"
+  PLUGIN: "1.1.0"
 
 jobs:
   shots:
@@ -35,8 +37,8 @@ jobs:
           for l in forge neoforge; do
             curl -fsSL -o "libs/logiclib-$l-${MC}-${LOGICLIB}.jar" "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/logiclib-$l-${MC}-${LOGICLIB}.jar"
           done
-          curl -fsSL -o plugin-jars/logiclib-paper-${LOGICLIB}.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib-paper/dist/logiclib-paper-${LOGICLIB}.jar"
-          curl -fsSL -o plugin-jars/stashradar-paper-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/stashradar-plugin/dist/stashradar-paper-0.1.0.jar"
+          curl -fsSL -o plugin-jars/logiclib-paper-${LOGICLIB_PLUGIN}.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib-paper/dist/logiclib-paper-${LOGICLIB_PLUGIN}.jar"
+          curl -fsSL -o plugin-jars/stashradar-paper-${PLUGIN}.jar "https://raw.githubusercontent.com/CosmicLogic0/stashradar-plugin/dist/stashradar-paper-${PLUGIN}.jar"
           ls -la libs plugin-jars
       - name: Root project = ports code for 1.21.1
         run: python3 ci/sync-root.py

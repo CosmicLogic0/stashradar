@@ -85,6 +85,35 @@ final class ModOnly {
         }
     }
 
+    /** Mouse over the "Search item names for ..." button under the search box. */
+    static void hoverTextButton() {
+        Minecraft mc = Minecraft.getInstance();
+        moveMouse(mc.screen.width / 2.0, 66);
+    }
+
+    /** Mouse over the "Glow through walls" setting (right column, 4th row). */
+    static void hoverGlowSetting() {
+        Minecraft mc = Minecraft.getInstance();
+        moveMouse(mc.screen.width / 2.0 + 85, 130);
+    }
+
+    private static void moveMouse(double x, double y) {
+        Minecraft mc = Minecraft.getInstance();
+        guiX = x;
+        guiY = y;
+        double scale = mc.getWindow().getGuiScale();
+        GLFW.glfwSetCursorPos(mc.getWindow().getWindow(), x * scale, y * scale);
+        try {
+            for (String fn : new String[]{"xpos", "ypos"}) {
+                Field mf = MouseHandler.class.getDeclaredField(fn);
+                mf.setAccessible(true);
+                mf.setDouble(mc.mouseHandler, fn.equals("xpos") ? x * scale : y * scale);
+            }
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     static void openSettings() {
         Minecraft.getInstance().setScreen(new com.cosmiclogic.stashradar.client.ConfigScreen(null));
     }

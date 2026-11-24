@@ -251,6 +251,27 @@ public final class PageShots {
             burst(40, p + (r == 8 ? "04-yard-range-8" : "05-yard-range-24"));
         }
 
+        // 15. Glow through walls (1.1.0): a stone wall between the player and the storage; far results glow through it
+        cmd("fill 0 -60 3 14 -55 3 minecraft:stone_bricks");
+        look(7.5, -58.0, -5.5, 7.5, -59.0, 10.5);
+        then(40, () -> LOG.info("SRSHOT wall up"));
+        cmd("find " + diamond + " 32");
+        burst(40, p + "15-glow-walls");
+        cmd("fill 0 -60 3 14 -55 3 minecraft:air");
+
+        if (!plugin) {
+            // 16. Search by name (1.1.0): "ore" typed, the button under the box searches every item name with "ore"
+            then(5, () -> ModOnly.openSearch("ore", 24));
+            then(10, ModOnly::hoverTextButton);
+            shot(30, "mod-16-name-search");
+            closeScreen();
+            // 17. Settings screen (1.1.0), pointing at "Glow through walls" so its explanation shows
+            then(5, ModOnly::openSettings);
+            then(10, ModOnly::hoverGlowSetting);
+            shot(30, "mod-17-settings");
+            closeScreen();
+        }
+
         if (!plugin) {
             // 6./7. The search screen (key K): suggestions with icons, range button, mouse over a row
             then(5, () -> ModOnly.openSearch("diamond", 16));
@@ -263,7 +284,8 @@ public final class PageShots {
             closeScreen();
         }
 
-        // 8. Chat close-up (HUD on, big GUI): the summary line, outlines behind it
+        // 8. Chat close-up (HUD on, big GUI): the summary line, the 3 nearest containers, the ender chest line
+        cmd("item replace entity @s enderchest.0 with " + diamond + " 6");
         spectator(false);
         hud(true);
         look(7.5, -58.38, 4.5, 7.5, -59.0, 10.5);
@@ -296,6 +318,11 @@ public final class PageShots {
         clearChat();
         cmd("find " + (plugin ? "netherite_ingot" : "minecraft:netherite_ingot"));
         shot(30, p + "10-chat-nothing");
+
+        // 18. /find help (1.1.0)
+        clearChat();
+        cmd("find help");
+        shot(30, p + "18-help");
 
         if (plugin) {
             // 11. Cooldown for normal players (operators skip it): deop, then search twice
