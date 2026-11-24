@@ -1,0 +1,10 @@
+SRTEST 0 failure(s)
+SRTEST pass /find #tag
+SRTEST pass /find help
+SRTEST pass /find name
+SRTEST pass far results glow through walls (fake shulkers sent to this player)
+SRTEST pass nearest containers are listed with coordinates
+SRTEST pass no glow right next to the player (chests can be opened)
+SRTEST pass range above the server's limit is explained
+SRTEST pass the answer arrives in chat
+PASS

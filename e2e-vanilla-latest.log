@@ -1,0 +1,473 @@
+[13:09:03] [main/INFO]: ModLauncher running: args [--fml.neoForgeVersion, 21.1.80, --fml.fmlVersion, 4.0.31, --fml.mcVersion, 1.21.1, --fml.neoFormVersion, 20240808.144430, --launchTarget, forgeclient, --username, Radar, --version, neoforge-21.1.80, --gameDir, /home/runner/work/stashradar/stashradar/game-e2e-vanilla, --assetsDir, /home/runner/work/stashradar/stashradar/game-e2e-vanilla/assets, --assetIndex, 17, --uuid, 85473d6cd7c33538bb61b1a043f5b663, --accessToken, ❄❄❄❄❄❄❄❄, --clientId, , --xuid, , --userType, , --versionType, release, --width, 1920, --height, 1080]
+[13:09:03] [main/INFO]: JVM identified as Microsoft OpenJDK 64-Bit Server VM 21.0.7+6-LTS
+[13:09:03] [main/INFO]: ModLauncher 11.0.4+main.d2e20e43 starting: java version 21.0.7 by Microsoft; OS Linux arch amd64 version 7.0.0-1020-azure
+[13:09:03] [main/WARN]: Configuration file /home/runner/work/stashradar/stashradar/game-e2e-vanilla/config/fml.toml is not correct. Correcting
+[13:09:03] [main/INFO]: Incorrect key [disableConfigWatcher] was corrected from null to false
+[13:09:03] [main/INFO]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to []
+[13:09:03] [main/INFO]: Incorrect key [earlyWindowSquir] was corrected from null to false
+[13:09:03] [main/INFO]: Loading ImmediateWindowProvider fmlearlywindow
+[13:09:03] [main/INFO]: Trying GL version 4.6
+[13:09:03] [main/INFO]: Trying GL version 4.5
+[13:09:04] [main/INFO]: Requested GL version 4.5 got version 4.5
+[13:09:04] [main/INFO]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/sponge-mixin-0.15.2+mixin.0.8.7.jar%23110!/ Service=ModLauncher Env=CLIENT
+[13:09:05] [pool-2-thread-1/INFO]: GL info: llvmpipe (LLVM 21.1.8, 256 bits) GL version 4.5 (Core Profile) Mesa 26.0.8-1ubuntu0.3, Mesa
+[13:09:05] [main/INFO]: Found mod file "client-1.21.1-20240808.144430-srg.jar" [locator: production client provider +net.neoforged:neoforge:21.1.80:client]
+[13:09:05] [main/INFO]: Found mod file "neoforge-21.1.80-universal.jar" [locator: PathBasedLocator[name=neoforge, paths=[/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/neoforge/21.1.80/neoforge-21.1.80-universal.jar]], reader: mod manifest]
+[13:09:05] [main/INFO]: Found mod file "logiclib-neoforge-1.21.1-0.1.0.jar" [locator: {mods folder locator at /home/runner/work/stashradar/stashradar/game-e2e-vanilla/mods}, reader: mod manifest]
+[13:09:05] [main/INFO]: Found mod file "stashradar-pageshots.jar" [locator: {mods folder locator at /home/runner/work/stashradar/stashradar/game-e2e-vanilla/mods}, reader: mod manifest]
+[13:09:05] [main/INFO]: Found 2 dependencies adding them to mods collection
+[13:09:05] [main/INFO]: Found gamelibrary file "mixinextras-neoforge-0.4.1.jar" [parent: neoforge-21.1.80-universal.jar, locator: jarinjar, reader: mod manifest]
+[13:09:05] [main/INFO]: Found library file "neoforge-coremods-21.1.80.jar" [parent: neoforge-21.1.80-universal.jar, locator: jarinjar, reader: mod manifest]
+[13:09:05] [main/INFO]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		LogicLib 0.1.0 (logiclib)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.80 (neoforge)
+		Stash Radar gallery shots (CI only) 1.0.0 (stashradar_pageshots)
+[13:09:06] [main/INFO]: Launching target 'forgeclient' with arguments [--version, neoforge-21.1.80, --gameDir, /home/runner/work/stashradar/stashradar/game-e2e-vanilla, --assetsDir, /home/runner/work/stashradar/stashradar/game-e2e-vanilla/assets, --uuid, 85473d6cd7c33538bb61b1a043f5b663, --username, Radar, --assetIndex, 17, --accessToken, ❄❄❄❄❄❄❄❄, --clientId, , --xuid, , --userType, , --versionType, release, --width, 1920, --height, 1080]
+[24Nov2026 13:09:08.454] [Datafixer Bootstrap/INFO] [com.mojang.datafixers.DataFixerBuilder/]: 229 Datafixer optimizations took 475 milliseconds
+[24Nov2026 13:09:08.730] [pool-7-thread-1/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[24Nov2026 13:09:14.031] [main/WARN] [net.minecraft.client.main.Main/]: Unrecognized user type: 
+[24Nov2026 13:09:14.175] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/minecraft/client/1.21.1-20240808.144430/client-1.21.1-20240808.144430-srg.jar%23170!/assets/.mcassetsroot' uses unexpected schema
+[24Nov2026 13:09:14.176] [Render thread/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/minecraft/client/1.21.1-20240808.144430/client-1.21.1-20240808.144430-srg.jar%23170!/data/.mcassetsroot' uses unexpected schema
+[24Nov2026 13:09:14.204] [Render thread/INFO] [com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService/]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[24Nov2026 13:09:14.213] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Setting user: Radar
+[24Nov2026 13:09:14.348] [Render thread/INFO] [net.minecraft.client.Minecraft/]: Backend library: LWJGL version 3.3.3+5
+[24Nov2026 13:09:14.809] [modloading-worker-0/INFO] [SRSHOT/]: SRSHOT mode e2e-vanilla server 127.0.0.1:25565
+[24Nov2026 13:09:14.811] [modloading-worker-0/INFO] [LogicLib/]: LogicLib loaded on NeoForge
+[24Nov2026 13:09:14.824] [modloading-worker-0/INFO] [net.neoforged.neoforge.common.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.80, for MC 1.21.1
+[24Nov2026 13:09:15.820] [Render thread/ERROR] [com.mojang.text2speech.Narrator/]: Error while loading the narrator
+com.mojang.text2speech.Narrator$InitializeException: Failed to load library flite
+	at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:69) ~[text2speech-1.17.9.jar%23130!/:?]
+	at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.17.9.jar%23130!/:?]
+	at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) ~[text2speech-1.17.9.jar%23130!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.GameNarrator.<init>(GameNarrator.java:21) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.<init>(Minecraft.java:609) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:214) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23115!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+Caused by: java.lang.UnsatisfiedLinkError: Unable to load library 'flite':
+libflite.so: cannot open shared object file: No such file or directory
+libflite.so: cannot open shared object file: No such file or directory
+Native library (linux-x86-64/libflite.so) not found in resource path (/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-util/9.7/asm-util-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/accesstransformers/10.0.1/accesstransformers-10.0.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/openjdk/nashorn/nashorn-core/15.4/nashorn-core-15.4.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm/9.7/asm-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/accesstransformers/at-modlauncher/10.0.1/at-modlauncher-10.0.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/maven/maven-artifact/3.8.5/maven-artifact-3.8.5.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/cpw/mods/bootstraplauncher/2.0.2/bootstraplauncher-2.0.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/logging/log4j/log4j-api/2.22.1/log4j-api-2.22.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/logging/log4j/log4j-core/2.22.1/log4j-core-2.22.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/jodah/typetools/0.6.3/typetools-0.6.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/JarJarMetadata/0.4.1/JarJarMetadata-0.4.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/bus/8.0.2/bus-8.0.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/jline/jline-reader/3.20.0/jline-reader-3.20.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/JarJarSelector/0.4.1/JarJarSelector-0.4.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-commons/9.7/asm-commons-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/electronwill/night-config/toml/3.8.0/toml-3.8.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/minecraftforge/srgutils/0.4.15/srgutils-0.4.15.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/electronwill/night-config/core/3.8.0/core-3.8.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/machinezoo/noexception/noexception/1.7.1/noexception-1.7.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/fancymodloader/earlydisplay/4.0.31/earlydisplay-4.0.31.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/coremods/7.0.3/coremods-7.0.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/logging/log4j/log4j-slf4j2-impl/2.22.1/log4j-slf4j2-impl-2.22.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/jline/jline-terminal/3.20.0/jline-terminal-3.20.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/sponge-mixin-0.15.2+mixin.0.8.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/logging/1.2.7/logging-1.2.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/cpw/mods/securejarhandler/3.0.8/securejarhandler-3.0.8.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/cpw/mods/modlauncher/11.0.4/modlauncher-11.0.4.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/minecrell/terminalconsoleappender/1.3.0/terminalconsoleappender-1.3.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/JarJarFileSystems/0.4.1/JarJarFileSystems-0.4.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/fancymodloader/loader/4.0.31/loader-4.0.31.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/codehaus/plexus/plexus-utils/3.3.0/plexus-utils-3.3.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-analysis/9.7/asm-analysis-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/mergetool/2.0.3/mergetool-2.0.3-api.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-tree/9.7/asm-tree-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/github/oshi/oshi-core/6.4.10/oshi-core-6.4.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/ibm/icu/icu4j/73.2/icu4j-73.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/authlib/6.0.54/authlib-6.0.54.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/blocklist/1.0.10/blocklist-1.0.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/patchy/2.2.10/patchy-2.2.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/text2speech/1.17.9/text2speech-1.17.9.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-buffer/4.1.97.Final/netty-buffer-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-codec/4.1.97.Final/netty-codec-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-common/4.1.97.Final/netty-common-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-handler/4.1.97.Final/netty-handler-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-resolver/4.1.97.Final/netty-resolver-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-classes-epoll/4.1.97.Final/netty-transport-classes-epoll-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-native-epoll/4.1.97.Final/netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-native-epoll/4.1.97.Final/netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-native-unix-common/4.1.97.Final/netty-transport-native-unix-common-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport/4.1.97.Final/netty-transport-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/it/unimi/dsi/fastutil/8.5.12/fastutil-8.5.12.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/java/dev/jna/jna-platform/5.14.0/jna-platform-5.14.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/commons/commons-compress/1.26.0/commons-compress-1.26.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/joml/joml/1.10.5/joml-1.10.5.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/versions/neoforge-21.1.80/neoforge-21.1.80.jar)
+	at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:325) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+	at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:481) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+	at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:423) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+	at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:67) ~[text2speech-1.17.9.jar%23130!/:?]
+	... 20 more
+	Suppressed: java.lang.UnsatisfiedLinkError: libflite.so: cannot open shared object file: No such file or directory
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.Native.open(Native Method) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:213) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:481) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:423) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:67) ~[text2speech-1.17.9.jar%23130!/:?]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.17.9.jar%23130!/:?]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) ~[text2speech-1.17.9.jar%23130!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.GameNarrator.<init>(GameNarrator.java:21) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.<init>(Minecraft.java:609) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:214) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23115!/:?]
+		at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+		at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	Suppressed: java.lang.UnsatisfiedLinkError: libflite.so: cannot open shared object file: No such file or directory
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.Native.open(Native Method) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:226) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:481) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:423) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:67) ~[text2speech-1.17.9.jar%23130!/:?]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.17.9.jar%23130!/:?]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) ~[text2speech-1.17.9.jar%23130!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.GameNarrator.<init>(GameNarrator.java:21) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.<init>(Minecraft.java:609) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:214) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23115!/:?]
+		at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+		at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+	Suppressed: java.io.IOException: Native library (linux-x86-64/libflite.so) not found in resource path (/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-util/9.7/asm-util-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/accesstransformers/10.0.1/accesstransformers-10.0.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/openjdk/nashorn/nashorn-core/15.4/nashorn-core-15.4.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm/9.7/asm-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/accesstransformers/at-modlauncher/10.0.1/at-modlauncher-10.0.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/guava/guava/32.1.2-jre/guava-32.1.2-jre.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/j2objc/j2objc-annotations/2.8/j2objc-annotations-2.8.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/maven/maven-artifact/3.8.5/maven-artifact-3.8.5.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/cpw/mods/bootstraplauncher/2.0.2/bootstraplauncher-2.0.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/logging/log4j/log4j-api/2.22.1/log4j-api-2.22.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/logging/log4j/log4j-core/2.22.1/log4j-core-2.22.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/jodah/typetools/0.6.3/typetools-0.6.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/JarJarMetadata/0.4.1/JarJarMetadata-0.4.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/bus/8.0.2/bus-8.0.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/jline/jline-reader/3.20.0/jline-reader-3.20.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/JarJarSelector/0.4.1/JarJarSelector-0.4.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-commons/9.7/asm-commons-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/electronwill/night-config/toml/3.8.0/toml-3.8.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/slf4j/slf4j-api/2.0.9/slf4j-api-2.0.9.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/minecraftforge/srgutils/0.4.15/srgutils-0.4.15.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/electronwill/night-config/core/3.8.0/core-3.8.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/machinezoo/noexception/noexception/1.7.1/noexception-1.7.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/checkerframework/checker-qual/3.33.0/checker-qual-3.33.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/fancymodloader/earlydisplay/4.0.31/earlydisplay-4.0.31.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/coremods/7.0.3/coremods-7.0.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/code/gson/gson/2.10.1/gson-2.10.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/logging/log4j/log4j-slf4j2-impl/2.22.1/log4j-slf4j2-impl-2.22.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/jline/jline-terminal/3.20.0/jline-terminal-3.20.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/sponge-mixin-0.15.2+mixin.0.8.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/antlr/antlr4-runtime/4.13.1/antlr4-runtime-4.13.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/logging/1.2.7/logging-1.2.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/commons-io/commons-io/2.15.1/commons-io-2.15.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/cpw/mods/securejarhandler/3.0.8/securejarhandler-3.0.8.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/cpw/mods/modlauncher/11.0.4/modlauncher-11.0.4.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/minecrell/terminalconsoleappender/1.3.0/terminalconsoleappender-1.3.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/commons/commons-lang3/3.14.0/commons-lang3-3.14.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/JarJarFileSystems/0.4.1/JarJarFileSystems-0.4.1.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/fancymodloader/loader/4.0.31/loader-4.0.31.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/codehaus/plexus/plexus-utils/3.3.0/plexus-utils-3.3.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/google/errorprone/error_prone_annotations/2.18.0/error_prone_annotations-2.18.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-analysis/9.7/asm-analysis-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/sf/jopt-simple/jopt-simple/5.0.4/jopt-simple-5.0.4.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/neoforged/mergetool/2.0.3/mergetool-2.0.3-api.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/ow2/asm/asm-tree/9.7/asm-tree-9.7.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/github/oshi/oshi-core/6.4.10/oshi-core-6.4.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/ibm/icu/icu4j/73.2/icu4j-73.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/authlib/6.0.54/authlib-6.0.54.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/blocklist/1.0.10/blocklist-1.0.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/brigadier/1.3.10/brigadier-1.3.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/patchy/2.2.10/patchy-2.2.10.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/com/mojang/text2speech/1.17.9/text2speech-1.17.9.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/commons-codec/commons-codec/1.16.0/commons-codec-1.16.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/commons-logging/commons-logging/1.2/commons-logging-1.2.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-buffer/4.1.97.Final/netty-buffer-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-codec/4.1.97.Final/netty-codec-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-common/4.1.97.Final/netty-common-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-handler/4.1.97.Final/netty-handler-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-resolver/4.1.97.Final/netty-resolver-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-classes-epoll/4.1.97.Final/netty-transport-classes-epoll-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-native-epoll/4.1.97.Final/netty-transport-native-epoll-4.1.97.Final-linux-aarch_64.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-native-epoll/4.1.97.Final/netty-transport-native-epoll-4.1.97.Final-linux-x86_64.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport-native-unix-common/4.1.97.Final/netty-transport-native-unix-common-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/io/netty/netty-transport/4.1.97.Final/netty-transport-4.1.97.Final.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/it/unimi/dsi/fastutil/8.5.12/fastutil-8.5.12.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/java/dev/jna/jna-platform/5.14.0/jna-platform-5.14.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/net/java/dev/jna/jna/5.14.0/jna-5.14.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/commons/commons-compress/1.26.0/commons-compress-1.26.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/apache/httpcomponents/httpcore/4.4.16/httpcore-4.4.16.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/jcraft/jorbis/0.0.17/jorbis-0.0.17.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/joml/joml/1.10.5/joml-1.10.5.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-freetype/3.3.3/lwjgl-freetype-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-glfw/3.3.3/lwjgl-glfw-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-jemalloc/3.3.3/lwjgl-jemalloc-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-openal/3.3.3/lwjgl-openal-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-opengl/3.3.3/lwjgl-opengl-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-stb/3.3.3/lwjgl-stb-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl-tinyfd/3.3.3/lwjgl-tinyfd-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lwjgl/lwjgl/3.3.3/lwjgl-3.3.3-natives-linux.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/libraries/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/home/runner/work/stashradar/stashradar/game-e2e-vanilla/versions/neoforge-21.1.80/neoforge-21.1.80.jar)
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.Native.extractFromResourcePath(Native.java:1141) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.loadLibrary(NativeLibrary.java:297) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:481) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/com.sun.jna@5.14.0/com.sun.jna.NativeLibrary.getInstance(NativeLibrary.java:423) ~[jna-5.14.0.jar%23145!/:5.14.0 (b0)]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux$FliteLibrary.loadNative(NarratorLinux.java:67) ~[text2speech-1.17.9.jar%23130!/:?]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.NarratorLinux.<init>(NarratorLinux.java:18) ~[text2speech-1.17.9.jar%23130!/:?]
+		at MC-BOOTSTRAP/text2speech@1.17.9/com.mojang.text2speech.Narrator.getNarrator(Narrator.java:41) ~[text2speech-1.17.9.jar%23130!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.GameNarrator.<init>(GameNarrator.java:21) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.<init>(Minecraft.java:609) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:214) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+		at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+		at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23118!/:4.0]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23115!/:?]
+		at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23115!/:?]
+		at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+		at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+[24Nov2026 13:09:15.848] [Render thread/INFO] [net.minecraft.server.packs.resources.ReloadableResourceManager/]: Reloading ResourceManager: vanilla, mod_resources, mod/stashradar_pageshots, mod/logiclib, mod/neoforge
+[24Nov2026 13:09:16.025] [Worker-Main-1/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_all_no_pua-15.1.05.hex, loading
+[24Nov2026 13:09:16.584] [Worker-Main-1/INFO] [net.minecraft.client.gui.font.providers.UnihexProvider/]: Found unifont_jp_patch-15.1.05.hex, loading
+[24Nov2026 13:09:18.932] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:item.goat_horn.play
+[24Nov2026 13:09:18.932] [Render thread/WARN] [net.minecraft.client.sounds.SoundEngine/]: Missing sound for event: minecraft:entity.goat.screaming.horn_break
+[24Nov2026 13:09:18.969] [Render thread/ERROR] [net.minecraft.client.sounds.SoundEngine/SOUNDS]: Error starting SoundSystem. Turning off sounds & music
+java.lang.IllegalStateException: Failed to open OpenAL device
+	at TRANSFORMER/minecraft@1.21.1/com.mojang.blaze3d.audio.Library.openDeviceOrFallback(Library.java:302) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/com.mojang.blaze3d.audio.Library.init(Library.java:154) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundEngine.loadLibrary(SoundEngine.java:107) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundEngine.reload(SoundEngine.java:99) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundManager.apply(SoundManager.java:128) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.sounds.SoundManager.apply(SoundManager.java:42) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.SimplePreparableReloadListener.lambda$reload$1(SimplePreparableReloadListener.java:19) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at java.base/java.util.concurrent.CompletableFuture$UniAccept.tryFire(CompletableFuture.java:718) ~[?:?]
+	at java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:482) ~[?:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.server.packs.resources.SimpleReloadInstance.lambda$new$3(SimpleReloadInstance.java:69) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.doRunTask(BlockableEventLoop.java:148) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.ReentrantBlockableEventLoop.doRunTask(ReentrantBlockableEventLoop.java:23) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.pollTask(BlockableEventLoop.java:122) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.util.thread.BlockableEventLoop.runAllTasks(BlockableEventLoop.java:111) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.runTick(Minecraft.java:1155) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.Minecraft.run(Minecraft.java:807) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at TRANSFORMER/minecraft@1.21.1/net.minecraft.client.main.Main.main(Main.java:230) ~[client-1.21.1-20240808.144430-srg.jar%23170!/:?]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[?:?]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[?:?]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.runTarget(CommonLaunchHandler.java:136) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.clientService(CommonLaunchHandler.java:124) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonClientLaunchHandler.runService(CommonClientLaunchHandler.java:32) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/fml_loader@4.0.31/net.neoforged.fml.loading.targets.CommonLaunchHandler.lambda$launchService$4(CommonLaunchHandler.java:118) ~[loader-4.0.31.jar%23118!/:4.0]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandlerDecorator.launch(LaunchServiceHandlerDecorator.java:30) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:53) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.LaunchServiceHandler.launch(LaunchServiceHandler.java:71) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.run(Launcher.java:103) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.Launcher.main(Launcher.java:74) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:26) [modlauncher-11.0.4.jar%23115!/:?]
+	at MC-BOOTSTRAP/cpw.mods.modlauncher@11.0.4/cpw.mods.modlauncher.BootstrapLaunchConsumer.accept(BootstrapLaunchConsumer.java:23) [modlauncher-11.0.4.jar%23115!/:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.run(BootstrapLauncher.java:210) [bootstraplauncher-2.0.2.jar:?]
+	at cpw.mods.bootstraplauncher@2.0.2/cpw.mods.bootstraplauncher.BootstrapLauncher.main(BootstrapLauncher.java:69) [bootstraplauncher-2.0.2.jar:?]
+[24Nov2026 13:09:19.231] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x4 minecraft:textures/atlas/blocks.png-atlas
+[24Nov2026 13:09:19.258] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/signs.png-atlas
+[24Nov2026 13:09:19.259] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/shield_patterns.png-atlas
+[24Nov2026 13:09:19.260] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x512x4 minecraft:textures/atlas/banner_patterns.png-atlas
+[24Nov2026 13:09:19.262] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x1024x4 minecraft:textures/atlas/armor_trims.png-atlas
+[24Nov2026 13:09:19.270] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 128x64x4 minecraft:textures/atlas/decorated_pot.png-atlas
+[24Nov2026 13:09:19.271] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x256x4 minecraft:textures/atlas/chest.png-atlas
+[24Nov2026 13:09:19.273] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/shulker_boxes.png-atlas
+[24Nov2026 13:09:19.274] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x4 minecraft:textures/atlas/beds.png-atlas
+[24Nov2026 13:09:19.503] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/particles.png-atlas
+[24Nov2026 13:09:19.506] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 512x256x0 minecraft:textures/atlas/paintings.png-atlas
+[24Nov2026 13:09:19.507] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 256x128x0 minecraft:textures/atlas/mob_effects.png-atlas
+[24Nov2026 13:09:19.508] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 64x64x0 minecraft:textures/atlas/map_decorations.png-atlas
+[24Nov2026 13:09:19.508] [Render thread/INFO] [net.minecraft.client.renderer.texture.TextureAtlas/]: Created: 1024x512x0 minecraft:textures/atlas/gui.png-atlas
+[24Nov2026 13:09:19.597] [Render thread/WARN] [net.minecraft.client.renderer.ShaderInstance/]: Shader rendertype_entity_translucent_emissive could not find sampler named Sampler2 in the specified shader program.
+[24Nov2026 13:09:19.866] [Render thread/INFO] [net.neoforged.neoforge.client.entity.animation.json.AnimationLoader/]: Loaded 0 entity animations
+[24Nov2026 13:09:19.927] [Render thread/INFO] [SRSHOT/]: SRSHOT connecting
+[24Nov2026 13:09:20.004] [Render thread/INFO] [net.minecraft.client.gui.screens.ConnectScreen/]: Connecting to 127.0.0.1, 25565
+[24Nov2026 13:09:25.410] [Render thread/INFO] [net.minecraft.advancements.AdvancementTree/]: Loaded 2 advancements
+[24Nov2026 13:09:25.878] [Render thread/INFO] [SRSHOT/]: SRSHOT in world
+[24Nov2026 13:09:31.041] [Render thread/INFO] [SRSHOT/]: SRSHOT setting up
+[24Nov2026 13:09:31.211] [Render thread/INFO] [SRSHOT/]: SRSHOT /gamemode creative
+[24Nov2026 13:09:31.317] [Render thread/INFO] [SRSHOT/]: SRSHOT /gamerule doDaylightCycle false
+[24Nov2026 13:09:31.370] [Render thread/INFO] [SRSHOT/]: SRCHAT Gamerule doDaylightCycle is now set to: false
+[24Nov2026 13:09:31.371] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Gamerule doDaylightCycle is now set to: false
+[24Nov2026 13:09:31.514] [Render thread/INFO] [SRSHOT/]: SRSHOT /time set 6000
+[24Nov2026 13:09:31.577] [Render thread/INFO] [SRSHOT/]: SRCHAT Set the time to 6000
+[24Nov2026 13:09:31.577] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Set the time to 6000
+[24Nov2026 13:09:31.642] [Render thread/INFO] [SRSHOT/]: SRSHOT /weather clear 1000000
+[24Nov2026 13:09:31.693] [Render thread/INFO] [SRSHOT/]: SRCHAT Set the weather to clear
+[24Nov2026 13:09:31.693] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Set the weather to clear
+[24Nov2026 13:09:31.798] [Render thread/INFO] [SRSHOT/]: SRSHOT /gamerule doMobSpawning false
+[24Nov2026 13:09:31.850] [Render thread/INFO] [SRSHOT/]: SRCHAT Gamerule doMobSpawning is now set to: false
+[24Nov2026 13:09:31.850] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Gamerule doMobSpawning is now set to: false
+[24Nov2026 13:09:31.915] [Render thread/INFO] [SRSHOT/]: SRSHOT /kill @e[type=!player]
+[24Nov2026 13:09:31.978] [Render thread/INFO] [SRSHOT/]: SRCHAT No entity was found
+[24Nov2026 13:09:31.979] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] No entity was found
+[24Nov2026 13:09:32.094] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -2 -60 -2 16 -50 13 air
+[24Nov2026 13:09:32.162] [Render thread/INFO] [SRSHOT/]: SRCHAT No blocks were filled
+[24Nov2026 13:09:32.162] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] No blocks were filled
+[24Nov2026 13:09:32.218] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -44 -60 -8 -16 -50 24 air
+[24Nov2026 13:09:32.287] [Render thread/INFO] [SRSHOT/]: SRCHAT No blocks were filled
+[24Nov2026 13:09:32.287] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] No blocks were filled
+[24Nov2026 13:09:32.397] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill 0 -61 0 14 -61 10 minecraft:spruce_planks
+[24Nov2026 13:09:32.483] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 165 block(s)
+[24Nov2026 13:09:32.483] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 165 block(s)
+[24Nov2026 13:09:32.610] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill 0 -60 11 14 -57 11 minecraft:oak_planks
+[24Nov2026 13:09:32.753] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 60 block(s)
+[24Nov2026 13:09:32.753] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 60 block(s)
+[24Nov2026 13:09:32.757] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill 0 -56 11 14 -56 11 minecraft:stripped_oak_log[axis=x]
+[24Nov2026 13:09:32.895] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 15 block(s)
+[24Nov2026 13:09:32.896] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 15 block(s)
+[24Nov2026 13:09:32.899] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill 0 -60 11 0 -56 11 minecraft:oak_log
+[24Nov2026 13:09:33.029] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 5 block(s)
+[24Nov2026 13:09:33.030] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 5 block(s)
+[24Nov2026 13:09:33.035] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill 7 -60 11 7 -56 11 minecraft:oak_log
+[24Nov2026 13:09:33.122] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 5 block(s)
+[24Nov2026 13:09:33.123] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 5 block(s)
+[24Nov2026 13:09:33.125] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill 14 -60 11 14 -56 11 minecraft:oak_log
+[24Nov2026 13:09:33.248] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 5 block(s)
+[24Nov2026 13:09:33.249] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 5 block(s)
+[24Nov2026 13:09:33.348] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 3 -57 10 minecraft:wall_torch[facing=north]
+[24Nov2026 13:09:33.445] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 3, -57, 10
+[24Nov2026 13:09:33.445] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 3, -57, 10
+[24Nov2026 13:09:33.448] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 11 -57 10 minecraft:wall_torch[facing=north]
+[24Nov2026 13:09:33.535] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 11, -57, 10
+[24Nov2026 13:09:33.536] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 11, -57, 10
+[24Nov2026 13:09:33.627] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 0 -60 9 minecraft:crafting_table
+[24Nov2026 13:09:33.707] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 0, -60, 9
+[24Nov2026 13:09:33.707] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 0, -60, 9
+[24Nov2026 13:09:33.711] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 14 -60 9 minecraft:smoker[facing=west]
+[24Nov2026 13:09:33.779] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 14, -60, 9
+[24Nov2026 13:09:33.780] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 14, -60, 9
+[24Nov2026 13:09:33.909] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 14 -59 9 minecraft:potted_fern
+[24Nov2026 13:09:33.968] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 14, -59, 9
+[24Nov2026 13:09:33.968] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 14, -59, 9
+[24Nov2026 13:09:34.025] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 1 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:cobblestone",count:64},{Slot:1b,id:"minecraft:cobblestone",count:64},{Slot:2b,id:"minecraft:stone",count:40}]} replace
+[24Nov2026 13:09:34.095] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 1, -60, 10
+[24Nov2026 13:09:34.095] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 1, -60, 10
+[24Nov2026 13:09:34.157] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 2 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:bread",count:24},{Slot:3b,id:"minecraft:carrot",count:31},{Slot:5b,id:"minecraft:lime_shulker_box",count:1,components:{"minecraft:container":[{slot:0,item:{id:"minecraft:emerald",count:32}},{slot:1,item:{id:"minecraft:emerald",count:16}}]}}]} replace
+[24Nov2026 13:09:34.245] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 2, -60, 10
+[24Nov2026 13:09:34.245] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 2, -60, 10
+[24Nov2026 13:09:34.356] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 3 -60 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:oak_log",count:64},{Slot:1b,id:"minecraft:oak_log",count:48}]} replace
+[24Nov2026 13:09:34.422] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 3, -60, 10
+[24Nov2026 13:09:34.423] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 3, -60, 10
+[24Nov2026 13:09:34.503] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 4 -60 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:coal",count:52},{Slot:1b,id:"minecraft:redstone",count:30}]} replace
+[24Nov2026 13:09:34.559] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 4, -60, 10
+[24Nov2026 13:09:34.559] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 4, -60, 10
+[24Nov2026 13:09:34.634] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 5 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:diamond",count:12},{Slot:1b,id:"minecraft:gold_ingot",count:9},{Slot:2b,id:"minecraft:lapis_lazuli",count:20}]} replace
+[24Nov2026 13:09:34.710] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 5, -60, 10
+[24Nov2026 13:09:34.711] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 5, -60, 10
+[24Nov2026 13:09:34.798] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 6 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:wheat",count:64},{Slot:1b,id:"minecraft:wheat_seeds",count:40}]} replace
+[24Nov2026 13:09:34.868] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 6, -60, 10
+[24Nov2026 13:09:34.868] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 6, -60, 10
+[24Nov2026 13:09:34.947] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 7 -60 10 minecraft:blue_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:arrow",count:64},{Slot:1b,id:"minecraft:bow",count:1}]} replace
+[24Nov2026 13:09:35.014] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 7, -60, 10
+[24Nov2026 13:09:35.014] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 7, -60, 10
+[24Nov2026 13:09:35.151] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 8 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:sand",count:64},{Slot:1b,id:"minecraft:gravel",count:32}]} replace
+[24Nov2026 13:09:35.209] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 8, -60, 10
+[24Nov2026 13:09:35.209] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 8, -60, 10
+[24Nov2026 13:09:35.213] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 9 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:string",count:18},{Slot:1b,id:"minecraft:leather",count:11}]} replace
+[24Nov2026 13:09:35.265] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 9, -60, 10
+[24Nov2026 13:09:35.265] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 9, -60, 10
+[24Nov2026 13:09:35.404] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 10 -60 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:diamond",count:30},{Slot:4b,id:"minecraft:obsidian",count:14}]} replace
+[24Nov2026 13:09:35.471] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 10, -60, 10
+[24Nov2026 13:09:35.471] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 10, -60, 10
+[24Nov2026 13:09:35.538] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 11 -60 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:spruce_log",count:64}]} replace
+[24Nov2026 13:09:35.594] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 11, -60, 10
+[24Nov2026 13:09:35.594] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 11, -60, 10
+[24Nov2026 13:09:35.658] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 12 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:torch",count:64},{Slot:1b,id:"minecraft:ladder",count:20}]} replace
+[24Nov2026 13:09:35.728] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 12, -60, 10
+[24Nov2026 13:09:35.729] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 12, -60, 10
+[24Nov2026 13:09:35.868] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 13 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:copper_ingot",count:40},{Slot:1b,id:"minecraft:quartz",count:22}]} replace
+[24Nov2026 13:09:35.938] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 13, -60, 10
+[24Nov2026 13:09:35.939] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 13, -60, 10
+[24Nov2026 13:09:35.995] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 1 -59 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:andesite",count:64}]} replace
+[24Nov2026 13:09:36.058] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 1, -59, 10
+[24Nov2026 13:09:36.058] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 1, -59, 10
+[24Nov2026 13:09:36.125] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 2 -59 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:glass",count:48}]} replace
+[24Nov2026 13:09:36.191] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 2, -59, 10
+[24Nov2026 13:09:36.191] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 2, -59, 10
+[24Nov2026 13:09:36.265] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 3 -59 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:bone",count:20},{Slot:1b,id:"minecraft:rotten_flesh",count:33}]} replace
+[24Nov2026 13:09:36.321] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 3, -59, 10
+[24Nov2026 13:09:36.322] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 3, -59, 10
+[24Nov2026 13:09:36.452] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 4 -59 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:flint",count:9},{Slot:1b,id:"minecraft:feather",count:17}]} replace
+[24Nov2026 13:09:36.514] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 4, -59, 10
+[24Nov2026 13:09:36.514] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 4, -59, 10
+[24Nov2026 13:09:36.579] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 5 -59 10 minecraft:white_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:white_wool",count:40}]} replace
+[24Nov2026 13:09:36.642] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 5, -59, 10
+[24Nov2026 13:09:36.643] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 5, -59, 10
+[24Nov2026 13:09:36.709] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 6 -59 10 minecraft:purple_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:diamond",count:9},{Slot:1b,id:"minecraft:ender_pearl",count:8}]} replace
+[24Nov2026 13:09:36.784] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 6, -59, 10
+[24Nov2026 13:09:36.784] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 6, -59, 10
+[24Nov2026 13:09:36.887] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 7 -59 10 minecraft:yellow_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:honey_bottle",count:6}]} replace
+[24Nov2026 13:09:36.952] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 7, -59, 10
+[24Nov2026 13:09:36.952] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 7, -59, 10
+[24Nov2026 13:09:37.076] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 8 -59 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:pumpkin",count:21}]} replace
+[24Nov2026 13:09:37.221] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 8, -59, 10
+[24Nov2026 13:09:37.222] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 8, -59, 10
+[24Nov2026 13:09:37.226] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 9 -59 10 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:melon_slice",count:50}]} replace
+[24Nov2026 13:09:37.338] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 9, -59, 10
+[24Nov2026 13:09:37.338] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 9, -59, 10
+[24Nov2026 13:09:37.342] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 10 -59 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:book",count:12},{Slot:1b,id:"minecraft:paper",count:30}]} replace
+[24Nov2026 13:09:37.458] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 10, -59, 10
+[24Nov2026 13:09:37.459] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 10, -59, 10
+[24Nov2026 13:09:37.464] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 11 -59 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:slime_ball",count:5},{Slot:2b,id:"minecraft:cyan_shulker_box",count:1,components:{"minecraft:container":[{slot:0,item:{id:"minecraft:diamond",count:20}},{slot:1,item:{id:"minecraft:diamond",count:10}}]}}]} replace
+[24Nov2026 13:09:37.555] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 11, -59, 10
+[24Nov2026 13:09:37.556] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 11, -59, 10
+[24Nov2026 13:09:37.636] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 12 -59 10 minecraft:red_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:tnt",count:4}]} replace
+[24Nov2026 13:09:37.704] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 12, -59, 10
+[24Nov2026 13:09:37.705] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 12, -59, 10
+[24Nov2026 13:09:37.778] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock 13 -59 10 minecraft:green_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:cactus",count:30}]} replace
+[24Nov2026 13:09:37.871] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at 13, -59, 10
+[24Nov2026 13:09:37.872] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at 13, -59, 10
+[24Nov2026 13:09:37.983] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -33 -61 6 -27 -61 10 minecraft:farmland[moisture=7]
+[24Nov2026 13:09:38.075] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 35 block(s)
+[24Nov2026 13:09:38.075] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 35 block(s)
+[24Nov2026 13:09:38.080] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -33 -60 6 -27 -60 10 minecraft:wheat[age=7]
+[24Nov2026 13:09:38.169] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 35 block(s)
+[24Nov2026 13:09:38.170] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 35 block(s)
+[24Nov2026 13:09:38.306] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -30 -61 8 minecraft:water
+[24Nov2026 13:09:38.415] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -30, -61, 8
+[24Nov2026 13:09:38.415] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -30, -61, 8
+[24Nov2026 13:09:38.418] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -30 -60 8 minecraft:air
+[24Nov2026 13:09:38.482] [Render thread/INFO] [SRSHOT/]: SRCHAT Could not set the block
+[24Nov2026 13:09:38.482] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Could not set the block
+[24Nov2026 13:09:38.572] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -34 -60 5 -26 -60 5 minecraft:oak_fence
+[24Nov2026 13:09:38.643] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 9 block(s)
+[24Nov2026 13:09:38.643] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 9 block(s)
+[24Nov2026 13:09:38.715] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -34 -60 11 -26 -60 11 minecraft:oak_fence
+[24Nov2026 13:09:38.790] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 9 block(s)
+[24Nov2026 13:09:38.791] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 9 block(s)
+[24Nov2026 13:09:38.882] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -34 -60 6 -34 -60 10 minecraft:oak_fence
+[24Nov2026 13:09:38.951] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 5 block(s)
+[24Nov2026 13:09:38.951] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 5 block(s)
+[24Nov2026 13:09:39.026] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -26 -60 6 -26 -60 10 minecraft:oak_fence
+[24Nov2026 13:09:39.113] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 5 block(s)
+[24Nov2026 13:09:39.113] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 5 block(s)
+[24Nov2026 13:09:39.120] [Render thread/INFO] [SRSHOT/]: SRSHOT /fill -39 -61 3 -21 -61 3 minecraft:dirt_path
+[24Nov2026 13:09:39.197] [Render thread/INFO] [SRSHOT/]: SRCHAT Successfully filled 19 block(s)
+[24Nov2026 13:09:39.197] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Successfully filled 19 block(s)
+[24Nov2026 13:09:39.288] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -36 -60 13 minecraft:hay_block
+[24Nov2026 13:09:39.354] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -36, -60, 13
+[24Nov2026 13:09:39.354] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -36, -60, 13
+[24Nov2026 13:09:39.474] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -36 -59 13 minecraft:hay_block
+[24Nov2026 13:09:39.562] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -36, -59, 13
+[24Nov2026 13:09:39.562] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -36, -59, 13
+[24Nov2026 13:09:39.566] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -37 -60 13 minecraft:hay_block
+[24Nov2026 13:09:39.661] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -37, -60, 13
+[24Nov2026 13:09:39.662] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -37, -60, 13
+[24Nov2026 13:09:39.734] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -23 -60 1 minecraft:crafting_table
+[24Nov2026 13:09:39.801] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -23, -60, 1
+[24Nov2026 13:09:39.802] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -23, -60, 1
+[24Nov2026 13:09:39.886] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -22 -60 1 minecraft:furnace[facing=north]
+[24Nov2026 13:09:39.940] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -22, -60, 1
+[24Nov2026 13:09:39.940] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -22, -60, 1
+[24Nov2026 13:09:40.055] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -38 -60 5 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:iron_ingot",count:24},{Slot:1b,id:"minecraft:coal",count:16}]} replace
+[24Nov2026 13:09:40.107] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -38, -60, 5
+[24Nov2026 13:09:40.107] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -38, -60, 5
+[24Nov2026 13:09:40.182] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -23 -60 10 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:iron_ingot",count:9},{Slot:1b,id:"minecraft:bread",count:6}]} replace
+[24Nov2026 13:09:40.264] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -23, -60, 10
+[24Nov2026 13:09:40.265] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -23, -60, 10
+[24Nov2026 13:09:40.359] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -32 -60 15 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:iron_ingot",count:40}]} replace
+[24Nov2026 13:09:40.449] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -32, -60, 15
+[24Nov2026 13:09:40.449] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -32, -60, 15
+[24Nov2026 13:09:40.544] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -21 -60 5 minecraft:barrel[facing=south]{Items:[{Slot:0b,id:"minecraft:iron_ingot",count:5},{Slot:1b,id:"minecraft:wheat_seeds",count:30}]} replace
+[24Nov2026 13:09:40.616] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -21, -60, 5
+[24Nov2026 13:09:40.616] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -21, -60, 5
+[24Nov2026 13:09:40.622] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -27 -60 16 minecraft:orange_shulker_box[facing=up]{Items:[{Slot:0b,id:"minecraft:iron_ingot",count:16}]} replace
+[24Nov2026 13:09:40.700] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -27, -60, 16
+[24Nov2026 13:09:40.700] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -27, -60, 16
+[24Nov2026 13:09:40.765] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -39 -60 11 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:wheat",count:20}]} replace
+[24Nov2026 13:09:40.814] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -39, -60, 11
+[24Nov2026 13:09:40.815] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -39, -60, 11
+[24Nov2026 13:09:40.924] [Render thread/INFO] [SRSHOT/]: SRSHOT /setblock -29 -60 0 minecraft:chest[facing=south,type=single]{Items:[{Slot:0b,id:"minecraft:pumpkin_seeds",count:12}]} replace
+[24Nov2026 13:09:40.986] [Render thread/INFO] [SRSHOT/]: SRCHAT Changed the block at -29, -60, 0
+[24Nov2026 13:09:40.987] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Changed the block at -29, -60, 0
+[24Nov2026 13:09:41.060] [Render thread/INFO] [SRSHOT/]: SRSHOT /tp @s 7.50 -60.52 -8.00 -0.0 0.3
+[24Nov2026 13:09:41.132] [Render thread/INFO] [SRSHOT/]: SRCHAT Teleported Radar to 7.500000, -60.520000, -8.000000
+[24Nov2026 13:09:41.132] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Teleported Radar to 7.500000, -60.520000, -8.000000
+[24Nov2026 13:09:44.277] [Render thread/INFO] [SRSHOT/]: SRSHOT /find minecraft:diamond 32
+[24Nov2026 13:09:44.369] [Render thread/INFO] [SRSHOT/]: SRCHAT [Stash Radar] Found 81 Diamond in 4 containers. Nearest: 19 blocks south
+[24Nov2026 13:09:44.370] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Stash Radar] Found 81 Diamond in 4 containers. Nearest: 19 blocks south
+[24Nov2026 13:09:44.370] [Render thread/INFO] [SRSHOT/]: SRCHAT  9 in Purple Shulker Box at 6, -59, 10 (19 blocks south)
+[24Nov2026 13:09:44.370] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  9 in Purple Shulker Box at 6, -59, 10 (19 blocks south)
+[24Nov2026 13:09:44.371] [Render thread/INFO] [SRSHOT/]: SRCHAT  12 in Chest at 5, -60, 10 (19 blocks south)
+[24Nov2026 13:09:44.371] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  12 in Chest at 5, -60, 10 (19 blocks south)
+[24Nov2026 13:09:44.371] [Render thread/INFO] [SRSHOT/]: SRCHAT  30 in Barrel at 10, -60, 10 (19 blocks south)
+[24Nov2026 13:09:44.371] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  30 in Barrel at 10, -60, 10 (19 blocks south)
+[24Nov2026 13:09:44.371] [Render thread/INFO] [SRSHOT/]: SRCHAT  ...and 1 more, all outlined.
+[24Nov2026 13:09:44.371] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  ...and 1 more, all outlined.
+[24Nov2026 13:09:46.404] [Render thread/INFO] [SRSHOT/]: SRTEST pass the answer arrives in chat
+[24Nov2026 13:09:46.404] [Render thread/INFO] [SRSHOT/]: SRTEST pass nearest containers are listed with coordinates
+[24Nov2026 13:09:46.405] [Render thread/INFO] [SRSHOT/]: SRTEST pass far results glow through walls (fake shulkers sent to this player)
+[24Nov2026 13:09:46.506] [Render thread/INFO] [SRSHOT/]: SRSHOT /tp @s 5.50 -60.02 8.50 -0.0 28.8
+[24Nov2026 13:09:46.601] [Render thread/INFO] [SRSHOT/]: SRCHAT Teleported Radar to 5.500000, -60.020000, 8.500000
+[24Nov2026 13:09:46.601] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Teleported Radar to 5.500000, -60.020000, 8.500000
+[24Nov2026 13:09:48.530] [Render thread/INFO] [SRSHOT/]: SRTEST pass no glow right next to the player (chests can be opened)
+[24Nov2026 13:09:48.712] [Render thread/INFO] [SRSHOT/]: SRSHOT /find help
+[24Nov2026 13:09:48.786] [Render thread/INFO] [SRSHOT/]: SRCHAT [Stash Radar] finds items in nearby chests, barrels and shulker boxes.
+[24Nov2026 13:09:48.786] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Stash Radar] finds items in nearby chests, barrels and shulker boxes.
+[24Nov2026 13:09:48.787] [Render thread/INFO] [SRSHOT/]: SRCHAT  /find <item> [range]  e.g. /find diamond or /find diamond 32
+[24Nov2026 13:09:48.787] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  /find <item> [range]  e.g. /find diamond or /find diamond 32
+[24Nov2026 13:09:48.787] [Render thread/INFO] [SRSHOT/]: SRCHAT  /find #<tag> [range]  a group of items, e.g. /find #logs
+[24Nov2026 13:09:48.787] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  /find #<tag> [range]  a group of items, e.g. /find #logs
+[24Nov2026 13:09:48.787] [Render thread/INFO] [SRSHOT/]: SRCHAT  /find name <text> [range]  names contain the text, e.g. /find name sword or a renamed box
+[24Nov2026 13:09:48.788] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  /find name <text> [range]  names contain the text, e.g. /find name sword or a renamed box
+[24Nov2026 13:09:48.788] [Render thread/INFO] [SRSHOT/]: SRCHAT  Search screen  press K (needs the mod on your game; change it in Controls)
+[24Nov2026 13:09:48.788] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  Search screen  press K (needs the mod on your game; change it in Controls)
+[24Nov2026 13:09:48.788] [Render thread/INFO] [SRSHOT/]: SRCHAT Range 16 by default, up to 32 blocks. Wait 5s between searches. Results glow for 12s.
+[24Nov2026 13:09:48.788] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] Range 16 by default, up to 32 blocks. Wait 5s between searches. Results glow for 12s.
+[24Nov2026 13:09:49.739] [Render thread/INFO] [SRSHOT/]: SRTEST pass /find help
+[24Nov2026 13:09:49.876] [Render thread/INFO] [SRSHOT/]: SRSHOT /find name "shulker" 32
+[24Nov2026 13:09:49.933] [Render thread/INFO] [SRSHOT/]: SRCHAT [Stash Radar] Found 2 items named "shulker" in 2 containers. Nearest: 4 blocks south-west
+[24Nov2026 13:09:49.933] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Stash Radar] Found 2 items named "shulker" in 2 containers. Nearest: 4 blocks south-west
+[24Nov2026 13:09:49.934] [Render thread/INFO] [SRSHOT/]: SRCHAT  1 in Chest at 2, -60, 10 (4 blocks south-west)
+[24Nov2026 13:09:49.934] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  1 in Chest at 2, -60, 10 (4 blocks south-west)
+[24Nov2026 13:09:49.934] [Render thread/INFO] [SRSHOT/]: SRCHAT  1 in Chest at 11, -59, 10 (6 blocks east)
+[24Nov2026 13:09:49.934] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  1 in Chest at 11, -59, 10 (6 blocks east)
+[24Nov2026 13:09:50.935] [Render thread/INFO] [SRSHOT/]: SRTEST pass /find name
+[24Nov2026 13:09:51.097] [Render thread/INFO] [SRSHOT/]: SRSHOT /find #minecraft:logs 32
+[24Nov2026 13:09:51.157] [Render thread/INFO] [SRSHOT/]: SRCHAT [Stash Radar] Found 176 #logs in 2 containers. Nearest: 3 blocks south-west
+[24Nov2026 13:09:51.158] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Stash Radar] Found 176 #logs in 2 containers. Nearest: 3 blocks south-west
+[24Nov2026 13:09:51.158] [Render thread/INFO] [SRSHOT/]: SRCHAT  112 in Barrel at 3, -60, 10 (3 blocks south-west)
+[24Nov2026 13:09:51.158] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  112 in Barrel at 3, -60, 10 (3 blocks south-west)
+[24Nov2026 13:09:51.158] [Render thread/INFO] [SRSHOT/]: SRCHAT  64 in Barrel at 11, -60, 10 (6 blocks east)
+[24Nov2026 13:09:51.158] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  64 in Barrel at 11, -60, 10 (6 blocks east)
+[24Nov2026 13:09:52.111] [Render thread/INFO] [SRSHOT/]: SRTEST pass /find #tag
+[24Nov2026 13:09:52.291] [Render thread/INFO] [SRSHOT/]: SRSHOT /find minecraft:diamond 100
+[24Nov2026 13:09:52.352] [Render thread/INFO] [SRSHOT/]: SRCHAT [Stash Radar] This server searches at most 32 blocks, so that's what I used.
+[24Nov2026 13:09:52.352] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Stash Radar] This server searches at most 32 blocks, so that's what I used.
+[24Nov2026 13:09:52.353] [Render thread/INFO] [SRSHOT/]: SRCHAT [Stash Radar] Found 81 Diamond in 4 containers. Nearest: 2 blocks south
+[24Nov2026 13:09:52.353] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT] [Stash Radar] Found 81 Diamond in 4 containers. Nearest: 2 blocks south
+[24Nov2026 13:09:52.353] [Render thread/INFO] [SRSHOT/]: SRCHAT  12 in Chest at 5, -60, 10 (2 blocks south)
+[24Nov2026 13:09:52.353] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  12 in Chest at 5, -60, 10 (2 blocks south)
+[24Nov2026 13:09:52.353] [Render thread/INFO] [SRSHOT/]: SRCHAT  9 in Purple Shulker Box at 6, -59, 10 (2 blocks south-east)
+[24Nov2026 13:09:52.353] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  9 in Purple Shulker Box at 6, -59, 10 (2 blocks south-east)
+[24Nov2026 13:09:52.354] [Render thread/INFO] [SRSHOT/]: SRCHAT  30 in Barrel at 10, -60, 10 (5 blocks east)
+[24Nov2026 13:09:52.354] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  30 in Barrel at 10, -60, 10 (5 blocks east)
+[24Nov2026 13:09:52.354] [Render thread/INFO] [SRSHOT/]: SRCHAT  ...and 1 more, all outlined.
+[24Nov2026 13:09:52.354] [Render thread/INFO] [net.minecraft.client.gui.components.ChatComponent/]: [System] [CHAT]  ...and 1 more, all outlined.
+[24Nov2026 13:09:53.324] [Render thread/INFO] [SRSHOT/]: SRTEST pass range above the server's limit is explained
+[24Nov2026 13:09:53.875] [Render thread/INFO] [SRSHOT/]: SRTEST 0 failure(s)
+[24Nov2026 13:09:53.875] [Render thread/INFO] [SRSHOT/]: SRSHOT done

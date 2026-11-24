@@ -1,0 +1,120 @@
+[32m[13:08:44.400] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher running: args [--launchTarget, forgeserver, --fml.neoForgeVersion, 21.1.80, --fml.fmlVersion, 4.0.31, --fml.mcVersion, 1.21.1, --fml.neoFormVersion, 20240808.144430, nogui] 
+[m[32m[13:08:44.403] [main/INFO] [Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 21.0.13+9-LTS 
+[m[32m[13:08:44.404] [main/INFO] [Launcher/MODLAUNCHER]: ModLauncher 11.0.4+main.d2e20e43 starting: java version 21.0.13 by Eclipse Adoptium; OS Linux arch amd64 version 7.0.0-1020-azure 
+[m[33m[13:08:44.513] [main/WARN] [loading.FMLConfig/CORE]: Configuration file /home/runner/work/stashradar/stashradar/server-e2e-vanilla/config/fml.toml is not correct. Correcting 
+[m[32m[13:08:44.514] [main/INFO] [loading.FMLConfig/CORE]: Incorrect key [disableConfigWatcher] was corrected from null to false 
+[m[32m[13:08:44.515] [main/INFO] [loading.FMLConfig/CORE]: Incorrect key [earlyWindowSkipGLVersions] was corrected from null to [] 
+[m[32m[13:08:44.515] [main/INFO] [loading.FMLConfig/CORE]: Incorrect key [earlyWindowSquir] was corrected from null to false 
+[m[32m[13:08:44.540] [main/INFO] [loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forgeserver 
+[m[32m[13:08:44.598] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=union:/home/runner/work/stashradar/stashradar/server-e2e-vanilla/libraries/net/fabricmc/sponge-mixin/0.15.2+mixin.0.8.7/sponge-mixin-0.15.2+mixin.0.8.7.jar%2375!/ Service=ModLauncher Env=SERVER 
+[m[32m[13:08:44.744] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "server-1.21.1-20240808.144430-srg.jar" [locator: production server provider +net.neoforged:neoforge:21.1.80:server] 
+[m[32m[13:08:44.758] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "neoforge-21.1.80-universal.jar" [locator: PathBasedLocator[name=neoforge, paths=[libraries/net/neoforged/neoforge/21.1.80/neoforge-21.1.80-universal.jar]], reader: mod manifest] 
+[m[32m[13:08:44.766] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "logiclib-neoforge-1.21.1-0.1.0.jar" [locator: {mods folder locator at /home/runner/work/stashradar/stashradar/server-e2e-vanilla/mods}, reader: mod manifest] 
+[m[32m[13:08:44.769] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found mod file "stashradar-neoforge-1.21.1-1.1.0.jar" [locator: {mods folder locator at /home/runner/work/stashradar/stashradar/server-e2e-vanilla/mods}, reader: mod manifest] 
+[m[32m[13:08:44.871] [main/INFO] [loading.moddiscovery.locators.JarInJarDependencyLocator/]: Found 2 dependencies adding them to mods collection 
+[m[32m[13:08:44.872] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found gamelibrary file "mixinextras-neoforge-0.4.1.jar" [parent: neoforge-21.1.80-universal.jar, locator: jarinjar, reader: mod manifest] 
+[m[32m[13:08:44.872] [main/INFO] [loading.moddiscovery.ModDiscoverer/SCAN]: Found library file "neoforge-coremods-21.1.80.jar" [parent: neoforge-21.1.80-universal.jar, locator: jarinjar, reader: mod manifest] 
+[m[32m[13:08:44.873] [main/INFO] [loading.moddiscovery.ModDiscoverer/]: 
+     Mod List:
+		Name Version (Mod Id)
+
+		LogicLib 0.1.0 (logiclib)
+		Minecraft 1.21.1 (minecraft)
+		NeoForge 21.1.80 (neoforge)
+		Stash Radar 1.1.0 (stashradar) 
+[m[32m[13:08:45.428] [main/INFO] [LaunchServiceHandler/MODLAUNCHER]: Launching target 'forgeserver' with arguments [nogui] 
+[mWARN StatusConsoleListener Advanced terminal features are not available in this environment
+[13:08:46] [main/INFO] [MixinExtras|Service/]: Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.4.1).
+[13:08:52] [modloading-worker-0/INFO] [LogicLib/]: LogicLib loaded on NeoForge
+[13:08:52] [modloading-worker-0/INFO] [ne.ne.ne.co.NeoForgeMod/NEOFORGE-MOD]: NeoForge mod loading, version 21.1.80, for MC 1.21.1
+[13:08:52] [modloading-worker-0/INFO] [Stash Radar/]: Stash Radar: config updated to version 2 (your settings were kept)
+[13:08:52] [modloading-worker-0/INFO] [Stash Radar/]: Stash Radar loaded on NeoForge
+[13:08:52] [main/INFO] [mojang/YggdrasilAuthenticationService]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[13:08:52] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/runner/work/stashradar/stashradar/server-e2e-vanilla/libraries/net/minecraft/server/1.21.1-20240808.144430/server-1.21.1-20240808.144430-srg.jar%23121!/assets/.mcassetsroot' uses unexpected schema
+[13:08:52] [main/WARN] [minecraft/VanillaPackResourcesBuilder]: Assets URL 'union:/home/runner/work/stashradar/stashradar/server-e2e-vanilla/libraries/net/minecraft/server/1.21.1-20240808.144430/server-1.21.1-20240808.144430-srg.jar%23121!/data/.mcassetsroot' uses unexpected schema
+[13:08:53] [main/INFO] [minecraft/Main]: No existing world data, creating new world
+[13:08:53] [main/ERROR] [minecraft/DedicatedServerProperties]: No key layers in MapLike[{}]
+[13:08:54] [main/INFO] [minecraft/RecipeManager]: Loaded 1290 recipes
+[13:08:54] [main/INFO] [minecraft/AdvancementTree]: Loaded 1399 advancements
+[13:08:54] [Server thread/INFO] [minecraft/DedicatedServer]: Starting minecraft server version 1.21.1
+[13:08:54] [Server thread/INFO] [minecraft/DedicatedServer]: Loading properties
+[13:08:54] [Server thread/INFO] [minecraft/DedicatedServer]: Default game type: CREATIVE
+[13:08:54] [Server thread/INFO] [minecraft/MinecraftServer]: Generating keypair
+[13:08:55] [Server thread/INFO] [minecraft/DedicatedServer]: Starting Minecraft server on *:25565
+[13:08:55] [Server thread/INFO] [minecraft/ServerConnectionListener]: Using epoll channel type
+[13:08:55] [Server thread/WARN] [minecraft/DedicatedServer]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[13:08:55] [Server thread/WARN] [minecraft/DedicatedServer]: The server will make no attempt to authenticate usernames. Beware.
+[13:08:55] [Server thread/WARN] [minecraft/DedicatedServer]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[13:08:55] [Server thread/WARN] [minecraft/DedicatedServer]: To change this, set "online-mode" to "true" in the server.properties file.
+[13:08:55] [Server thread/INFO] [minecraft/DedicatedServer]: Preparing level "world"
+[13:08:55] [Server thread/INFO] [minecraft/MinecraftServer]: Preparing start region for dimension minecraft:overworld
+[13:08:55] [Worker-Main-2/INFO] [minecraft/LoggerChunkProgressListener]: Preparing spawn area: 2%
+[13:08:56] [Server thread/INFO] [minecraft/LoggerChunkProgressListener]: Time elapsed: 262 ms
+[13:08:56] [Server thread/INFO] [minecraft/DedicatedServer]: Done (0.877s)! For help, type "help"
+[13:08:56] [Server thread/INFO] [ne.ne.ne.se.pe.PermissionAPI/]: Successfully initialized permission handler neoforge:default_handler
+[13:09:23] [Server thread/INFO] [minecraft/PlayerList]: Radar[/127.0.0.1:34426] logged in with entity id 1 at (-1.5, -60.0, -5.5)
+[13:09:23] [Server thread/INFO] [minecraft/MinecraftServer]: Radar joined the game
+[13:09:31] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Gamerule doDaylightCycle is now set to: false]
+[13:09:31] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Set the time to 6000]
+[13:09:31] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Set the weather to clear]
+[13:09:31] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Gamerule doMobSpawning is now set to: false]
+[13:09:32] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 165 block(s)]
+[13:09:32] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 60 block(s)]
+[13:09:32] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 15 block(s)]
+[13:09:32] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 5 block(s)]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 5 block(s)]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 5 block(s)]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 3, -57, 10]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 11, -57, 10]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 0, -60, 9]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 14, -60, 9]
+[13:09:33] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 14, -59, 9]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 1, -60, 10]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 2, -60, 10]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 3, -60, 10]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 4, -60, 10]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 5, -60, 10]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 6, -60, 10]
+[13:09:34] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 7, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 8, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 9, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 10, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 11, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 12, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 13, -60, 10]
+[13:09:35] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 1, -59, 10]
+[13:09:36] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 2, -59, 10]
+[13:09:36] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 3, -59, 10]
+[13:09:36] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 4, -59, 10]
+[13:09:36] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 5, -59, 10]
+[13:09:36] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 6, -59, 10]
+[13:09:36] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 7, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 8, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 9, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 10, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 11, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 12, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at 13, -59, 10]
+[13:09:37] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 35 block(s)]
+[13:09:38] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 35 block(s)]
+[13:09:38] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -30, -61, 8]
+[13:09:38] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 9 block(s)]
+[13:09:38] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 9 block(s)]
+[13:09:38] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 5 block(s)]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 5 block(s)]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Successfully filled 19 block(s)]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -36, -60, 13]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -36, -59, 13]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -37, -60, 13]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -23, -60, 1]
+[13:09:39] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -22, -60, 1]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -38, -60, 5]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -23, -60, 10]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -32, -60, 15]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -21, -60, 5]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -27, -60, 16]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -39, -60, 11]
+[13:09:40] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Changed the block at -29, -60, 0]
+[13:09:41] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Teleported Radar to 7.500000, -60.520000, -8.000000]
+[13:09:46] [Server thread/INFO] [minecraft/MinecraftServer]: [Radar: Teleported Radar to 5.500000, -60.020000, 8.500000]
+WARN StatusConsoleListener Unable to register Log4j shutdown hook because JVM is shutting down. Using SimpleLogger

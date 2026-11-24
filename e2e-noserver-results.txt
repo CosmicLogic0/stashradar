@@ -1,0 +1,5 @@
+SRTEST 0 failure(s)
+SRTEST pass the search screen says the server doesn't have Stash Radar
+SRTEST pass the settings screen opens
+SRTEST pass this server has no /find
+PASS
