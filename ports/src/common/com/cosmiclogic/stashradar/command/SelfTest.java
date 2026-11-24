@@ -93,7 +93,8 @@ final class SelfTest {
             chest.setItem(2, renamed(shulkerItemWith(new ItemStack(Items.IRON_INGOT, 5)), "Ore Box"));
 
             Vec3 from = new Vec3(x + 0.5, y + 0.5, z - 3.5);
-            ContainerSearch.Options options = new ContainerSearch.Options(StashRadar.config().containers, true, true);
+            // The default container list, not the server's own (an owner may have changed it; the test must not care).
+            ContainerSearch.Options options = new ContainerSearch.Options(new StashRadarConfig().containers, true, true);
             Predicate<ItemStack> diamond = ContainerSearch.of(Items.DIAMOND);
 
             List<ContainerSearch.Hit> diamonds = ContainerSearch.search(level, from, diamond, 8, options);

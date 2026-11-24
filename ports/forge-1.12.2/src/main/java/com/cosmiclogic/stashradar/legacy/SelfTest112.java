@@ -48,7 +48,7 @@ final class SelfTest112 {
             int x = (spawn.getX() >> 4) * 16 + 8;
             int z = (spawn.getZ() >> 4) * 16 + 8;
             int y = 200;
-            List<String> defaults = StashRadar.config().containers;
+            List<String> defaults = new StashRadarConfig().containers;   // not the server's own list
 
             // Chest: 7 diamonds + a shulker box ITEM holding 3 emeralds.
             IInventory chest = place(world, new BlockPos(x, y, z), Blocks.CHEST.getDefaultState(), placed);
