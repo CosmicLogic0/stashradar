@@ -163,7 +163,7 @@ final class SelfTest {
             expect(problems, "ender chest count (with a shulker box item)", 11, ContainerSearch.count(enderLike, diamond, true));
 
             //#if MC >= 1.21.9
-            place(level, new BlockPos(x, y, z - 2), Blocks.COPPER_CHEST.defaultBlockState(), placed).setItem(0, new ItemStack(Items.LAPIS_LAZULI, 3));
+            place(level, new BlockPos(x, y, z - 2), com.cosmiclogic.stashradar.search.Ids.findBlock("minecraft:copper_chest").defaultBlockState(), placed).setItem(0, new ItemStack(Items.LAPIS_LAZULI, 3));
             checks++;
             expect(problems, "copper chests are searched by default", 3, total(ContainerSearch.search(level, from, ContainerSearch.of(Items.LAPIS_LAZULI), 8, options)));
             //#endif

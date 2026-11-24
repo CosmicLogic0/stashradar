@@ -44,7 +44,8 @@ public final class Glow {
 
     /** Builds (but doesn't send) the fake glowing shulker for a block. */
     public static Ghost build(ServerLevel level, BlockPos pos) {
-        Shulker shulker = new Shulker(EntityType.SHULKER, level);
+        EntityType<Shulker> type = shulkerType();
+        Shulker shulker = new Shulker(type, level);
         shulker.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         shulker.setInvisible(true);
         shulker.setSilent(true);
@@ -56,7 +57,7 @@ public final class Glow {
         List<Packet<?>> packets = new ArrayList<>();
         //#if MC >= 1.20.5
         packets.add(new ClientboundAddEntityPacket(shulker.getId(), shulker.getUUID(), shulker.getX(), shulker.getY(), shulker.getZ(),
-                0f, 0f, EntityType.SHULKER, 0, Vec3.ZERO, 0d));
+                0f, 0f, type, 0, Vec3.ZERO, 0d));
         //#elif MC >= 1.19
         packets.add(new ClientboundAddEntityPacket(shulker));
         //#else
@@ -71,6 +72,21 @@ public final class Glow {
         packets.add(new ClientboundSetEntityDataPacket(shulker.getId(), shulker.getEntityData(), true));
         //#endif
         return new Ghost(shulker.getId(), packets);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static EntityType<Shulker> shulkerType() {
+        //#if MC >= 26.1
+        // 26.x moved the EntityType constants; the registry has it under the same id.
+        for (EntityType<?> t : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE) {
+            if (net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(t).toString().equals("minecraft:shulker")) {
+                return (EntityType<Shulker>) t;
+            }
+        }
+        throw new IllegalStateException("no shulker entity type");
+        //#else
+        return EntityType.SHULKER;
+        //#endif
     }
 
     public static void show(ServerPlayer player, Ghost ghost) {

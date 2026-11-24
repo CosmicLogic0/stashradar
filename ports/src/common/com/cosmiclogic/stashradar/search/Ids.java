@@ -41,6 +41,20 @@ public final class Ids {
         return null;
     }
 
+    /** The block with this full id ("minecraft:copper_chest"), or null. */
+    public static Block findBlock(String id) {
+        //#if MC >= 1.19.3
+        for (Block block : BuiltInRegistries.BLOCK) {
+        //#else
+        for (Block block : Registry.BLOCK) {
+        //#endif
+            if (block(block).equals(id)) {
+                return block;
+            }
+        }
+        return null;
+    }
+
     public static Iterable<Item> allItems() {
         //#if MC >= 1.19.3
         return BuiltInRegistries.ITEM;
