@@ -19,29 +19,29 @@ public final class StashRadarClient {
 
     /** GLFW_KEY_K. Written as a number: 26.x no longer ships org.lwjgl.glfw on the compile classpath. */
     private static final int KEY_K = 75;
-    /** Not bound until the player picks a key in Controls. */
-    private static final int UNBOUND = -1;
+    // "Repeat last search" starts unbound: Minecraft's own UNKNOWN key. A plain -1 key crashes 26.3 when a world
+    // loads (KeyMapping.setAll reads key -1 from the keyboard state); found by the 26.3 client test.
 
     //#if MC >= 26.1
     public static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
             net.minecraft.resources.Identifier.fromNamespaceAndPath("stashradar", "main"));
     // values()[0] is KEYSYM up to 26.2 and KEYBOARD from 26.3: the keyboard either way.
     public static final KeyMapping KEY = new KeyMapping("key.stashradar.search", InputConstants.Type.values()[0], KEY_K, CATEGORY);
-    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.Type.values()[0], UNBOUND, CATEGORY);
+    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.UNKNOWN.getType(), InputConstants.UNKNOWN.getValue(), CATEGORY);
     //#elif MC >= 1.21.11
     public static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
             net.minecraft.resources.Identifier.fromNamespaceAndPath("stashradar", "main"));
     public static final KeyMapping KEY = new KeyMapping("key.stashradar.search", InputConstants.Type.KEYSYM, KEY_K, CATEGORY);
-    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.Type.KEYSYM, UNBOUND, CATEGORY);
+    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.UNKNOWN.getType(), InputConstants.UNKNOWN.getValue(), CATEGORY);
     //#elif MC >= 1.21.9
     public static final KeyMapping.Category CATEGORY = KeyMapping.Category.register(
             net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("stashradar", "main"));
     public static final KeyMapping KEY = new KeyMapping("key.stashradar.search", InputConstants.Type.KEYSYM, KEY_K, CATEGORY);
-    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.Type.KEYSYM, UNBOUND, CATEGORY);
+    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.UNKNOWN.getType(), InputConstants.UNKNOWN.getValue(), CATEGORY);
     //#else
     public static final String CATEGORY = "key.categories.stashradar";
     public static final KeyMapping KEY = new KeyMapping("key.stashradar.search", InputConstants.Type.KEYSYM, KEY_K, CATEGORY);
-    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.Type.KEYSYM, UNBOUND, CATEGORY);
+    public static final KeyMapping REPEAT = new KeyMapping("key.stashradar.repeat", InputConstants.UNKNOWN.getType(), InputConstants.UNKNOWN.getValue(), CATEGORY);
     //#endif
 
     /** Every key to register in Controls. */
