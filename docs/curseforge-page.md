@@ -2,7 +2,7 @@
 
 **Stop opening every chest. Just ask the radar.**
 
-> ⚠️ **Requires [LogicLib](https://www.curseforge.com/minecraft/mc-mods/logiclib).** Install it too. The CurseForge app adds it for you automatically.
+⚠️ Requires [LogicLib](https://www.curseforge.com/minecraft/mc-mods/logiclib)
 
 You know the diamonds are *somewhere*. Twenty chests, three barrels and a wall of shulker boxes later, you still haven't found them. **Stash Radar finds them for you.** Type the item, and every nearby container that has it lights up.
 
