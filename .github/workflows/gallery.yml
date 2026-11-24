@@ -15,7 +15,7 @@ env:
   MC: "1.21.1"
   LOGICLIB: "0.1.0"
   LOGICLIB_PLUGIN: "0.2.0"
-  PLUGIN: "1.1.0"
+  PLUGIN: "1.1.1"
 
 jobs:
   shots:
