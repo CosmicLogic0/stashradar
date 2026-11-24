@@ -401,7 +401,7 @@ public final class PageShots {
         then(20, () -> check("/find name", chatHas("items named \"shulker\"")));
         cmd("find #minecraft:logs 32");
         then(20, () -> check("/find #tag", chatHas("#logs")));
-        cmd("find minecraft:diamond 999");
+        cmd("find minecraft:diamond 100");
         then(20, () -> check("range above the server's limit is explained", chatHas("searches at most")));
         finish();
     }
