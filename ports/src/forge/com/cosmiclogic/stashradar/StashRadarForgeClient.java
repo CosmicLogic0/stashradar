@@ -22,18 +22,18 @@ final class StashRadarForgeClient {
     private StashRadarForgeClient() {
     }
 
-    //#if MC >= 26.1
+    //#if MC >= 1.21.6
     static void init(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
+        //#if MC >= 26.1
         RegisterKeyMappingsEvent.BUS.addListener(e -> e.register(StashRadarClient.KEY));
+        //#else
+        RegisterKeyMappingsEvent.getBus(context.getModBusGroup()).addListener(e -> e.register(StashRadarClient.KEY));
+        //#endif
         InputEvent.Key.BUS.addListener(e -> StashRadarClient.onKeyInput());
     }
     //#else
     static void init() {
-        //#if MC >= 1.21.6
-        RegisterKeyMappingsEvent.getBus(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext.get().getModBusGroup())
-                .addListener(e -> e.register(StashRadarClient.KEY));
-        InputEvent.Key.BUS.addListener(e -> StashRadarClient.onKeyInput());
-        //#elif MC >= 1.19
+        //#if MC >= 1.19
         FMLJavaModLoadingContext.get().getModEventBus().addListener((RegisterKeyMappingsEvent e) -> e.register(StashRadarClient.KEY));
         MinecraftForge.EVENT_BUS.addListener((InputEvent.Key e) -> StashRadarClient.onKeyInput());
         //#else

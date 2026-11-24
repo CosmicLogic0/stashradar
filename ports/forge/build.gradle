@@ -57,8 +57,10 @@ def neoNewToml = neo && vrCmp(mcv, '1.20.5') >= 0
 def packFormats = ['1.16.5': 6, '1.17.1': 7, '1.18.2': 8, '1.19.2': 9, '1.19.4': 13, '1.20.1': 15, '1.20.4': 22, '1.20.6': 32,
                    '1.21.1': 34, '1.21.4': 46, '1.21.5': 55, '1.21.8': 64, '1.21.10': 69, '1.21.11': 75]
 def pack = packFormats[mcv] ?: 15
+// pack.mcmeta: 1.21.9+ (format > 64) needs min_format/max_format, and formats up to 81 also want supported_formats.
+def packExtra = pack > 64 ? ", \"supported_formats\": [${pack}, 81], \"min_format\": ${pack}, \"max_format\": 255" : ""
 processResources {
-    def props = ['version': project.mod_version, 'mcRange': mcRange, 'loaderMajor': loaderMajor, 'pack': pack,
+    def props = ['version': project.mod_version, 'mcRange': mcRange, 'loaderMajor': loaderMajor, 'pack': pack, 'packExtra': packExtra,
                  'loaderId': loaderName, 'mandatory': neoNewToml ? 'type = "required"' : 'mandatory = true',
                  'logiclibVersion': project.logiclib_version]
     inputs.properties props

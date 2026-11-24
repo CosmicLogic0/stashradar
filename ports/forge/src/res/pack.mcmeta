@@ -1,1 +1,1 @@
-{ "pack": { "description": "Stash Radar resources", "pack_format": ${pack} } }
+{ "pack": { "description": "Stash Radar resources", "pack_format": ${pack}${packExtra} } }

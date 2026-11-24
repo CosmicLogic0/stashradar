@@ -43,7 +43,7 @@ for e in "${EXPECTS[@]}"; do
   if ! grep -Eq "$e" server.log; then echo "::error::Expected log line not found: $e"; exit 1; fi
 done
 CHECK="${CHECK_PATTERN:-logiclib|stash ?radar|stashradar}"
-if grep -Ei "$CHECK" server.log | grep -Eiq "exception|error|could not load|failed"; then
-  echo "::error::LogicLib / Stash Radar problem in the log:"; grep -Ei "$CHECK" server.log | grep -Ei "exception|error|could not load|failed"; exit 1
+if grep -Ei "$CHECK" server.log | grep -Eiq "exception|error|could not load|couldn.t load|failed|/warn"; then
+  echo "::error::LogicLib / Stash Radar problem in the log:"; grep -Ei "$CHECK" server.log | grep -Ei "exception|error|could not load|couldn.t load|failed|/warn"; exit 1
 fi
 echo "PASS: server started, LogicLib + Stash Radar loaded and every expected line was found, with no errors."

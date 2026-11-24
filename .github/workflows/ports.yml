@@ -150,14 +150,27 @@ jobs:
           grep -h "Logic Survival" run/logs/latest.log | head -3
           grep -q "requested by stashradar" run/logs/latest.log && echo "LogicLib added it for stashradar"
           grep -q "Stash Radar loaded on" run/logs/latest.log && echo "Stash Radar loaded in the client"
+      - name: Client log check (no warnings or errors about Stash Radar)
+        id: clog
+        if: always() && steps.client.outcome == 'success'
+        run: |
+          # Any WARN/ERROR/exception line that names Stash Radar fails the run (this is how the broken pack.mcmeta on
+          # 1.21.11 / 26.x would have been caught). LogicLib's own lines are reported, not failed: they go to Library Requests.
+          L=run/logs/latest.log
+          BAD=$(grep -Ein "stashradar|stash radar" "$L" | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" || true)
+          LL=$(grep -Ein "mod:logiclib|mod/logiclib|logiclib" "$L" | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" | head -5 || true)
+          [ -n "$LL" ] && { echo "::warning::LogicLib lines (reported to LogicLib, not failed here):"; echo "$LL"; }
+          if [ -n "$BAD" ]; then echo "::error::Stash Radar warnings/errors in the client log:"; echo "$BAD" | head -20; exit 1; fi
+          echo "Client log is clean for Stash Radar."
       - name: Write the result
         if: always()
         run: |
           mkdir -p result
           R="result/${{ matrix.id }}.txt"
-          B="${{ steps.build.outcome }}"; S="${{ steps.server.outcome }}"; C="${{ steps.client.outcome }}"; K="${{ steps.cs.outcome }}"
-          if [ "$B" = success ] && [ "$S" = success ] && [ "$C" = success ] && [ "$K" = success ]; then echo "PASS build+server(self-test)+client+creator-server (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R";
-          else echo "FAIL build=$B server=$S client=$C creator-server=$K (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R"; fi
+          B="${{ steps.build.outcome }}"; S="${{ steps.server.outcome }}"; C="${{ steps.client.outcome }}"; K="${{ steps.cs.outcome }}"; G="${{ steps.clog.outcome }}"
+          if [ "$B" = success ] && [ "$S" = success ] && [ "$C" = success ] && [ "$K" = success ] && [ "$G" = success ]; then echo "PASS build+server(self-test)+client+creator-server+clean-logs (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R";
+          else echo "FAIL build=$B server=$S client=$C creator-server=$K client-log=$G (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R"; fi
+          if [ "$G" = failure ]; then echo "--- client log ---" >> "$R"; grep -Ein "stashradar|stash radar" run/logs/latest.log | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" | head -15 >> "$R"; fi
           if [ "$B" != success ] && [ -f ${{ matrix.dir }}/build.log ]; then python3 - ${{ matrix.dir }}/build.log >> "$R" <<'PY'
           import re, sys
           L = open(sys.argv[1], errors='replace').read().split('\n'); out = []; seen = set()

@@ -3,11 +3,13 @@
 #         forge26 / neoforge26 (ports/forge-26, ports/neoforge-26), forge112 (ports/forge-1.12.2, RetroFuturaGradle)
 # A version is only added here once LogicLib has a released jar for it (LogicLib's dist branch).
 forge 1.21.11
+forge 1.21.1
 forge 1.20.1
 forge 1.19.2
 forge 1.18.2
 forge 1.16.5
 neoforge 1.21.11
+neoforge 1.21.1
 neoforge120 1.20.1   # the Forge 1.20.1 jar, tested on NeoForge 1.20.1
 forge26 26.3
 forge26 26.2

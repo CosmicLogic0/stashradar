@@ -12,7 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 @Mod(StashRadar.MOD_ID)
 public class StashRadarForge {
 
-    //#if MC >= 26.1
+    //#if MC >= 1.21.6
     public StashRadarForge(net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext context) {
     //#else
     public StashRadarForge() {
@@ -24,7 +24,7 @@ public class StashRadarForge {
         MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
         //#endif
         if (FMLEnvironment.dist == Dist.CLIENT) {
-            //#if MC >= 26.1
+            //#if MC >= 1.21.6
             StashRadarForgeClient.init(context);
             //#else
             StashRadarForgeClient.init();
