@@ -22,18 +22,26 @@ public class StashRadarCommand112 extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/stashradar reload";
+        return "/stashradar help | /stashradar reload";
     }
 
     @Override
     public int getRequiredPermissionLevel() {
-        return 2;
+        return 0;   // help is for everyone; reload checks for operators itself
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+        return true;
     }
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
         String sub = args.length > 0 ? args[0] : "";
         if (sub.equals("reload")) {
+            if (!sender.canUseCommand(2, getName())) {
+                throw new CommandException("commands.generic.permission");
+            }
             StashRadar.reloadConfig();
             sender.sendMessage(Text112.prefix().appendSibling(Text112.of("Config reloaded.", TextFormatting.GREEN)));
             return;
@@ -42,13 +50,16 @@ public class StashRadarCommand112 extends CommandBase {
             SelfTest112.run(server);
             return;
         }
-        throw new CommandException(getUsage(sender));
+        sender.sendMessage(Text112.prefix().appendSibling(Text112.of("server commands:", TextFormatting.GRAY)));
+        FindCommand112.line(sender, "/find help", "how players search");
+        FindCommand112.line(sender, "/stashradar reload", "reload config/stashradar.json (operators)");
+        FindCommand112.line(sender, "/stashradar help", "this list");
     }
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if (args.length == 1) {
-            return getListOfStringsMatchingLastWord(args, "reload");
+            return getListOfStringsMatchingLastWord(args, "help", "reload");
         }
         return Collections.emptyList();
     }

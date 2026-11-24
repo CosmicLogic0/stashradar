@@ -4,6 +4,7 @@
 # Usage: server-test.sh <server-dir> <expected-log-regex> [more-expected-regex...] -- <start command...>
 # Env:   TEST_COMMANDS   console commands to run after startup, separated by ';' (e.g. "stashradar selftest")
 #        CHECK_PATTERN   lines matching this (case-insensitive) must not contain exception/error/failed
+#        ALLOW_PATTERN   lines matching this are expected (e.g. the warning about a broken config we broke on purpose)
 set -u
 DIR="$1"; shift
 EXPECTS=()
@@ -45,6 +46,7 @@ done
 # Paths of the CI checkout (".../stashradar/stashradar/server/...") are removed first, so a WARN line that only
 # mentions the folder name doesn't count as a Stash Radar problem.
 CLEAN=$(sed -E 's#(/[A-Za-z0-9._%#!-]+)+/stashradar/[^ ]*##g; s#union:[^ ]*##g' server.log)
+if [ -n "${ALLOW_PATTERN:-}" ]; then CLEAN=$(echo "$CLEAN" | grep -Eiv "$ALLOW_PATTERN" || true); fi
 CHECK="${CHECK_PATTERN:-stash ?radar|stashradar}"
 BAD=$(echo "$CLEAN" | grep -Ei "$CHECK" | grep -Ei "exception|error|could not load|couldn.t load|failed|/warn" || true)
 LL=$(echo "$CLEAN" | grep -Ei "logiclib" | grep -Ei "exception|error|could not load|couldn.t load|failed|/warn" || true)

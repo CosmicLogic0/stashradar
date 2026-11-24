@@ -123,6 +123,31 @@ jobs:
           echo "start: $CMD"
           cd ..
           TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server "LogicLib loaded on $NAME" "Stash Radar loaded on $NAME" "Stash Radar self-test PASSED" -- $CMD 2>&1 | tee server-test.log
+      - name: Restart test (world reload, broken config, 1.0 config upgrade)
+        id: restart
+        run: |
+          J=${{ matrix.java }}; JH=$(eval echo \$JAVA_HOME_${J}_X64); export PATH="$JH/bin:$PATH"
+          cd server
+          if [ -f run.sh ]; then CMD="bash run.sh nogui"; else CMD="java -jar $(ls forge-*.jar | grep -v installer | head -1) nogui"; fi
+          case "${{ matrix.loader }}" in neoforge120|forge*) NAME=Forge ;; *) NAME=NeoForge ;; esac
+          cd ..
+          # 1) Same world again, with a config file that isn't valid JSON: kept as .broken, defaults used, still works.
+          echo '{ "range": 16, oops this is not json' > server/config/stashradar.json
+          mv server/server.log server/server-first.log
+          ALLOW_PATTERN="Config stashradar.json is broken" TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server \
+            "Stash Radar loaded on $NAME" "Config stashradar.json is broken" "Stash Radar self-test PASSED" -- $CMD 2>&1 | tail -5
+          test -f server/config/stashradar.json.broken || { echo "::error::broken config was not kept as stashradar.json.broken"; exit 1; }
+          python3 -c "import json; json.load(open('server/config/stashradar.json'))" || { echo "::error::config was not rewritten as valid JSON"; exit 1; }
+          # 2) A 1.0 config (no configVersion, own choices): upgraded, choices kept.
+          echo '{ "range": 20, "maxRange": 40, "containers": ["minecraft:chest", "minecraft:barrel"] }' > server/config/stashradar.json
+          mv server/server.log server/server-broken.log
+          TEST_COMMANDS="stashradar selftest" bash ci/server-test.sh server "Stash Radar loaded on $NAME" "config updated to version 2" "Stash Radar self-test PASSED" -- $CMD 2>&1 | tail -5
+          python3 - <<'PY'
+          import json, sys
+          c = json.load(open('server/config/stashradar.json'))
+          ok = c.get('range') == 20 and c.get('maxRange') == 40 and c.get('containers') == ['minecraft:chest', 'minecraft:barrel', 'copper_chests'] and c.get('configVersion') == 2 and c.get('searchItemFrames') is True
+          print('upgraded config:', c); sys.exit(0 if ok else 1)
+          PY
       - name: Client test files
         if: always() && steps.jar.outputs.file != ''
         run: |
@@ -169,9 +194,9 @@ jobs:
         run: |
           mkdir -p result
           R="result/${{ matrix.id }}.txt"
-          B="${{ steps.build.outcome }}"; S="${{ steps.server.outcome }}"; C="${{ steps.client.outcome }}"; K="${{ steps.cs.outcome }}"; G="${{ steps.clog.outcome }}"
-          if [ "$B" = success ] && [ "$S" = success ] && [ "$C" = success ] && [ "$K" = success ] && [ "$G" = success ]; then echo "PASS build+server(self-test)+client+creator-server+clean-logs (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R";
-          else echo "FAIL build=$B server=$S client=$C creator-server=$K client-log=$G (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R"; fi
+          B="${{ steps.build.outcome }}"; S="${{ steps.server.outcome }}"; C="${{ steps.client.outcome }}"; K="${{ steps.cs.outcome }}"; G="${{ steps.clog.outcome }}"; T="${{ steps.restart.outcome }}"
+          if [ "$B" = success ] && [ "$S" = success ] && [ "$T" = success ] && [ "$C" = success ] && [ "$K" = success ] && [ "$G" = success ]; then echo "PASS build+server(self-test)+restart(broken+old config)+client+creator-server+clean-logs (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R";
+          else echo "FAIL build=$B server=$S restart=$T client=$C creator-server=$K client-log=$G (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R"; fi
           if [ "$G" = failure ]; then echo "--- client log ---" >> "$R"; grep -Ein "stashradar|stash radar" run/clean.log | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" | head -15 >> "$R"; fi
           if [ "$B" != success ] && [ -f ${{ matrix.dir }}/build.log ]; then python3 - ${{ matrix.dir }}/build.log >> "$R" <<'PY'
           import re, sys

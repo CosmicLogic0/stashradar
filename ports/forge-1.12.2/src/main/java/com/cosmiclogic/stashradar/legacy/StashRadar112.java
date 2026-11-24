@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
  * use /find (acceptableRemoteVersions = "*"), players with it also get the search screen (key K).
  * Startup and config are the shared {@link StashRadar} class, same as every other version.
  */
-@Mod(modid = StashRadar.MOD_ID, name = StashRadar.MOD_NAME, version = "0.1.0",
+@Mod(modid = StashRadar.MOD_ID, name = StashRadar.MOD_NAME, version = "1.1.0",
         dependencies = "required-after:logiclib@[0.1.0,)",
         acceptableRemoteVersions = "*", acceptedMinecraftVersions = "[1.12.2]")
 public class StashRadar112 {

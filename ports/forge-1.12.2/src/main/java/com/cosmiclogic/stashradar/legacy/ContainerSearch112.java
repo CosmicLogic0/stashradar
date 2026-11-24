@@ -2,6 +2,8 @@ package com.cosmiclogic.stashradar.legacy;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockShulkerBox;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,7 +19,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * The search for 1.12.2 (same rules as every other version). Runs on the server thread and reads the
@@ -43,8 +47,25 @@ public final class ContainerSearch112 {
     private ContainerSearch112() {
     }
 
-    /** Containers within {@code range} blocks of {@code center} that hold {@code item}, nearest first. */
+    public static Predicate<ItemStack> of(final Item item) {
+        return stack -> stack.getItem() == item;
+    }
+
+    /** Items whose shown name (a custom name too) or id contains the text, ignoring case. */
+    public static Predicate<ItemStack> named(String text) {
+        final String q = text.trim().toLowerCase(Locale.ROOT);
+        return stack -> !q.isEmpty() && (stack.getDisplayName().toLowerCase(Locale.ROOT).contains(q)
+                || itemId(stack.getItem()).contains(q.replace(' ', '_')));
+    }
+
+    /** Old call, used by the first self-test checks: one item, no item frames. */
     public static List<Hit> search(WorldServer world, Vec3d center, Item item, int range, List<String> containers, boolean insideItems) {
+        return search(world, center, of(item), range, containers, insideItems, false);
+    }
+
+    /** Containers (and item frames) within {@code range} blocks of {@code center} with matching items, nearest first. */
+    public static List<Hit> search(WorldServer world, Vec3d center, Predicate<ItemStack> item, int range, List<String> containers,
+                                   boolean insideItems, boolean itemFrames) {
         List<Hit> hits = new ArrayList<>();
         if (range < 1) {
             return hits;
@@ -79,6 +100,17 @@ public final class ContainerSearch112 {
                 }
             }
         }
+        if (itemFrames) {
+            AxisAlignedBB box = new AxisAlignedBB(center.x - range, center.y - range, center.z - range,
+                    center.x + range, center.y + range, center.z + range);
+            for (EntityItemFrame frame : world.getEntitiesWithinAABB(EntityItemFrame.class, box)) {
+                double distSq = center.squareDistanceTo(frame.posX, frame.posY, frame.posZ);
+                int count = count(frame.getDisplayedItem(), item, insideItems, 0);
+                if (count > 0 && distSq <= rangeSq && !frame.isDead) {
+                    hits.add(new Hit(new BlockPos(frame.posX, frame.posY, frame.posZ), "item_frame", count, Math.sqrt(distSq)));
+                }
+            }
+        }
         Collections.sort(hits, new Comparator<Hit>() {
             @Override
             public int compare(Hit a, Hit b) {
@@ -109,7 +141,7 @@ public final class ContainerSearch112 {
         return false;
     }
 
-    static int count(IInventory inv, Item item, boolean insideItems) {
+    public static int count(IInventory inv, Predicate<ItemStack> item, boolean insideItems) {
         int total = 0;
         for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
             total += count(inv.getStackInSlot(slot), item, insideItems, 0);
@@ -118,11 +150,11 @@ public final class ContainerSearch112 {
     }
 
     /** This stack, plus (one level deep) what's inside it if it's a shulker box item. */
-    static int count(ItemStack stack, Item item, boolean insideItems, int depth) {
+    static int count(ItemStack stack, Predicate<ItemStack> item, boolean insideItems, int depth) {
         if (stack.isEmpty()) {
             return 0;
         }
-        int total = stack.getItem() == item ? stack.getCount() : 0;
+        int total = item.test(stack) ? stack.getCount() : 0;
         if (insideItems && depth == 0) {
             int inside = 0;
             for (ItemStack inner : contentsOf(stack)) {

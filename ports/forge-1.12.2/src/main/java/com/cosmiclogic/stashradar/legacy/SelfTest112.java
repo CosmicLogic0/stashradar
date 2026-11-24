@@ -1,6 +1,11 @@
 package com.cosmiclogic.stashradar.legacy;
 
 import com.cosmiclogic.stashradar.StashRadar;
+import com.cosmiclogic.stashradar.StashRadarConfig;
+import com.cosmiclogic.stashradar.StashRadarRules;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -20,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Console-only "/stashradar selftest" for 1.12.2, run by CI on a real dedicated server. Same 10 checks
@@ -33,6 +39,7 @@ final class SelfTest112 {
     static int run(MinecraftServer server) {
         List<String> problems = new ArrayList<>();
         List<BlockPos> placed = new ArrayList<>();
+        List<BlockPos> placedNether = new ArrayList<>();
         WorldServer world = server.getWorld(0);
         int checks = 0;
         try {
@@ -84,20 +91,81 @@ final class SelfTest112 {
             expect(problems, "far chest with a 24 block range", 4, ContainerSearch112.search(world, from, Items.DIAMOND, 24, defaults, true).size());
             checks++;
             expect(problems, "direction to the chest", 1, ContainerSearch112.direction(from, new BlockPos(x, y, z)).equals("south") ? 1 : 0);
+
+            // 1.1.0: names, item frames, ender chest, other dimensions, glow, rules, help.
+            ItemStack oreBox = shulkerItemWith(new ItemStack(Items.IRON_INGOT, 5));
+            oreBox.setStackDisplayName("Ore Box");
+            chest.setInventorySlotContents(2, oreBox);
+            checks++;
+            expect(problems, "name search finds the renamed \"Ore Box\"", 1,
+                    total(ContainerSearch112.search(world, from, ContainerSearch112.named("ore box"), 8, defaults, true, true)));
+            checks++;
+            expect(problems, "name search \"iron\" finds the iron inside it", 5,
+                    total(ContainerSearch112.search(world, from, ContainerSearch112.named("iron"), 8, defaults, true, true)));
+
+            EntityItemFrame frame = new EntityItemFrame(world, new BlockPos(x - 2, y + 2, z), EnumFacing.NORTH);
+            frame.setDisplayedItem(new ItemStack(Items.CLOCK));
+            world.spawnEntity(frame);
+            try {
+                List<ContainerSearch112.Hit> clocks = ContainerSearch112.search(world, from, ContainerSearch112.of(Items.CLOCK), 8, defaults, true, true);
+                checks++;
+                expect(problems, "clock in an item frame", 1, clocks.size() == 1 && clocks.get(0).blockId.equals("item_frame") ? 1 : 0);
+                checks++;
+                expect(problems, "item frames off", 0, ContainerSearch112.search(world, from, ContainerSearch112.of(Items.CLOCK), 8, defaults, true, false).size());
+            } finally {
+                frame.setDead();
+            }
+
+            InventoryBasic enderLike = new InventoryBasic("ender", false, 27);
+            enderLike.setInventorySlotContents(3, new ItemStack(Items.DIAMOND, 9));
+            enderLike.setInventorySlotContents(4, shulkerItemWith(new ItemStack(Items.DIAMOND, 2)));
+            checks++;
+            expect(problems, "ender chest count (with a shulker box item)", 11, ContainerSearch112.count(enderLike, ContainerSearch112.of(Items.DIAMOND), true));
+
+            WorldServer nether = server.getWorld(-1);
+            if (nether != null) {
+                nether.getChunkProvider().provideChunk(0, 0);
+                place(nether, new BlockPos(8, 100, 8), Blocks.CHEST.getDefaultState(), placedNether).setInventorySlotContents(0, new ItemStack(Items.GOLD_INGOT, 9));
+                checks++;
+                expect(problems, "gold in a Nether chest, searched in the Nether", 9,
+                        total(ContainerSearch112.search(nether, new Vec3d(8.5, 100.5, 5.5), ContainerSearch112.of(Items.GOLD_INGOT), 8, defaults, true, true)));
+                checks++;
+                expect(problems, "the Nether chest is not found from the overworld", 0,
+                        ContainerSearch112.search(world, new Vec3d(8.5, 100.5, 5.5), ContainerSearch112.of(Items.GOLD_INGOT), 8, defaults, true, true).size());
+            }
+
+            Glow112.Ghost ghost = Glow112.build(world, new BlockPos(x, y, z));
+            checks++;
+            expect(problems, "glow packets", 1, ghost.spawn.size() == 2 && ghost.id != 0 ? 1 : 0);
+            checks++;
+            expect(problems, "outline points (1 result / 16 results)", 1,
+                    Highlighter112.outline(BlockPos.ORIGIN, 6).size() == 80 && Highlighter112.outline(BlockPos.ORIGIN, 1).size() == 20 ? 1 : 0);
+
+            StashRadarConfig c = new StashRadarConfig();
+            checks++;
+            expect(problems, "range rules", 1, StashRadarRules.range(-1, c) == 16 && StashRadarRules.range(64, c) == 32
+                    && StashRadarRules.rangeWasLimited(64, c) && StashRadarRules.range(8, c) == 8 ? 1 : 0);
+            StashRadarRules.Cooldowns cd = new StashRadarRules.Cooldowns();
+            UUID a = new UUID(1, 1), b = new UUID(2, 2), d = new UUID(3, 3);
+            checks++;
+            expect(problems, "cooldowns are per player", 1, cd.tryUse(a, 1000, 5000) == 0 && cd.tryUse(a, 2000, 5000) == 4000
+                    && cd.tryUse(b, 2000, 5000) == 0 && cd.tryUse(a, 6000, 5000) == 0 ? 1 : 0);
+            cd.tryUse(d, 60000, 5000);
+            checks++;
+            expect(problems, "old cooldowns are dropped (no leak)", 1, cd.size());
+            checks++;
+            expect(problems, "the loaded config is upgraded", 1, StashRadar.config().configVersion == StashRadarRules.CONFIG_VERSION ? 1 : 0);
+            checks++;
+            expect(problems, "/find help runs", 1, server.getCommandManager().executeCommand(server, "find help") > 0 ? 1 : 0);
+            checks++;
+            expect(problems, "/stashradar help runs", 1, server.getCommandManager().executeCommand(server, "stashradar help") > 0 ? 1 : 0);
         } catch (Throwable t) {
             problems.add("exception " + t);
         } finally {
-            for (BlockPos pos : placed) {
-                try {
-                    TileEntity te = world.getTileEntity(pos);
-                    if (te instanceof IInventory) {
-                        ((IInventory) te).clear();
-                    }
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-                } catch (Throwable ignored) {
-                    // best effort cleanup
-                }
+            if (server.getWorld(-1) != null) {
+                clear(server.getWorld(-1), placedNether);
             }
+            clear(world, placed);
         }
         if (problems.isEmpty()) {
             StashRadar.LOG.info("Stash Radar self-test PASSED ({} checks)", checks);
@@ -108,6 +176,20 @@ final class SelfTest112 {
         }
         StashRadar.LOG.warn("Stash Radar self-test FAILED ({} of {})", problems.size(), checks);
         return 0;
+    }
+
+    private static void clear(WorldServer world, List<BlockPos> placed) {
+        for (BlockPos pos : placed) {
+            try {
+                TileEntity te = world.getTileEntity(pos);
+                if (te instanceof IInventory) {
+                    ((IInventory) te).clear();
+                }
+                world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+            } catch (Throwable ignored) {
+                // best effort cleanup
+            }
+        }
     }
 
     private static ItemStack shulkerItemWith(ItemStack content) {
