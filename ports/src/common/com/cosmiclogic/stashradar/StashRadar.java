@@ -30,6 +30,7 @@ public final class StashRadar {
     /** Called once by the loader-specific entrypoint. */
     public static void init() {
         config = LogicConfig.create(MOD_ID, StashRadarConfig.class, StashRadarConfig::new);
+        upgradeConfig();
         CreatorServer.request(MOD_ID, config().addCreatorServer);
         LOG.info("{} loaded on {}", MOD_NAME, Services.PLATFORM.getPlatformName());
     }
@@ -40,5 +41,22 @@ public final class StashRadar {
 
     public static void reloadConfig() {
         config.load();
+        upgradeConfig();
+    }
+
+    /** Saves changes made in the config screen. */
+    public static void saveConfig() {
+        config.save();
+    }
+
+    public static java.nio.file.Path configFile() {
+        return config.getFile();
+    }
+
+    private static void upgradeConfig() {
+        if (StashRadarRules.upgrade(config.get())) {
+            config.save();
+            LOG.info("{}: config updated to version {} (your settings were kept)", MOD_NAME, StashRadarRules.CONFIG_VERSION);
+        }
     }
 }

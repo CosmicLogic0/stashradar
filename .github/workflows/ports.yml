@@ -156,7 +156,9 @@ jobs:
         run: |
           # Any WARN/ERROR/exception line that names Stash Radar fails the run (this is how the broken pack.mcmeta on
           # 1.21.11 / 26.x would have been caught). LogicLib's own lines are reported, not failed: they go to Library Requests.
-          L=run/logs/latest.log
+          L=run/clean.log
+          # Drop file paths first: the CI checkout itself lives in a folder called "stashradar".
+          sed -E 's#(/[A-Za-z0-9._%#!-]+)+/stashradar/[^ ]*##g; s#union:[^ ]*##g' run/logs/latest.log > "$L"
           BAD=$(grep -Ein "stashradar|stash radar" "$L" | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" || true)
           LL=$(grep -Ein "mod:logiclib|mod/logiclib|logiclib" "$L" | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" | head -5 || true)
           [ -n "$LL" ] && { echo "::warning::LogicLib lines (reported to LogicLib, not failed here):"; echo "$LL"; }
@@ -170,7 +172,7 @@ jobs:
           B="${{ steps.build.outcome }}"; S="${{ steps.server.outcome }}"; C="${{ steps.client.outcome }}"; K="${{ steps.cs.outcome }}"; G="${{ steps.clog.outcome }}"
           if [ "$B" = success ] && [ "$S" = success ] && [ "$C" = success ] && [ "$K" = success ] && [ "$G" = success ]; then echo "PASS build+server(self-test)+client+creator-server+clean-logs (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R";
           else echo "FAIL build=$B server=$S client=$C creator-server=$K client-log=$G (${{ steps.v.outputs.lv }}, LogicLib from ${{ steps.ll.outputs.src }})" > "$R"; fi
-          if [ "$G" = failure ]; then echo "--- client log ---" >> "$R"; grep -Ein "stashradar|stash radar" run/logs/latest.log | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" | head -15 >> "$R"; fi
+          if [ "$G" = failure ]; then echo "--- client log ---" >> "$R"; grep -Ein "stashradar|stash radar" run/clean.log | grep -Ei "/warn|/error|exception|couldn.t|could not|failed" | head -15 >> "$R"; fi
           if [ "$B" != success ] && [ -f ${{ matrix.dir }}/build.log ]; then python3 - ${{ matrix.dir }}/build.log >> "$R" <<'PY'
           import re, sys
           L = open(sys.argv[1], errors='replace').read().split('\n'); out = []; seen = set()

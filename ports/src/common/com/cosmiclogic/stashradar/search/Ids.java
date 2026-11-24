@@ -30,6 +30,17 @@ public final class Ids {
         //#endif
     }
 
+    /** The item with this id ("diamond" means "minecraft:diamond"), or null. */
+    public static Item findItem(String id) {
+        String full = id.indexOf(':') >= 0 ? id : "minecraft:" + id;
+        for (Item item : allItems()) {
+            if (item(item).equals(full)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
     public static Iterable<Item> allItems() {
         //#if MC >= 1.19.3
         return BuiltInRegistries.ITEM;

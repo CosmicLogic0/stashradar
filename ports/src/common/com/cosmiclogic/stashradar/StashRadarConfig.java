@@ -15,16 +15,27 @@ public class StashRadarConfig {
     public int cooldownSeconds = 5;
     /** Permission level needed for /find (0 = everyone, 2 = operators). */
     public int permissionLevel = 0;
-    /** Block ids that are searched. "shulker_boxes" means every shulker box color. Modded containers work too. */
+    /**
+     * Block ids that are searched. "shulker_boxes" means every shulker box color, "copper_chests" every copper
+     * chest (Minecraft 1.21.9+). Modded containers work too.
+     */
     public List<String> containers = new ArrayList<>(Arrays.asList(
-            "minecraft:chest", "minecraft:trapped_chest", "minecraft:barrel", "shulker_boxes"));
+            "minecraft:chest", "minecraft:trapped_chest", "minecraft:barrel", "shulker_boxes", "copper_chests"));
     /** Also look inside shulker box (and bundle) items stored in containers. */
     public boolean searchInsideItems = true;
+    /** Also look at items shown in item frames and glow item frames. */
+    public boolean searchItemFrames = true;
+    /** Also tell the player how many they have in their own ender chest. */
+    public boolean searchEnderChest = true;
     /** How long results are highlighted, and the outline color. */
     public int highlightSeconds = 12;
     public String highlightColor = "#3CFF7A";
     /** At most this many containers get outlines (the nearest ones). */
     public int maxHighlights = 16;
+    /** Far-away results also get a glowing outline that shows through walls (only the searching player sees it). */
+    public boolean glowThroughWalls = true;
     /** Adds the creator's server (Logic Survival) to the multiplayer list once, across all CosmicLogic mods. */
     public boolean addCreatorServer = true;
+    /** Config layout version, used to upgrade older files. Don't change it. */
+    public int configVersion = 0;
 }

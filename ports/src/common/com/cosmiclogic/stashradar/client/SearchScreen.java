@@ -33,6 +33,7 @@ import java.util.Locale;
 /**
  * The search screen: type part of an item name, pick it from the suggestions (with icons), and the
  * server is asked via /find. The server does the real search, so this screen can't be used to cheat.
+ * With an empty box it lists recent searches; the button under the box searches item names (or a #tag).
  */
 public class SearchScreen extends Screen {
 
@@ -44,17 +45,20 @@ public class SearchScreen extends Screen {
     private static String lastQuery = "";
     private static int lastRange = -1;
 
+    /** One row: an item to search for, or a recent search. {@code query} is what follows "/find ". */
     private static final class Entry {
         final ItemStack stack;
         final String name;
         final String lowerName;
         final String id;
+        final String query;
 
-        Entry(ItemStack stack, String name, String id) {
+        Entry(ItemStack stack, String name, String id, String query) {
             this.stack = stack;
             this.name = name;
             this.lowerName = name.toLowerCase(Locale.ROOT);
             this.id = id;
+            this.query = query;
         }
     }
 
@@ -62,6 +66,12 @@ public class SearchScreen extends Screen {
 
     private EditBox searchBox;
     private Button rangeButton;
+    private Button textButton;
+    private Button settingsButton;
+    /** False when the server has no /find for this player (no Stash Radar there, or not allowed). */
+    private boolean available = true;
+    /** True while the list shows recent searches (the box is empty). */
+    private boolean showingRecent;
     private final List<Entry> results = new ArrayList<>();
     private int scroll;
     private int range;
@@ -79,7 +89,7 @@ public class SearchScreen extends Screen {
                     continue;
                 }
                 ItemStack stack = new ItemStack(item);
-                allItems.add(new Entry(stack, stack.getHoverName().getString(), Ids.item(item)));
+                allItems.add(new Entry(stack, stack.getHoverName().getString(), Ids.item(item), Ids.item(item)));
             }
         }
         if (lastRange < 0) {
@@ -95,27 +105,44 @@ public class SearchScreen extends Screen {
         searchBox.setMaxLength(64);
         searchBox.setValue(lastQuery);
         searchBox.setResponder(text -> refresh());
-        //#if MC >= 1.19.3
-        rangeButton = Button.builder(rangeLabel(), b -> cycleRange()).bounds(left + LIST_WIDTH - 80, 32, 80, 20).build();
-        //#else
-        rangeButton = new Button(left + LIST_WIDTH - 80, 32, 80, 20, rangeLabel(), b -> cycleRange());
-        //#endif
+        available = StashRadarClient.serverHasFind(minecraft);
+        rangeButton = button(left + LIST_WIDTH - 80, 32, 80, 20, rangeLabel(), this::cycleRange, "screen.stashradar.range.tip");
+        textButton = button(left, 56, LIST_WIDTH, 20, Component.nullToEmpty(""), this::searchText, "screen.stashradar.text.tip");
+        settingsButton = button(width - 64, 6, 58, 20, tr("screen.stashradar.settings"),
+                () -> StashRadarClient.open(minecraft, new ConfigScreen(this)), "screen.stashradar.settings.tip");
         //#if MC >= 1.17
         addRenderableWidget(searchBox);
         addRenderableWidget(rangeButton);
+        addRenderableWidget(textButton);
+        addRenderableWidget(settingsButton);
         //#else
         addButton(searchBox);
         addButton(rangeButton);
+        addButton(textButton);
+        addButton(settingsButton);
         //#endif
         setInitialFocus(searchBox);
         refresh();
+    }
+
+    /** A button with a hover tooltip (1.19.3+; older versions show the footer line instead). */
+    static Button button(int x, int y, int w, int h, Component label, Runnable action, String tooltipKey) {
+        //#if MC >= 1.19.3
+        Button b = Button.builder(label, btn -> action.run()).bounds(x, y, w, h).build();
+        if (tooltipKey != null) {
+            b.setTooltip(net.minecraft.client.gui.components.Tooltip.create(tr(tooltipKey)));
+        }
+        return b;
+        //#else
+        return new Button(x, y, w, h, label, btn -> action.run());
+        //#endif
     }
 
     private Component rangeLabel() {
         return tr("screen.stashradar.range", range);
     }
 
-    private static net.minecraft.network.chat.MutableComponent tr(String key, Object... args) {
+    static net.minecraft.network.chat.MutableComponent tr(String key, Object... args) {
         //#if MC >= 1.19
         return Component.translatable(key, args);
         //#else
@@ -141,7 +168,16 @@ public class SearchScreen extends Screen {
         lastQuery = searchBox.getValue();
         results.clear();
         scroll = 0;
+        String typed = searchBox.getValue().trim();
+        textButton.visible = !typed.isEmpty() && !typed.contains("\"");
+        textButton.setMessage(typed.startsWith("#")
+                ? tr("screen.stashradar.tag", typed)
+                : tr("screen.stashradar.text", typed));
+        showingRecent = q.isEmpty();
         if (q.isEmpty()) {
+            for (String query : StashRadarClient.recent()) {
+                results.add(recentEntry(query));
+            }
             return;
         }
         List<Entry> contains = new ArrayList<>();
@@ -155,12 +191,42 @@ public class SearchScreen extends Screen {
         results.addAll(contains);
     }
 
+    /** A recent search as a row: an item with its icon, a #tag, or a name search. */
+    private static Entry recentEntry(String query) {
+        if (query.startsWith("#")) {
+            return new Entry(new ItemStack(Items.CHEST), query, "tag", query);
+        }
+        if (query.startsWith("name ")) {
+            String text = query.substring(5).replace("\"", "");
+            return new Entry(new ItemStack(Items.NAME_TAG), "\"" + text + "\"", "name", query);
+        }
+        for (Entry e : allItems) {
+            if (e.id.equals(query)) {
+                return e;
+            }
+        }
+        return new Entry(new ItemStack(Items.BARRIER), query, "?", query);
+    }
+
+    private void searchText() {
+        String typed = searchBox.getValue().trim();
+        if (typed.isEmpty()) {
+            return;
+        }
+        if (typed.startsWith("#")) {
+            String tag = typed.substring(1).toLowerCase(Locale.ROOT).replace(' ', '_');
+            go(tag.indexOf(':') >= 0 ? "#" + tag : "#minecraft:" + tag);
+        } else {
+            go("name \"" + typed.replace("\"", "") + "\"");
+        }
+    }
+
     private int listTop() {
-        return 60;
+        return 82;
     }
 
     private int visibleRows() {
-        return Math.max(1, (height - listTop() - 24) / ROW_HEIGHT);
+        return Math.max(1, (height - listTop() - 28) / ROW_HEIGHT);
     }
 
     @Override
@@ -180,6 +246,11 @@ public class SearchScreen extends Screen {
     //#endif
         int left = (width - LIST_WIDTH) / 2;
         centered(g, title, width / 2, 14, 0xFFFFFF);
+        centered(g, tr("screen.stashradar.footer"), width / 2, height - 14, 0x808080);
+        if (!available) {
+            centered(g, tr("screen.stashradar.unavailable"), width / 2, listTop() - 2, 0xFF6060);
+            return;
+        }
         //#if MC < 1.19.4
         if (searchBox.getValue().isEmpty() && !searchBox.isFocused()) {
             text(g, tr("screen.stashradar.hint").getString(), searchBox.x + 4, searchBox.y + 6, 0x555555);
@@ -193,6 +264,9 @@ public class SearchScreen extends Screen {
             centered(g, msg, width / 2, listTop() + 8, 0x808080);
             return;
         }
+        if (showingRecent) {
+            text(g, tr("screen.stashradar.recent").getString(), left + 2, listTop() - 11, 0xA0A0A0);
+        }
         int rows = visibleRows();
         for (int i = 0; i < rows && scroll + i < results.size(); i++) {
             Entry e = results.get(scroll + i);
@@ -201,7 +275,8 @@ public class SearchScreen extends Screen {
             rect(g, left, y, left + LIST_WIDTH, y + ROW_HEIGHT - 1, hover ? 0x8040A060 : (i % 2 == 0 ? 0x40000000 : 0x20000000));
             item(g, e.stack, left + 2, y + 1);
             text(g, e.name, left + 22, y + 6, 0xFFFFFF);
-            String id = e.id.startsWith("minecraft:") ? e.id.substring(10) : e.id;
+            String id = showingRecent ? tr("screen.stashradar.recent.remove").getString()
+                    : e.id.startsWith("minecraft:") ? e.id.substring(10) : e.id;
             text(g, id, left + LIST_WIDTH - 4 - font.width(id), y + 6, 0x707070);
         }
         if (results.size() > rows) {
@@ -232,10 +307,16 @@ public class SearchScreen extends Screen {
     /** @return true if the click picked an item */
     private boolean clickList(double mouseX, double mouseY, int button) {
         int left = (width - LIST_WIDTH) / 2;
-        if (button == 0 && mouseX >= left && mouseX < left + LIST_WIDTH && mouseY >= listTop()) {
+        if ((button == 0 || button == 1) && available && mouseX >= left && mouseX < left + LIST_WIDTH && mouseY >= listTop()) {
             int row = (int) ((mouseY - listTop()) / ROW_HEIGHT);
             if (row < visibleRows() && scroll + row < results.size()) {
-                pick(results.get(scroll + row));
+                Entry e = results.get(scroll + row);
+                if (button == 1 && showingRecent) {
+                    StashRadarClient.forgetRecent(e.query);   // right-click forgets a recent search
+                    refresh();
+                } else if (button == 0) {
+                    pick(e);
+                }
                 return true;
             }
         }
@@ -267,8 +348,12 @@ public class SearchScreen extends Screen {
 
     /** Enter picks the first match. */
     private boolean enter(int keyCode) {
-        if ((keyCode == 257 || keyCode == 335) && !results.isEmpty()) {   // GLFW Enter, keypad Enter
-            pick(results.get(0));
+        if (keyCode == 257 || keyCode == 335) {   // GLFW Enter, keypad Enter
+            if (!results.isEmpty()) {
+                pick(results.get(0));
+            } else if (textButton.visible) {
+                searchText();
+            }
             return true;
         }
         return false;
@@ -287,14 +372,15 @@ public class SearchScreen extends Screen {
     //#endif
 
     private void pick(Entry entry) {
+        go(entry.query);
+    }
+
+    private void go(String query) {
+        if (!available) {
+            return;
+        }
         if (minecraft != null && minecraft.player != null) {
-            //#if MC >= 1.19.3
-            minecraft.player.connection.sendCommand("find " + entry.id + " " + range);
-            //#elif MC >= 1.19
-            minecraft.player.commandUnsigned("find " + entry.id + " " + range);
-            //#else
-            minecraft.player.chat("/find " + entry.id + " " + range);
-            //#endif
+            StashRadarClient.search(minecraft, query, range);
         }
         onClose();
     }
