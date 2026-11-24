@@ -1,8 +1,9 @@
 # Uploads the TESTED Stash Radar jars to CurseForge (project id in .github/curseforge-id.txt).
 # Only jars from a commit where every test passed are used:
-#   - 1.21.1 Forge + NeoForge: the "stashradar-jars" artifact of a successful "Build and test" run on this commit
-#   - every other version: the port-results branch, whose SUMMARY must say PASS and whose tested COMMIT must have
-#     the same port code as this commit
+#   - every version (1.21.1 included since 1.1.0): the port-results branch, whose SUMMARY must say PASS for every
+#     line and whose tested COMMIT must have the same port code as this commit
+#   - and the end-to-end tests (e2e-results: player without the mod, server without the mod) must have passed on
+#     the same code
 # Run it by hand (Actions → Publish to CurseForge → Run workflow). dry_run (default) checks everything,
 # including that CurseForge knows every game version, and uploads nothing. Needs the CURSEFORGE_TOKEN secret.
 name: Publish to CurseForge
@@ -32,20 +33,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Find the passing "Build and test" run for this commit
-        id: main
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          RID=$(curl -fsS -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/actions/workflows/build.yml/runs?head_sha=${{ github.sha }}&status=success&per_page=1" | python3 -c "import sys,json;r=json.load(sys.stdin)['workflow_runs'];print(r[0]['id'] if r else '')")
-          if [ -z "$RID" ]; then echo "::error::No passing Build and test run for ${{ github.sha }}"; exit 1; fi
-          echo "Build and test run $RID"; echo "rid=$RID" >> "$GITHUB_OUTPUT"
-      - uses: actions/download-artifact@v4
-        with:
-          name: stashradar-jars
-          run-id: ${{ steps.main.outputs.rid }}
-          github-token: ${{ github.token }}
-          path: main-jars
       - name: Get the ported jars (port-results)
         run: |
           git clone -q --depth 1 -b port-results "https://github.com/${{ github.repository }}" pr
@@ -54,6 +41,13 @@ jobs:
           CHANGED=$(git diff --name-only "$(cat pr/COMMIT)" "${{ github.sha }}" -- ports common/src/main/resources ci .github/ports.txt .github/workflows/ports.yml)
           if [ -n "$CHANGED" ]; then echo "::error::Port code changed since the tested commit $(cat pr/COMMIT):"; echo "$CHANGED"; exit 1; fi
           cat pr/SUMMARY
+      - name: End-to-end tests passed on the same code (e2e-results)
+        run: |
+          git clone -q --depth 1 -b e2e-results "https://github.com/${{ github.repository }}" e2e
+          echo "e2e tested commit: $(cat e2e/COMMIT)  run: $(cat e2e/RUN)"
+          CHANGED=$(git diff --name-only "$(cat e2e/COMMIT)" "${{ github.sha }}" -- ports/src common/src/main/resources)
+          if [ -n "$CHANGED" ]; then echo "::error::Code changed since the e2e-tested commit:"; echo "$CHANGED"; exit 1; fi
+          for m in e2e-vanilla e2e-noserver; do cat "e2e/$m-results.txt"; tail -1 "e2e/$m-results.txt" | grep -qx PASS || { echo "::error::$m did not pass"; exit 1; }; done
       - id: m
         name: Plan the uploads
         run: |
@@ -75,10 +69,6 @@ jobs:
               names = {'forge': 'Forge', 'neoforge': 'NeoForge'}
               ups.append({'id': uid, 'jar': dst, 'loaders': ' '.join(loaders), 'mc': mc, 'java': java(mc),
                           'name': f"Stash Radar {ver} for {'/'.join(names[l] for l in loaders)} {mc}", 'version': f"{ver}+{uid}"})
-          # 1.21.1 from the main MultiLoader build
-          for l in ('forge', 'neoforge'):
-              found = glob.glob(f"main-jars/**/stashradar-{l}-1.21.1-{ver}.jar", recursive=True)
-              add(f"{l}-1.21.1", found[0] if found else f"main-jars/stashradar-{l}-1.21.1-{ver}.jar", [l], '1.21.1')
           # every port that passed
           for line in open('.github/ports.txt'):
               p = line.split('#')[0].split()
@@ -132,6 +122,8 @@ jobs:
         with:
           name: upload-jars
           path: upload
+      - name: Release notes (only this version's part of CHANGELOG.md)
+        run: awk 'NR==1 || !/^## /{print; next} {exit}' CHANGELOG.md > RELEASE_NOTES.md && cat RELEASE_NOTES.md
       - name: Game versions
         id: gv
         run: |
@@ -149,4 +141,4 @@ jobs:
           game-versions: ${{ steps.gv.outputs.list }}
           java: ${{ matrix.java }}
           dependencies: logiclib(required)
-          changelog-file: CHANGELOG.md
+          changelog-file: RELEASE_NOTES.md
