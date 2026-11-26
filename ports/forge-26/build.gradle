@@ -64,7 +64,8 @@ tasks.register('apiProbe') {
         def javap = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }.get().executablePath.asFile.parentFile.toPath().resolve('javap').toString()
         (project.findProperty('probe') ?: '').toString().split(',').findAll { it }.each { cls ->
             def p = new ProcessBuilder(javap, '-cp', cp, cls).redirectErrorStream(true).start()
-            println "===== ${cls}"; println p.inputStream.text; p.waitFor()
+            def f = (project.findProperty('probeFilter') ?: '.').toString()
+            println "===== ${cls}"; p.inputStream.text.readLines().findAll { it =~ f || it.startsWith('public') || it.startsWith('Error') }.each { println "  | ${it}" }; p.waitFor()
         }
     }
 }

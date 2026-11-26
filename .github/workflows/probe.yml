@@ -73,7 +73,7 @@ jobs:
           curl -fsSL -o ../../libs/logiclib-forge-$MC-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/logiclib-forge-$MC-0.1.0.jar" || true
           CLS=$(sed -n 3p ../../.github/probe.txt)
           FORGE=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>$MC-[^<]*</version>" | sed "s/<[^>]*>//g; s/^$MC-//" | sort -V | tail -1)
-          ./gradlew apiProbe --no-daemon -Pminecraft_version=$MC -Pforge_version=$FORGE -Pprobe="$CLS" 2>&1 | grep -v "^\s*$" | grep -v "^> Task\|warning:" | head -400
+          ./gradlew apiProbe --no-daemon -Pminecraft_version=$MC -Pforge_version=$FORGE -Pprobe="$CLS" -PprobeFilter="$(sed -n 5p ../../.github/probe.txt)" 2>&1 | grep -E "^=====|^  \|"
   loom:
     runs-on: ubuntu-latest
     strategy:
@@ -105,4 +105,4 @@ jobs:
           fi
           curl -fsSL -o ../../libs/logiclib-$L-$mc-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/logiclib-$L-$mc-0.1.0.jar" || true
           CLS=$(sed -n 4p ../../.github/probe.txt)
-          ./gradlew apiProbe --no-daemon -Pminecraft_version=$mc $A -Parch_loom_version=$LOOM -Pprobe="$CLS" 2>&1 | grep -v "^\s*$" | grep -v "^> Task\|warning:" | head -500
+          ./gradlew apiProbe --no-daemon -Pminecraft_version=$mc $A -Parch_loom_version=$LOOM -Pprobe="$CLS" -PprobeFilter="$(sed -n 5p ../../.github/probe.txt)" 2>&1 | grep -E "^=====|^  \|"
