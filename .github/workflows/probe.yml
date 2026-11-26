@@ -1,11 +1,65 @@
 name: API probe
+# Lists loader event classes (and javap of chosen classes) for every version, so new client hooks are written
+# against the real API. Line 1 of .github/probe.txt: class-name regex for loader jars; line 2: classes to javap
+# (loader or Minecraft; Minecraft classes only on the 26.x compile classpath job).
 on:
   push:
-    paths: ['.github/probe.txt']
+    paths: ['.github/probe.txt', '.github/workflows/probe.yml']
   workflow_dispatch:
 jobs:
-  probe:
+  loader:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { l: forge, mc: 1.12.2 }
+          - { l: forge, mc: 1.16.5 }
+          - { l: forge, mc: 1.18.2 }
+          - { l: forge, mc: 1.19.2 }
+          - { l: forge, mc: 1.20.1 }
+          - { l: forge, mc: 1.21.1 }
+          - { l: forge, mc: 1.21.11 }
+          - { l: forge, mc: 26.1.2 }
+          - { l: forge, mc: 26.3 }
+          - { l: neoforge, mc: 1.21.1 }
+          - { l: neoforge, mc: 1.21.11 }
+          - { l: neoforge, mc: 26.1.2 }
+          - { l: neoforge, mc: 26.3 }
+    name: ${{ matrix.l }}-${{ matrix.mc }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 25 }
+      - name: Install server and list classes
+        run: |
+          mc=${{ matrix.mc }}
+          if [ "${{ matrix.l }}" = forge ]; then
+            V=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>$mc-[^<]*</version>" | sed "s/<[^>]*>//g" | sort -V | tail -1)
+            curl -fsSL -o i.jar "https://maven.minecraftforge.net/net/minecraftforge/forge/$V/forge-$V-installer.jar"
+            mkdir s && cd s && java -jar ../i.jar --installServer . > ../install.log 2>&1 || tail -20 ../install.log; cd ..
+          else
+            P="$mc"; case "$P" in 1.*) P=$(echo "$mc" | sed 's/^1\.//'); case "$P" in *.*) ;; *) P="$P.0" ;; esac ;; *.*.*) ;; *) P="$P.0" ;; esac
+            V=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1)
+            curl -fsSL -o i.jar "https://maven.neoforged.net/releases/net/neoforged/neoforge/$V/neoforge-$V-installer.jar"
+            mkdir s && cd s && java -jar ../i.jar --install-server . > ../install.log 2>&1 || tail -20 ../install.log; cd ..
+          fi
+          echo "##### ${{ matrix.l }} $V"
+          RE=$(sed -n 1p .github/probe.txt)
+          for j in $(find s -name '*.jar' | grep -Ei "forge|neoforge|fml|eventbus|bus"); do
+            unzip -Z1 "$j" 2>/dev/null | grep -E '\.class$' | grep -E "$RE" | sed "s#^#$(basename $j): #"
+          done | sort -u | head -150
+          CP=$(find s -name '*.jar' | tr '\n' ':')
+          for c in $(sed -n 2p .github/probe.txt | tr ',' ' '); do
+            if javap -cp "$CP" "$c" > o.txt 2>&1; then echo "===== $c"; cat o.txt; fi
+          done
+  mc26:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        mc: ['26.1.2', '26.3']
+    name: forge26-classpath-${{ matrix.mc }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -15,10 +69,40 @@ jobs:
         run: |
           mkdir -p ../../libs
           chmod +x gradlew
-          CLS=$(sed -n 2p ../../.github/probe.txt)
-          for MC in $(head -1 ../../.github/probe.txt | tr ',' ' '); do
-          echo "##### MC $MC"
+          MC=${{ matrix.mc }}
+          curl -fsSL -o ../../libs/logiclib-forge-$MC-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/logiclib-forge-$MC-0.1.0.jar" || true
+          CLS=$(sed -n 3p ../../.github/probe.txt)
           FORGE=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>$MC-[^<]*</version>" | sed "s/<[^>]*>//g; s/^$MC-//" | sort -V | tail -1)
-          echo "Forge $FORGE"
-          ./gradlew apiProbe --no-daemon -Pminecraft_version=$MC -Pforge_version=$FORGE -Pprobe="$CLS" 2>&1 | grep -v "^\s*$"
-          done
+          ./gradlew apiProbe --no-daemon -Pminecraft_version=$MC -Pforge_version=$FORGE -Pprobe="$CLS" 2>&1 | grep -v "^\s*$" | grep -v "^> Task\|warning:" | head -400
+  loom:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { l: forge, mc: 1.16.5 }
+          - { l: forge, mc: 1.19.2 }
+          - { l: forge, mc: 1.20.1 }
+          - { l: forge, mc: 1.21.1 }
+          - { l: forge, mc: 1.21.11 }
+          - { l: neoforge, mc: 1.21.11 }
+    name: loom-${{ matrix.l }}-${{ matrix.mc }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 21 }
+      - name: javap
+        working-directory: ports/forge
+        run: |
+          mkdir -p ../../libs; chmod +x gradlew
+          mc=${{ matrix.mc }}
+          LOOM=$(curl -s https://maven.architectury.dev/dev/architectury/loom/dev.architectury.loom.gradle.plugin/maven-metadata.xml | grep -o "<latest>[^<]*</latest>" | sed 's/<[^>]*>//g')
+          if [ "${{ matrix.l }}" = forge ]; then
+            F=$(curl -s https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml | grep -o "<version>$mc-[^<]*</version>" | sed "s/<[^>]*>//g; s/^$mc-//" | sort -V | tail -1); A="-Pforge_version=$F"; L=forge
+          else
+            P=$(echo "$mc" | sed 's/^1\.//')
+            F=$(curl -s https://maven.neoforged.net/releases/net/neoforged/neoforge/maven-metadata.xml | grep -oE "<version>$P\.[0-9]+(-beta)?</version>" | sed 's/<[^>]*>//g' | sort -V | tail -1); A="-Ploom.platform=neoforge -Pforge_version=$F"; L=neoforge
+          fi
+          curl -fsSL -o ../../libs/logiclib-$L-$mc-0.1.0.jar "https://raw.githubusercontent.com/CosmicLogic0/logiclib/dist/logiclib-$L-$mc-0.1.0.jar" || true
+          CLS=$(sed -n 4p ../../.github/probe.txt)
+          ./gradlew apiProbe --no-daemon -Pminecraft_version=$mc $A -Parch_loom_version=$LOOM -Pprobe="$CLS" 2>&1 | grep -v "^\s*$" | grep -v "^> Task\|warning:" | head -500

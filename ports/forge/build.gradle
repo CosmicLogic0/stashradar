@@ -77,3 +77,15 @@ tasks.withType(JavaCompile).configureEach {
     if (java8) { sourceCompatibility = '17'; options.compilerArgs += ['-Xlint:-options'] }   // Jabel: modern syntax, Java 8 classes
 }
 tasks.named('test') { enabled = false }
+
+// javap for API checks (used by .github/workflows/probe.yml only).
+tasks.register('apiProbe') {
+    doLast {
+        def cp = sourceSets.main.compileClasspath.files.collect { it.absolutePath }.join(File.pathSeparator)
+        def javap = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(21) }.get().executablePath.asFile.parentFile.toPath().resolve('javap').toString()
+        (project.findProperty('probe') ?: '').toString().split(',').findAll { it }.each { cls ->
+            def p = new ProcessBuilder(javap, '-cp', cp, cls).redirectErrorStream(true).start()
+            println "===== ${cls}"; println p.inputStream.text; p.waitFor()
+        }
+    }
+}

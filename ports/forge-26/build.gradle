@@ -59,7 +59,6 @@ tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.
 
 // Prints the signatures of a few Minecraft classes (javap) so ports can be written against the real 26.x API.
 tasks.register('apiProbe') {
-    dependsOn 'compileJava'
     doLast {
         def cp = sourceSets.main.compileClasspath.files.collect { it.absolutePath }.join(File.pathSeparator)
         def javap = javaToolchains.launcherFor { languageVersion = JavaLanguageVersion.of(25) }.get().executablePath.asFile.parentFile.toPath().resolve('javap').toString()
